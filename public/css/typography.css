@@ -1,0 +1,56 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900|Oswald:400,300,700|Arvo:400,700);
+@import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+@import url(font-retina.css);
+
+h1,h2,h3,h4,h5,h6{
+    font-family:"Lato";
+}
+h1, h3, h4{
+    font-weight: lighter;
+}
+body{
+    font-family:"Montserrat";
+    font-size:12px;
+}
+
+/*Outline buttons*/
+.btn-outline {
+    background-color: transparent;
+    color: inherit;
+    transition: all .5s;
+}
+
+.btn-primary.btn-outline {
+    color: #428bca;
+}
+
+.btn-success.btn-outline {
+    color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+    color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+    color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+    color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+    color: #fff;
+}
+.backsplash-text{
+    color:#363B48;
+}
+.feature h4{
+    color: #E24048;
+}

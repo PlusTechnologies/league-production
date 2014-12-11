@@ -1,0 +1,66 @@
+ @import url("nav/nav-platform.css");
+ @import url(http://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css);
+/**Use in all auth pages **/
+body > .container {
+  padding: 60px 15px 70px;
+}
+/**Tiles metro style**/
+.tile {
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.title {
+  margin-top: 0px;
+  font-weight: bolder;
+}
+.purple, .blue, .red, .orange, .green {
+    color: #fff;
+  } 
+.purple {
+    background: #5133AB;
+}
+ .purple:hover {
+    background: darken(#5133AB, 10%);
+ }  
+.red { background: #AC193D;}
+.red:hover {
+    background: darken(#AC193D, 10%);
+}   
+.green {background: #00A600;}
+ .green:hover {
+  background: darken(#00A600, 10%);
+}   
+.blue {   background: #2672EC;}
+.blue:hover {
+  background: darken(#2672EC, 10%);
+} 
+.orange {  background: #DC572E;}
+.orange:hover {
+  background: darken(#DC572E, 10%);
+}
+/**End of Tiles Style*/
+
+/* General page */
+.org-logo{
+   width: 85px;
+   height: 85px;
+}
+.edit-org-logo{
+  width: 180px;
+  height: 180px;
+}
+.clickable {
+    cursor: pointer;
+}
+#map_canvas{
+  min-height: 250px;
+}
+/* Data table overwrite*/
+table.dataTable thead > tr > th {
+  padding-left: 8px;
+}
