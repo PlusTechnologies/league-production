@@ -48,6 +48,15 @@ body{
 .btn-danger.btn-outline:hover {
     color: #fff;
 }
+
+.btn-primary.btn-outline[disabled],
+.btn-success.btn-outline[disabled],
+.btn-info.btn-outline[disabled],
+.btn-warning.btn-outline[disabled],
+.btn-danger.btn-outline[disabled] {
+    color: #fff;
+}
+
 .backsplash-text{
     color:#363B48;
 }

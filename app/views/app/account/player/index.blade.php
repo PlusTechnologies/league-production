@@ -18,7 +18,7 @@
             </div>
             <div class="col-sm-6">
               <div class="tile blue">
-                <h3 class="title">2</h3>
+                <h3 class="title">{{$players->count()}}</h3>
                 <p>Total Players</p>
               </div>
             </div>
@@ -34,23 +34,24 @@
             <thead>
               <tr>
                 <th class="col-sm-2" data-field="date">Created</th>
-                <th class="col-sm-1" data-field="id">Type</th>
                 <th class="col-sm-4" data-field="name">Name</th>
-                <th class="col-sm-2" data-field="e_date">Date</th>
-                <th class="col-sm-1" data-field="fee">Fee</th>
-                <th class="col-sm-2" data-field="status">Status</th>
+                <th class="col-sm-2" data-field="e_date">DOB</th>
+                <th class="col-sm-1" data-field="fee">Position</th>
+                <th class="col-sm-2" data-field="status">Relationship</th>
               </tr>
             </thead>
             <tbody>
-
+              @foreach ($players as $item)
               <tr class="clickable" data-id="">
-                <td class="col-sm-2"></td>
-                <td class="col-sm-1"></td>
-                <td class="col-sm-4"></td>
-                <td class="col-sm-2"></td>
-                <td class="col-sm-1"></td>
-                <td class="col-sm-2"></td>
+                <td class="col-sm-2">{{$item->created_at}}</td>
+                <td class="col-sm-4">{{$item->firstname}} {{$item->lastname}}</td>
+                <td class="col-sm-2">{{$item->dob}}</td>
+                <td class="col-sm-1">{{$item->position}}</td>
+                <td class="col-sm-2">{{$item->relation}}</td>
               </tr>
+
+              @endforeach
+              
 
             </tbody>
           </table>

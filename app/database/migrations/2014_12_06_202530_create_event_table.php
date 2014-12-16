@@ -22,10 +22,10 @@ class CreateEventTable extends Migration {
 			$table->double('early_fee');
 			$table->date('early_deadline');
 			$table->date('date');
-			$table->time('startTime');
-			$table->time('endTime');
+			$table->date('end');
 			$table->date('open');
 			$table->date('close');
+			$table->integer('max');
 			$table->boolean('status');
 			$table->integer('type_id')->unsigned();
       $table->foreign('type_id')->references('id')->on('event_type')->onDelete('cascade');
@@ -35,6 +35,17 @@ class CreateEventTable extends Migration {
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->timestamps();
 		});
+
+		Schema::create('event_schedule', function(Blueprint $table) {
+			$table->increments('id');
+			$table->date('date');
+			$table->time('time');
+			$table->text('notes');
+			$table->integer('event_id')->unsigned();
+      $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+			$table->timestamps();
+		});
+
 	}
 
 	/**

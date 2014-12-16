@@ -2,7 +2,7 @@
 
 class Evento extends Eloquent {
 
-	protected $fillable = array('name','type','location','fee','early_fee','early_deadline','date','end','open','close','status','notes');
+	protected $fillable = array('name','type','location','fee','early_fee','early_deadline','date','end','open','close','status','notes', 'max');
 	protected $table = 'events';
 
 	public static $rules = array(
@@ -10,8 +10,9 @@ class Evento extends Eloquent {
 		'type'			=>'required',
 		'location'		=>'required',
         'date'          =>'required|date',
-        'startTime'     =>'required',
-        'endTime'       =>'required',
+        'end'           =>'required|date',
+
+        'max'           =>'required|integer',
 
 		'fee'			=>'required|numeric',
         'early_fee'     =>'required|numeric',
@@ -28,6 +29,26 @@ class Evento extends Eloquent {
     }
     public function type() {
         return $this->hasOne('EventType', 'id','type_id');
+    }
+
+    public function schedule() {
+        return $this->hasMany('EventSchedule', 'event_id','id')->orderBy('date', 'asc');
+    }
+
+    public function participants() {
+        return $this->hasMany('Participant', 'event_id', 'id')
+        ->join('players', 'event_participant.player_id', '=', 'players.id')
+        ->join('profile', 'event_participant.user_id', '=', 'profile.user_id')
+        ->join('payments', 'event_participant.payment_id', '=', 'payments.id')
+        ->select('players.firstname as pfirstname', 
+                'players.lastname as plastname', 
+                'players.relation', 
+                'profile.firstname as ufirstname', 
+                'profile.lastname as ulasttname',
+                'payments.subtotal as total',
+                'payments.transaction',
+                'event_participant.created_at'
+            );
     }
     
     //Accessors & Mutators
@@ -69,6 +90,17 @@ class Evento extends Eloquent {
        return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
     }
 
+    public function setEndAttribute($value)
+    {
+        $this->attributes['end'] =   date('Y-m-d', strtotime($value));
+    }
+
+    public function getEndAttribute($value) 
+    {
+       return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+    }
+
+
     public function getStatusAttribute($value) 
     {
        if($value){ return array('name'=>'Available', 'id'=>1);};
@@ -82,19 +114,13 @@ class Evento extends Eloquent {
     {
        return "$".number_format($value, 2);
     }
-    public function getstartTimeAttribute($value) 
-    {
-       return date('h:i a', strtotime($value));
-    }
-    public function getendTimeAttribute($value) 
-    {
-       return date('h:i a', strtotime($value));
-    }
+    
     public function getNotesAttribute($value) 
     {
        if($value){ return $value;};
        return "No additional instructions";
     }
+
 
 
 

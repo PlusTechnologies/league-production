@@ -13,7 +13,7 @@
 						{{$club->name}}
 					</h1>
 					<h4 class="club-subtitle">{{$event->name}}</h4>
-					<h4 class="club-subtitle">{{$event->date}}</h4>
+					<h4 class="club-subtitle">{{$event->date}} to {{$event->end}}</h4>
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
 					<h1>About Event </h1>
@@ -39,8 +39,8 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th class="col-md-4"></th>
-								<th class="col-md-2"></th>
+								<th class="col-md-3"></th>
+								<th class="col-md-3"></th>
 								<th class="col-md-3"></th>
 								<th class="col-md-3"></th>
 							</tr>
@@ -48,28 +48,39 @@
 						<tbody>
 							<tr>
 								<td class="text-right"><b>Event date:</b></td>
-								<td>{{$event->date}}</td>
-								<td class="text-right"><b>Event time:</b></td>
-								<td>{{$event->startTime}} -  {{$event->endTime}}</td>
+								<td colspan='3'>{{$event->date}} to {{$event->end}}</td>
 							</tr>
+							<tr>
+								<td class="text-right"><b>Event schedule:</b></td>
+								<td colspan='3'>
+									 @foreach($schedule as $date=>$item)
+                    {{$date}} <br>
+                    	@foreach($item as $time)
+                    		&nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
+                    	@endforeach
+                  @endforeach
+								</td>
+							</tr>
+							
 							<tr>
 								<td class="text-right"><b>Registration fee:</b></td>
 								<td>{{$event->fee}}</td>
+							</tr>
+							<tr>
 								<td class="text-right"><b>Open registration:</b></td>
-								<td>{{$event->open}}</td>
-								
+								<td >{{$event->open}}</td>
+								<td class="text-right"><b>Close registration:</b></td>
+								<td>{{$event->close}}</td>
 							</tr>
 							<tr>
 								<td class="text-right"><b>Early registration:</b></td>
 								<td>{{$event->early_fee}}</td>
-								<td class="text-right"><b>Early registration deadline:</b></td>
+								<td class="text-right"><b>Before:</b></td>
 								<td>{{$event->early_deadline}}</td>
 							</tr>
 							<tr>
-								<td class="text-right"><b>Close registration:</b></td>
-								<td>{{$event->close}}</td>
 								<td class="text-right"><b>Location:</b></td>
-								<td>{{$event->location}}</td>
+								<td colspan='3'>{{$event->location}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -86,7 +97,7 @@
 				
 
 			</div>
-			<div class="col-md-5 col-md-offset-1">
+			<div class="col-md-6">
 				<br>
 				<div id="map_canvas"> </div>
 				<br>

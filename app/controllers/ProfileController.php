@@ -1,0 +1,109 @@
+<?php
+
+class ProfileController extends BaseController {
+
+	/**
+	 * Display a listing of the resource.
+	 * GET /profile
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		//
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 * GET /profile/create
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		//
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 * POST /profile
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		//
+	}
+
+	/**
+	 * Display the specified resource.
+	 * GET /profile/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		//
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 * GET /profile/{id}/edit
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 * PUT /profile/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update()
+	{
+		$user= Auth::user();
+		$validator= Validator::make(Input::all(), Profile::$rules);
+
+		if($validator->passes()){
+			$profile = $user->profile;
+			$profile->firstname = Input::get('firstname');
+			$profile->lastname 	= Input::get('lastname');
+			$profile->mobile 		= Input::get('mobile');
+			$profile->dob 			= Input::get('dob');
+			$profile->avatar 		= Input::get('avatar');
+			$status = $profile->save();
+			
+
+			if ( $status )
+			{
+				return Redirect::action('AccountController@settings')
+				->with( 'notice', 'Profile updated successfully');
+			}
+		}
+
+		$error = $validator->errors()->all(':message');
+		return Redirect::action('AccountController@settings')
+		->withErrors($validator)
+		->withInput();
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 * DELETE /profile/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
+
+}

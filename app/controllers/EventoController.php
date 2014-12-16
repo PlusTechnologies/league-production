@@ -64,8 +64,7 @@ class EventoController extends BaseController {
 			$event->type_id     = Input::get('type');
 			$event->location 		= Input::get('location');
 			$event->date 				= Input::get('date');
-			$event->startTime 	= Input::get('startTime');
-			$event->endTime 		= Input::get('endTime');
+			$event->end 				= Input::get('end');
 			$event->fee       	= Input::get('fee');
 			$event->early_fee   = Input::get('early_fee');
 			$event->early_deadline = Input::get('early_deadline');
@@ -73,6 +72,7 @@ class EventoController extends BaseController {
 			$event->close       = Input::get('close');
 			$event->notes 			= Input::get('notes');
 			$event->status 			= Input::get('status');
+			$event->max 				= Input::get('max');
 			$event->user_id 		= $user->id;
 			$event->club_id 		= $club->id;
 			$event->save();
@@ -102,15 +102,18 @@ class EventoController extends BaseController {
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();	
 		$event = Evento::find($id);
+		$participants = $event->participants;
+		$schedule = $event->schedule->groupBy('date');
 		
 		$title = 'League Together - '.$event->name.' Event';
-
-		//return $participant;
+		//return $participants;
 		return View::make('app.club.event.show')
 		->with('page_title', $title)
 		->withEvent($event)
 		->withClub($club)
-		->withUser($user);
+		->withUser($user)
+		->with('schedule', $schedule)
+		->withParticipants($participants);
 	}
 
 	/**

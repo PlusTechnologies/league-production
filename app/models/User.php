@@ -11,6 +11,11 @@ use ConfideUser;
 protected $fillable = array('username','email','password','password_confirmation','confirmation_code', 'remember_token','confirmed');
 protected $hidden = array('password');
 
+public static $rules = array(
+		'password'         => 'required',
+		'password_confirmation' => 'required|same:password'
+	);
+
 
 public function profile() {
 	return $this->hasOne('Profile'); // this matches the Eloquent model
@@ -19,11 +24,9 @@ public function profile() {
 public function clubs() {
 	return $this->belongsToMany('Club')->withTimestamps();    
 }
-public function players()
-{
+public function players(){
 	return $this->hasMany('Player');
 }
-
 
 }
 // <?php

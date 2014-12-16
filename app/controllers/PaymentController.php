@@ -88,9 +88,9 @@ public function success()
 
 
 	$param = array(
-	'report_type'		=> 'customer_vault',
-	'customer_vault_id'	=> $user->customer_id
-	);
+		'report_type'		=> 'customer_vault',
+		'customer_vault_id'	=> $user->customer_id
+		);
 	$payment = new Payment;
 	$vault = $payment->ask($param);
 	$items = Cart::contents();
@@ -140,7 +140,7 @@ public function create()
 		$param = array(
 			'report_type'		=> 'customer_vault',
 			'customer_vault_id'	=> $user->profile->customer_vault
-		);
+			);
 		$payment = new Payment;
 		$vault = $payment->ask($param);
 		//return $vault;
@@ -185,7 +185,7 @@ public function store()
 	$param = array(
 		'customer_vault_id'	=> Input::get('vault'),
 		'discount'					=> Input::get('discount')
-	);
+		);
 
 	$payment = new Payment;
 	$transaction = $payment->sale($param);
@@ -281,41 +281,47 @@ public function receipt($id)
 public function validate()
 {
 	$user =Auth::user();
-	//validation done prior ajax
-	$param = array(
-		'ccnumber'		=> Input::get('card'),
-		'ccexp'				=> Input::get('month').Input::get('year'),
-		'cvv'      		=> Input::get('cv'),
-		'address1'    => Input::get('address'),
-		'city'      	=> Input::get('city'),
-		'state'      	=> Input::get('state'),
-		'zip'					=> Input::get('zip')
-	);
+	$validator = Validator::make(Input::all(), Payment::$rules);
 
-	$payment = new Payment;
-	$transaction = $payment->create_customer($param, $user);
+	if($validator->passes()){
 
+		//validation done prior ajax
+		$param = array(
+			'ccnumber'		=> Input::get('card'),
+			'ccexp'				=> Input::get('month').Input::get('year'),
+			'cvv'      		=> Input::get('cvv'),
+			'address1'    => Input::get('address'),
+			'city'      	=> Input::get('city'),
+			'state'      	=> Input::get('state'),
+			'zip'					=> Input::get('zip')
+			);
 
+		$payment = new Payment;
+		$transaction = $payment->create_customer($param, $user);
 
-	if($transaction->response == 3 || $transaction->response == 2 ){
-		$data = array(
-			'success'  	=> false,
-			'error' 	=> $transaction, 
-		);
-		return $data;
-	}else{
+		if($transaction->response == 3 || $transaction->response == 2 ){
+			$data = array(
+				'success'  	=> false,
+				'error' 	=> $transaction, 
+				);
+			return $data;
+		}else{
 		//update user customer #
-		User::where('id', $user->id)->update(array('customer_id' => $transaction->customer_vault_id ));
+			User::where('id', $user->id)->update(array('customer_id' => $transaction->customer_vault_id ));
 		//retrived data save from API - See API documentation
-		$data = array(
-			'success'  	=> true,
-			'customer' 	=> $transaction->customer_vault_id, 
-			'card'		=> substr($param['ccnumber'], -4),
-			'ccexp'		=> $param['ccexp'],
-			'zip'		=> $param['zip']
-		);
-		return $data;
-	}
+			$data = array(
+				'success'  	=> true,
+				'customer' 	=> $transaction->customer_vault_id, 
+				'card'		=> substr($param['ccnumber'], -4),
+				'ccexp'		=> $param['ccexp'],
+				'zip'		=> $param['zip']
+				);
+			return $data;
+		}
+	}return Redirect::back()
+	->withErrors($validator)
+	->withInput();
+	
 }
 
 
@@ -374,9 +380,9 @@ public function selectplayer()
 
 	// return $cart;
 	return View::make('pages.public.select')
-		->with('page_title', 'Select Player')
-		->withPlayers($user->players)
-		->with('products',$cart );
+	->with('page_title', 'Select Player')
+	->withPlayers($user->players)
+	->with('products',$cart );
 }
 
 public function  addplayertocart($id)
@@ -403,13 +409,13 @@ public function  addplayertocart($id)
 	};
 
  	//validate the number of player by the quantity of items that required a player
- 	if( $array_count >= $cart->quantity){
- 		return  $cart->toArray();
+	if( $array_count >= $cart->quantity){
+		return  $cart->toArray();
  		// return  'true';
- 		return Redirect::back();
- 	}else{
+		return Redirect::back();
+	}else{
  		// return  'false array 0';
- 		if($player){
+		if($player){
 			$player[$index]= $selected;
 			$cart->player_id = $player;
 			//return 	$cart->toArray();
@@ -420,7 +426,7 @@ public function  addplayertocart($id)
 			//return  $cart->toArray();
 			return Redirect::back();
 		}
- 	}
+	}
 
 	//return $new;
 	

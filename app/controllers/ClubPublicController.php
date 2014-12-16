@@ -116,11 +116,14 @@ class ClubPublicController extends \BaseController {
 		$event = Evento::find($id);
 		$status = $event->status['id'];
 		$title = 'League Together - Club | '. $club->name;
+		$schedule = $event->schedule->groupBy('date');
+		//return $schedule;
 		if($status){
 
 			return View::make('app.public.club.event')
 			->with('page_title', $title)
 			->with('club', $club)
+			->with('schedule', $schedule)
 			->with('event', $event);
 
 		}
@@ -280,42 +283,52 @@ class ClubPublicController extends \BaseController {
 		$club = Club::find($club);
 		$event = Evento::find($id);
 
-		//validation done prior ajax
-		$param = array(
-			'ccnumber'		=> str_replace('_', '', Input::get('card')),
-			'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
-			'cvv'      		=> Input::get('cvv'),
-			'address1'    => Input::get('address'),
-			'city'      	=> Input::get('city'),
-			'state'      	=> Input::get('state'),
-			'zip'					=> Input::get('zip'),
-			'club' 				=> $club->id
-			);
+		$validator = Validator::make(Input::all(), Payment::$rules);
 
-		$payment = new Payment;
-		$transaction = $payment->create_customer($param, $user);
-		if($transaction->response == 3 || $transaction->response == 2 ){
-			$data = array(
-				'success'  	=> false,
-				'error' 	=> $transaction, 
+		if($validator->passes()){
+
+			//validation done prior ajax
+			$param = array(
+				'ccnumber'		=> str_replace('_', '', Input::get('card')),
+				'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
+				'cvv'      		=> Input::get('cvv'),
+				'address1'    => Input::get('address'),
+				'city'      	=> Input::get('city'),
+				'state'      	=> Input::get('state'),
+				'zip'					=> Input::get('zip'),
+				'club' 				=> $club->id
 				);
-			return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))
-			->with('error', $transaction->responsetext);
-		}else{
+
+			$payment = new Payment;
+			$transaction = $payment->create_customer($param, $user);
+			if($transaction->response == 3 || $transaction->response == 2 ){
+				$data = array(
+					'success'  	=> false,
+					'error' 	=> $transaction, 
+					);
+				return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))
+				->with('error', $transaction->responsetext);
+			}else{
 		//update user customer #
-			$user->profile->customer_vault = $transaction->customer_vault_id;
-			$user->profile->save();
+				$user->profile->customer_vault = $transaction->customer_vault_id;
+				$user->profile->save();
 			//User::where('id', $user->id)->update(array('customer_id' => $transaction->customer_vault_id ));
 			//retrived data save from API - See API documentation
-			$data = array(
-				'success'  	=> true,
-				'customer' 	=> $transaction->customer_vault_id, 
-				'card'		=> substr($param['ccnumber'], -4),
-				'ccexp'		=> $param['ccexp'],
-				'zip'		=> $param['zip']
-				);
-			return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id));
-		}
+				$data = array(
+					'success'  	=> true,
+					'customer' 	=> $transaction->customer_vault_id, 
+					'card'		=> substr($param['ccnumber'], -4),
+					'ccexp'		=> $param['ccexp'],
+					'zip'		=> $param['zip']
+					);
+				return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id));
+			}
+
+		}return Redirect::back()
+		->withErrors($validator)
+		->withInput();
+
+		
 	}
 
 	public function PaymentStore($club, $id)

@@ -60,21 +60,15 @@
 							<h4>Calendar Information</h4>
 							<p>All fields required</p>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Date</label>
+								<label class="col-sm-3 control-label">Start Date</label>
 								<div class="col-sm-9">
 									{{ Form::text('date',null, array('class' => 'form-control datepicker')) }}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Start Time</label>
+								<label class="col-sm-3 control-label">End Date</label>
 								<div class="col-sm-9">
-									{{ Form::text('startTime',null, array('class' => 'form-control timepicker')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">End Time</label>
-								<div class="col-sm-9">
-									{{ Form::text('endTime',null, array('class' => 'form-control timepicker')) }}
+									{{ Form::text('end',null, array('class' => 'form-control datepicker')) }}
 								</div>
 							</div>
 						</div>
@@ -121,6 +115,13 @@
 								<div class="col-sm-9">
 									{{ Form::text('close',null, array('class' => 'form-control datepicker')) }}
 									<span id="helpBlock" class="help-block">Last date to register for the event</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Max. Participant</label>
+								<div class="col-sm-9">
+									{{ Form::text('max',null, array('class' => 'form-control')) }}
+									<span id="helpBlock" class="help-block">Max. number of participants</span>
 								</div>
 							</div>
 							<div class="form-group">

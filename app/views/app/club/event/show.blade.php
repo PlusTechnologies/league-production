@@ -16,13 +16,13 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="tile blue">
-                <h3 class="title">$95,000.00</h3>
+                <h3 class="title">${{number_format($event->participants->sum('total'), 2)}}</h3>
                 <p>Sales</p>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="tile red">
-                <h3 class="title">50</h3>
+                <h3 class="title">{{$event->participants->count()}}</h3>
                 <p>Registered</p>
               </div>
             </div>
@@ -46,29 +46,41 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="text-right"><b>Event date:</b></td>
-                      <td>{{$event->date}}</td>
-                      <td class="text-right"><b>Event time:</b></td>
-                      <td>{{$event->startTime}} -  {{$event->endTime}}</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right"><b>Registration fee:</b></td>
-                      <td>{{$event->fee}}</td>
-                      <td class="text-right"><b>Early registration:</b></td>
-                      <td>{{$event->early_fee}}</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right"><b>Early registration deadline:</b></td>
-                      <td>{{$event->early_deadline}}</td>
-                      <td class="text-right"><b>Open registration:</b></td>
-                      <td>{{$event->open}}</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right"><b>Close registration:</b></td>
-                      <td>{{$event->close}}</td>
-                      <td class="text-right"><b>Location:</b></td>
-                      <td>{{$event->location}}</td>
-                    </tr>
+                <td class="text-right"><b>Event date:</b></td>
+                <td colspan='3'>{{$event->date}} to {{$event->end}}</td>
+              </tr>
+              <tr>
+                <td class="text-right"><b>Event schedule:</b></td>
+                <td colspan='3'>
+                   @foreach($schedule as $date=>$item)
+                    {{$date}} <br>
+                      @foreach($item as $time)
+                        &nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
+                      @endforeach
+                  @endforeach
+                </td>
+              </tr>
+              
+              <tr>
+                <td class="text-right"><b>Registration fee:</b></td>
+                <td>{{$event->fee}}</td>
+              </tr>
+              <tr>
+                <td class="text-right"><b>Open registration:</b></td>
+                <td >{{$event->open}}</td>
+                <td class="text-right"><b>Close registration:</b></td>
+                <td>{{$event->close}}</td>
+              </tr>
+              <tr>
+                <td class="text-right"><b>Early registration:</b></td>
+                <td>{{$event->early_fee}}</td>
+                <td class="text-right"><b>Before:</b></td>
+                <td>{{$event->early_deadline}}</td>
+              </tr>
+              <tr>
+                <td class="text-right"><b>Location:</b></td>
+                <td colspan='3'>{{$event->location}}</td>
+              </tr>
                   </tbody>
                 </table>
               </div>
@@ -95,19 +107,19 @@
                 <th class="col-sm-1">Relationship</th>
                 <th class="col-sm-2">Player</th>
                 <th class="col-sm-1">Amount</th>
-                <th class="col-sm-1">Method</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="clickable" data-id="">
-                  <td>2014-12-07 04:43:51</td>
-                  <td>asjdfk234hkjhsadjhf</td>
-                  <td>Don Smith</td>
-                  <td>Father</td>
-                  <td>Antony Smith</td>
-                  <td>$350.50</td>
-                  <td>Visa 7336</td>
+              @foreach($event->participants as $item)
+                <tr class="clickable" data-id="">
+                  <td>{{$item->created_at}}</td>
+                  <td>{{$item->transaction}}</td>
+                  <td>{{$item->ufirstname}} {{$item->ulastname}}</td>
+                  <td>{{$item->relation}}</td>
+                  <td>{{$item->pfirstname}} {{$item->plastname}}</td>
+                  <td>${{number_format($item->total, 2) }}</td>
                 </tr>
+              @endforeach
             </tbody>
           </table>
         </div>

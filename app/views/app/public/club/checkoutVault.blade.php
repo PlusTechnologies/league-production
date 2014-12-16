@@ -115,9 +115,9 @@
 								<hr>
 								<div class="row">
 									<div class="col-md-12">	
-										<a href="" class="btn btn-primary btn-outline process ">Edit Card</a>
-										<a href="" class="btn btn-primary btn-outline process ">Edit Player</a>
-
+										<a href="/account" class="btn btn-primary btn-outline ">Edit Card</a>
+										<a href="/account/players" class="btn btn-primary btn-outline ">Edit Player</a>
+										<a href="" class="btn btn-danger btn-outline ">Remove Player</a>
 									</div>
 								</div>
 							</div>
@@ -138,6 +138,12 @@
 		$(".card-mask").kendoMaskedTextBox({
 			mask: "0000 0000 0000 0000"
 		});
+		$( "form" ).submit(function( event ) {
+			$('.process').prop('disabled', true);
+			$('.process').text('');
+			$('.process').html('<i class="fa fa-refresh fa-spin"></i>');
+		});
+
 	});
 
 

@@ -77,6 +77,23 @@
 							</div>
 							@endif
 
+							@if($errors->has())
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<div class="alert alert-dismissable">
+									<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+									<ul>
+										@foreach ($errors->all() as $error) 
+										<li class="text-danger">{{$error}}</li>
+										@endforeach
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					@endif
+
 							{{ Form::open(array('action' => array('ClubPublicController@PaymentValidate', $club->id, $event->id), 'class'=>'form-horizontal','method' => 'post')) }}
 							<p>Credit Card</p>
 							<div class="row">
@@ -84,7 +101,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label">Card</label>
 										<div class="col-sm-9">
-											{{Form::text('card', '', array('id'=>'card','class'=>'form-control card-mask','placeholder'=>'Valid Card Number','tabindex'=>'1', 'required', 'autofocus')) }}
+											{{Form::text('card', '', array('id'=>'card','class'=>'form-control card-mask','placeholder'=>'Valid Card Number','tabindex'=>'1', 'autofocus')) }}
 										</div>
 									</div>
 
@@ -104,7 +121,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label">CVC</label>
 										<div class="col-sm-9">
-											{{Form::text('cvv', '', array('id'=>'cvc','class'=>'form-control','placeholder'=>'CV','tabindex'=>'4', 'required')) }}
+											{{Form::text('cvv', '', array('id'=>'cvc','class'=>'form-control','placeholder'=>'CV','tabindex'=>'4')) }}
 										</div>
 									</div>
 								</div>
@@ -116,13 +133,13 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label" >Street Address</label>
 										<div class="col-sm-9">
-											{{Form::text('address', '', array('id'=>'address','class'=>'form-control','placeholder'=>'eg. 80 Dolphin St','tabindex'=>'2', 'required')) }}
+											{{Form::text('address', '', array('id'=>'address','class'=>'form-control','placeholder'=>'eg. 80 Dolphin St','tabindex'=>'2')) }}
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-3 control-label">City</label>
 										<div class="col-sm-9">
-											{{Form::text('city','',array('id'=>'city','class'=>'form-control','placeholder'=>'eg. New York','tabindex'=>'2', 'required')) }}
+											{{Form::text('city','',array('id'=>'city','class'=>'form-control','placeholder'=>'eg. New York','tabindex'=>'2')) }}
 										</div>
 
 									</div>
@@ -195,7 +212,7 @@
 									<div class="form-group">
 										<label class="col-sm-3 control-label">Billing Zip</label>
 										<div class="col-sm-9">
-											{{Form::text('zip', '', array('id'=>'zip','class'=>'form-control','placeholder'=>'eg. 83401','tabindex'=>'5', 'required')) }}
+											{{Form::text('zip', '', array('id'=>'zip','class'=>'form-control','placeholder'=>'eg. 83401','tabindex'=>'5')) }}
 										</div>
 									</div>
 								</div>
@@ -203,10 +220,9 @@
 							@if($vault)
 							<button class="btn btn-primary btn-outline btn-sm process pull-right" type="submit">Place Order</button>
 							@else
-							<button class="btn btn-primary btn-outline vault btn-sm pull-right">Verify Payment</button>
+							<button class="btn btn-primary btn-outline vault pull-right">Verify Payment</button>
 							@endif
 							{{Form::close()}}
-							
 						</div>
 					</div>
 					<br>

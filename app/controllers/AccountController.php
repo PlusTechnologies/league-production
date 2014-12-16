@@ -12,8 +12,11 @@ class AccountController extends \BaseController {
 	{
 		$user =Auth::user();
 		$title = 'League Together - Club';
+		$payment = Payment::where('user_id', $user->id)->get();
+
 		return View::make('app.account.index')
 			->with('page_title', $title)
+			->with('payment', $payment)
 			->withUser($user);
 	}
 
@@ -22,6 +25,16 @@ class AccountController extends \BaseController {
 		$user =Auth::user();
 		$title = 'League Together - Club';
 		return View::make('app.account.player.index')
+			->with('page_title', $title)
+			->with('players', $user->players)
+			->withUser($user);
+	}
+
+	public function settings()
+	{
+		$user =Auth::user();
+		$title = 'League Together - Settings';
+		return View::make('app.account.settings.index')
 			->with('page_title', $title)
 			->withUser($user);
 	}

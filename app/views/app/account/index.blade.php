@@ -33,61 +33,17 @@
               <tr>
                 <th data-field="date">Date</th>
                 <th data-field="id">Transaction</th>
-                <th data-field="player">Player</th>
-                <th data-field="description">Description</th>
-                <th data-field="last">Card</th>
                 <th data-field="amount">Amount</th>
               </tr>
             </thead>
             <tbody>
+              @foreach($payment as $item)
               <tr>
-                <td class="col-sm-2">10/15/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s1wZ</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
+                <td class="col-sm-2">{{$item->created_at}}</td>
+                <td class="col-sm-2">{{$item->transaction}}</td>
+                <td class="col-sm-2">{{$item->total}}</td>
               </tr>
-              <tr>
-               <td class="col-sm-2">10/14/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s11Z</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
-              </tr>
-              <tr>
-               <td class="col-sm-2">10/15/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s1wZ</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
-              </tr>
-              <tr>
-               <td class="col-sm-2">10/14/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s11Z</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
-              </tr>
-              <tr>
-               <td class="col-sm-2">10/15/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s1wZ</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
-              </tr>
-              <tr>
-                <td class="col-sm-2">10/14/2014 12:13:13pm</td>
-                <td class="col-sm-2">432QjsuQT5s11Z</td>
-                <td class="col-sm-1">Josh Doe</td>
-                <td class="col-sm-4">Membership</td>
-                <td class="col-sm-1">Ending 2312</td>
-                <td class="col-sm-2">$1,300.00</td>
-              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>

@@ -28,11 +28,9 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12 text-center">
-				<a href="http://www.makespace.com" target="_blank"><img src="/img/client/cardflex.png" alt="MakeSpace"></a>
-				<a href="http://www.getcleanio.com/" target="_blank"><img src="/img/client/c2c.png" alt="Cleanio"></a>
-				<a href="http://www.fromparcel.com" target="_blank"><img src="/img/client/uslacrosse.png" alt="Parcel"></a>
-				<a href="http://www.fromparcel.com" target="_blank"><img src="/img/client/makespace.png" alt="Parcel"></a>
-				<a href="http://www.fromparcel.com" target="_blank"><img src="/img/client/firstdata.png" alt="Parcel"></a>
+				<a href="http://www.cardflexnow.com/" target="_blank"><img src="/img/client/cardflex.png" alt="CardFlex"></a>
+				<a href="http://www.uslacrosse.com" target="_blank"><img src="/img/client/uslacrosse.png" alt="Parcel"></a>
+				<a href="https://www.facebook.com/CSquaredCompanies" target="_blank"><img src="/img/client/cc.jpg" alt="CSquaredCompanies"></a>
 			</div>
 		</div>
 	</div>

@@ -4,24 +4,24 @@
       <div class="col-md-10 col-md-offset-1">
         <ul class="nav navbar-nav navbar-left ng-scope col-sm-12" ng-controller="SubnavCtrl">
           <li class="{{ HTML::smart_link('account.club') }} col-xs-1">
-            <a href="{{URL::action('ClubController@index')}}">
+            <a href="{{URL::action('AccountController@index')}}">
               <span class="icon-am retinaicon-essentials-006"></span> 
               <span class="subnav-link-name ng-scope" translate="">Overview</span>
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a href="">
               <span class="icon-am retinaicon-finance-001"></span> 
               <span class="subnav-link-name ng-scope">Payments</span>
             </a>
-          </li>
-          <li >
+          </li>-->
+          <li > 
             <a href="{{URL::action('AccountController@players')}}">
               <span class="icon-am retinaicon-communication-006"></span>
               <span class="subnav-link-name ng-scope">Players</span>
             </a>
           </li>
-          <li >
+          <!-- <li >
             <a href="">
               <span class="icon-am retinaicon-business-042"></span>
               <span class="subnav-link-name ng-scope">Clubs</span>
@@ -32,9 +32,9 @@
               <span class="icon-am retinaicon-essentials-127"></span>
               <span class="subnav-link-name ng-scope">Games Schedule</span>
             </a>
-          </li>
+          </li> -->
           <li>
-            <a href="">
+            <a href="{{URL::action('AccountController@settings')}}">
               <span class="icon-am retinaicon-essentials-007"></span> 
               <span class="subnav-link-name ng-scope">Settings</span>
             </a>

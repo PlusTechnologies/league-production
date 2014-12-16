@@ -19,6 +19,29 @@ class UsersController extends Controller
         return View::make(Config::get('confide::signup_form'));
     }
 
+    public function update()
+    {
+        $user= Auth::user();
+        $validator= Validator::make(Input::all(), User::$rules);
+
+        if($validator->passes()){
+            $user->password     = Input::get('password');
+            $user->password_confirmation   = Input::get('password_confirmation');
+            $status = $user->save();
+
+            if ( $status )
+            {
+                return Redirect::action('AccountController@settings')
+                ->with( 'notice', 'Credentials updated successfully');
+            }
+        }
+
+        $error = $validator->errors()->all(':message');
+        return Redirect::action('AccountController@settings')
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     /**
      * Stores new account
      *

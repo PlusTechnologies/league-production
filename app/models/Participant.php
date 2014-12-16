@@ -4,10 +4,11 @@ class Participant extends Eloquent {
 	protected $fillable = [];
 	protected $table = 'event_participant';
 
-	public function Events()
+	public function events()
     {
-        return $this->belongsTo('evento', 'event');
+        return $this->belongsTo('Evento', 'events');
     }
+
 
     public function Payments()
     {
@@ -16,7 +17,7 @@ class Participant extends Eloquent {
 
     public function Users()
     {
-        return $this->belongsTo('user', 'user');
+        return $this->belongsTo('user', 'users');
     }
 
 

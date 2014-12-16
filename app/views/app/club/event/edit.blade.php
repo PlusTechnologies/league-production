@@ -78,15 +78,9 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Start Time</label>
+								<label class="col-sm-3 control-label">End Date</label>
 								<div class="col-sm-9">
-									{{ Form::text('startTime',$event->startTime, array('class' => 'form-control timepicker')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">End Time</label>
-								<div class="col-sm-9">
-									{{ Form::text('endTime',$event->endTime, array('class' => 'form-control timepicker')) }}
+									{{ Form::text('end',$event->end, array('class' => 'form-control datepicker')) }}
 								</div>
 							</div>
 						</div>
@@ -133,6 +127,13 @@
 								<div class="col-sm-9">
 									{{ Form::text('close',$event->close, array('class' => 'form-control datepicker')) }}
 									<span id="helpBlock" class="help-block">Last date to register for the event</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Max. Participant</label>
+								<div class="col-sm-9">
+									{{ Form::text('max',$event->max, array('class' => 'form-control')) }}
+									<span id="helpBlock" class="help-block">Max. number of participants</span>
 								</div>
 							</div>
 							<div class="form-group">
