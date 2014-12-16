@@ -23,15 +23,17 @@
 					<div class="row">
 						<div class="col-xs-12">
 							
-							@foreach(Cart::contents() as $key=>$item)
+							
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Player</label>
 								<div class="col-sm-9">
 									{{ Form::select('player', $players,'', array('class' => 'form-control') ) }}
+									@foreach(Cart::contents() as $key=>$item)
 									{{ Form::hidden('item', $key) }}
+									@endforeach
 								</div>
 							</div>
-							@endforeach
+							
 							
 						</div>
 					</div>
