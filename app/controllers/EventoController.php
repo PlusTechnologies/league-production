@@ -225,12 +225,12 @@ class EventoController extends BaseController {
 
 		if($validator->passes()){
 			$event = Evento::find($id);
+
 			$event->name        = Input::get('name');
 			$event->type_id     = Input::get('type');
 			$event->location 		= Input::get('location');
 			$event->date 				= Input::get('date');
-			$event->startTime 	= Input::get('startTime');
-			$event->endTime 		= Input::get('endTime');
+			$event->end 				= Input::get('end');
 			$event->fee       	= Input::get('fee');
 			$event->early_fee   = Input::get('early_fee');
 			$event->early_deadline = Input::get('early_deadline');
@@ -238,7 +238,10 @@ class EventoController extends BaseController {
 			$event->close       = Input::get('close');
 			$event->notes 			= Input::get('notes');
 			$event->status 			= Input::get('status');
+			$event->max 				= Input::get('max');
 			$event->user_id 		= $user->id;
+
+
 			$status = $event->save();
 
 			if ( $status )
