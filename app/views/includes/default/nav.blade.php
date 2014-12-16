@@ -19,8 +19,8 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             @if(!Auth::check())
-            <li><a href="{{ URL::route('create') }}">Create Account</a></li>
-            <li><a href="{{ URL::route('login') }}">Login</a></li>
+            <!-- <li><a href="{{ URL::route('create') }}">Create Account</a></li>-->
+            <li><a href="{{ URL::route('login') }}">Login</a></li> 
             @else
             @if(Auth::user()->hasRole('administrator'))
             <li><a href="/account/administrator/club/create">Create account</a></li>

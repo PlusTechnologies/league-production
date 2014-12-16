@@ -14,7 +14,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             @if(!Auth::check())
-            <li><a href="{{ URL::route('create') }}">Create Account</a></li>
+            <!-- <li><a href="{{ URL::route('create') }}">Create Account</a></li> -->
             <li><a href="{{ URL::route('login') }}">Login</a></li>
             @else
             @if(Auth::user()->hasRole('administrator'))
