@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><span>League</span><span class="logo-red">together</span></a>
+          <a class="navbar-brand" href="/"><span>League</span><span class="logo-red">together&#0153;</span></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
