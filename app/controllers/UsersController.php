@@ -25,8 +25,9 @@ class UsersController extends Controller
         $validator= Validator::make(Input::all(), User::$rules);
 
         if($validator->passes()){
-            $user->password     = Input::get('password');
-            $user->password_confirmation   = Input::get('password_confirmation');
+            $user->password            = Input::get('password');
+            $user->password_confirmation  = Input::get('password_confirmation');
+            
             $status = $user->save();
 
             if ( $status )
