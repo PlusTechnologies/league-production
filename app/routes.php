@@ -93,6 +93,7 @@ Route::post('checkout/discount',  array('before' => 'auth','as' => 'checkout.dis
 //Helper API
 Route::post('api/image/upload', 		'ImageController@upload');
 Route::post('api/image/crop', 			'ImageController@crop');
+Route::get('api/ical/create/{id}', 'CalendarController@create');
 
 //** smart link macro **//
 HTML::macro('smart_link', function($route) 

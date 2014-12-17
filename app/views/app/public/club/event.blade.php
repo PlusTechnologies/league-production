@@ -23,7 +23,7 @@
           	<button type="submit" class="btn btn-default btn-outline" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
           {{ Form::close() }}
           <br>
-					<a class="btn btn-default btn-outline" href=""> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
+					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
 					<br><br><br>
 				</div>
 			</div>
@@ -87,10 +87,14 @@
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-					<a class="btn btn-primary btn-outline btn-block" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</a>
+
+					{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
+          	<button type="submit" class="btn btn-primary btn-outline btn-block" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
+          {{ Form::close() }}
+
 				</div>
 				<div class="col-md-6">
-					<a class="btn btn-primary btn-outline btn-block" href=""> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
+					<a class="btn btn-primary btn-outline btn-block" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
 				</div>
 				</div>
 				
