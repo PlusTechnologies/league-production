@@ -34,7 +34,7 @@
             <thead>
               <tr>
                 <th class="col-sm-2" data-field="date">Created</th>
-                <th class="col-sm-4" data-field="name">Name</th>
+                <th class="col-sm-2" data-field="name">Name</th>
                 <th class="col-sm-2" data-field="e_date">DOB</th>
                 <th class="col-sm-1" data-field="fee">Position</th>
                 <th class="col-sm-2" data-field="status">Relationship</th>
@@ -42,17 +42,14 @@
             </thead>
             <tbody>
               @foreach ($players as $item)
-              <tr class="clickable" data-id="">
-                <td class="col-sm-2">{{$item->created_at}}</td>
-                <td class="col-sm-4">{{$item->firstname}} {{$item->lastname}}</td>
-                <td class="col-sm-2">{{$item->dob}}</td>
-                <td class="col-sm-1">{{$item->position}}</td>
-                <td class="col-sm-2">{{$item->relation}}</td>
+              <tr class="clickable" data-id="{{$item->id}}">
+                <td>{{$item->created_at}}</td>
+                <td>{{$item->firstname}} {{$item->lastname}}</td>
+                <td>{{$item->dob}}</td>
+                <td>{{$item->position}}</td>
+                <td>{{$item->relation}}</td>
               </tr>
-
               @endforeach
-              
-
             </tbody>
           </table>
         </div>
@@ -66,7 +63,7 @@
 <script type="text/javascript">
 $(function () {
   $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/event/" + $(this).data("id"));
+    window.location = ("/account/player/" + $(this).data("id") +"/edit");
   });
   $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],

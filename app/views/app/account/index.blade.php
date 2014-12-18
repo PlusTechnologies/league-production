@@ -28,20 +28,26 @@
         <div class="col-md-12">
           <h3>Recent Payments</h3>
           <hr />
-          <table class="table" id="grid">
+          <table class="table table-striped" id="grid">
             <thead>
               <tr>
-                <th data-field="date">Date</th>
-                <th data-field="id">Transaction</th>
-                <th data-field="amount">Amount</th>
+                <th class="col-sm-2">Date</th>
+                <th class="col-sm-2">Transaction</th>
+                <th class="col-sm-6">Description</th>
+                <th class="col-sm-1 text-right">Amount</th>
               </tr>
             </thead>
             <tbody>
               @foreach($payment as $item)
               <tr>
-                <td class="col-sm-2">{{$item->created_at}}</td>
-                <td class="col-sm-2">{{$item->transaction}}</td>
-                <td class="col-sm-2">{{$item->total}}</td>
+                <td>{{$item->created_at}}</td>
+                <td>{{$item->transaction}}</td>
+                <td> 
+                  @foreach($item->items as $data)
+                  {{$data->description}}
+                  @endforeach
+                </td>
+                <td class="text-right">{{$item->total}}</td>
               </tr>
               @endforeach
             </tbody>
@@ -55,12 +61,12 @@
 @section("script")
 <script type="text/javascript">
 $(function () {
-$("#grid").kendoGrid({
-    scrollable: true,
-    sortable: true,
-    pageable: {
-      pageSize: 5
-    }
+  $('#grid').DataTable({
+      "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
+      "iDisplayLength": 5,
+      "tableTools": {
+            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+        }
   });
 });
 </script>

@@ -46,11 +46,11 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 });
 
 Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Club Routes
-	Route::get ('/', 								array('as' =>'account.players', 	'uses' => 'AccountController@index'));
+	Route::get ('/', 								array('as' =>'account.index', 	'uses' => 'AccountController@index'));
 	Route::get ('settings', 				array('as' =>'account.settings',	'uses' => 'AccountController@settings'));
-	Route::post ('settings/user', 		array('uses' => 'UsersController@update'));
+	Route::post ('settings/user', 	array('uses' => 'UsersController@update'));
 	Route::post('settings/profile', array('uses' => 'ProfileController@update'));
-	Route::get ('players', 					array('as' =>'account.players', 	'uses' => 'AccountController@players'));
+	Route::get ('player/delete/{id}', array('as' =>'account.player.delete', 	'uses' => 'PlayerController@delete'));
 	Route::resource('player','PlayerController');
 });
 

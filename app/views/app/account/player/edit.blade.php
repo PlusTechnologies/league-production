@@ -1,6 +1,6 @@
 @extends('layouts.account')
 @section('style')
-  {{HTML::style('css/helpers/croppic.css')}}
+{{HTML::style('css/helpers/croppic.css')}}
 @stop
 @section('content')
 <div class="container container-last">
@@ -8,13 +8,21 @@
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="col-md-4 signup-col same-height">
-					<h2>Account</h2>
-					<br>
-					<p>Update the general information about your account, including credentials and profile information.</p>
+					<h1>Update Player</h1>
+					<br><br>
+					<p>
+						<b class="text-danger">Important:</b> This page is intended for parents or legal guardian only. <br><br>
+						<b>Instructions:</b> <br>
+						Step 1 - Add new player information. <br>
+						Step 2 - Proceed to register to an event.
+					</p>
+					<p>Privacy questions?</p>
+						<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h2>Account Settings</h2>
+					<h3>Update Player</h3>
 					<p></p>
+					{{Form::open(array('action' => array('PlayerController@update', $player->id), 'class'=>'form-horizontal', 'method' => 'Put')) }}
 					@if($errors->has())
 					<div class="row">
 						<div class="col-sm-12">
@@ -42,96 +50,76 @@
 							</div>
 						</div>
 					</div>
-					@endif
-					{{Form::open(array('action' => array('UsersController@update'), 'class'=>'form-horizontal', 'method' => 'post')) }}
+					@endif					
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Account ID and Password</h4>
+							<h4>Player Information</h4>
 							<p>All fields required</p>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Email</label>
+								<label class="col-sm-3 control-label">First name</label>
 								<div class="col-sm-9">
-									{{ Form::text('email', $user->email, array('class' => 'form-control', 'disabled'=>'disabled')) }}
+									{{ Form::text('firstname',$player->firstname, array('class' => 'form-control', 'placeholder'=>'First name')) }}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Password</label>
+								<label class="col-sm-3 control-label">Last name</label>
 								<div class="col-sm-9">
-									{{ Form::password('password', array('class' => 'form-control')) }}
+									{{ Form::text('lastname',$player->lastname, array('class' => 'form-control', 'placeholder'=>'Last name')) }}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Confirm Password</label>
+								<label class="col-sm-3 control-label">Player's position</label>
 								<div class="col-sm-9">
-									{{ Form::password('password_confirmation', array('class' => 'form-control')) }}
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<hr />
-							<div class="form-group">
-								<div class="col-sm-12 text-right">
-									<button type="submit" class="btn btn-primary btn-outline">Save</button>
-									<a href="/" class="btn btn-default">Cancel</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					{{Form::close()}}
-					{{Form::open(array('action' => array('ProfileController@update'), 'class'=>'form-horizontal', 'method' => 'post'))}}
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Personal Information</h4>
-							<p>All fields required</p>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">First Name</label>
-								<div class="col-sm-9">
-									{{ Form::text('firstname', $user->profile->firstname, array('class' => 'form-control')) }}
+									{{ Form::text('position',$player->position, array('class' => 'form-control', 'placeholder'=>'Position')) }}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Last Name</label>
+								<label class="col-sm-3 control-label">Relatioship</label>
 								<div class="col-sm-9">
-									{{ Form::text('lastname', $user->profile->lastname, array('class' => 'form-control')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Mobile</label>
-								<div class="col-sm-9">
-									{{ Form::text('mobile', $user->profile->mobile, array('class' => 'form-control mobile')) }}
+									{{ Form::text('relation',$player->relation, array('class' => 'form-control', 'placeholder'=>'Ex. father, mother, legal guardian, etc.')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">DOB</label>
 								<div class="col-sm-9">
-									{{ Form::text('dob', $user->profile->dob, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('dob',$player->dob, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Profile Picture</h4>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Avatar</label>
+								<label class="col-sm-3 control-label">Gender</label>
+								<div class="col-sm-9">
+									{{Form::select('gender', array('M' => 'Male', 'F' => 'Female'),$player->gender, array('class'=>'form-control'));}}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Gradutation year</label>
+								<div class="col-sm-9">
+									{{ Form::selectRange('year', 2015, 2035, $player->year, array('class'=>'form-control'));}}
+									<span id="helpBlock" class="help-block"><small>High School Graduation Year</small></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Roster picture</label>
 								<div class="col-sm-9">
 									<div id="upimageclub">
-										<img class="edit-org-logo" src="{{$user->profile->avatar}}">
+										<img class="edit-org-logo" src="{{$player->avatar}}">
 									</div>
 									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
 								</div>
 							</div>
 						</div>
 					</div>
+
+
 					<div class="row">
 						<div class="col-xs-12">
 							<hr />
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
 									<button type="submit" class="btn btn-primary btn-outline">Save</button>
-									<a href="/" class="btn btn-default">Cancel</a>
+									<a href="{{URL::action('PlayerController@delete', $player->id)}}" class="btn btn-danger btn-outline">Delete</a>
+									<a href="{{URL::action('PlayerController@index')}}" class="btn btn-default">Cancel</a>
 								</div>
 							</div>
 						</div>
@@ -155,6 +143,7 @@ $(document).ready(function() {
 	$(".mobile").kendoMaskedTextBox({
 	    mask: "(999) 000-0000"
 	});
+
 });
 
 var cropperOptions = {
@@ -163,9 +152,7 @@ var cropperOptions = {
 	uploadUrl:'/api/image/upload',
 	cropUrl:'/api/image/crop',
 	outputUrlId:'croppic',
-	onAfterImgUpload:   function(){ 
-		$(".edit-org-logo").remove();
-	},
+	onAfterImgUpload:   function(){ console.log(cropperHeader) },
 	onAfterImgCrop:     function(){ 
 		console.log(cropperHeader['croppedImg']);
 		var cropurl = $("#croppic").val();

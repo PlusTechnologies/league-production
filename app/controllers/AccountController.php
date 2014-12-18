@@ -12,7 +12,7 @@ class AccountController extends \BaseController {
 	{
 		$user =Auth::user();
 		$title = 'League Together - Club';
-		$payment = Payment::where('user_id', $user->id)->get();
+		$payment = Payment::where('user_id', $user->id)->with('items')->get();
 
 		return View::make('app.account.index')
 			->with('page_title', $title)
@@ -20,7 +20,7 @@ class AccountController extends \BaseController {
 			->withUser($user);
 	}
 
-	public function players()
+	public function player()
 	{
 		$user =Auth::user();
 		$title = 'League Together - Club';

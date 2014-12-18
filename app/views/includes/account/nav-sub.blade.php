@@ -16,7 +16,7 @@
             </a>
           </li>-->
           <li > 
-            <a href="{{URL::action('AccountController@players')}}">
+            <a href="{{URL::action('PlayerController@index')}}">
               <span class="icon-am retinaicon-communication-006"></span>
               <span class="subnav-link-name ng-scope">Players</span>
             </a>
