@@ -1,5 +1,5 @@
  @import url("nav/nav-platform.css");
- @import url(http://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css);
+ @import url(https://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css);
 /**Use in all auth pages **/
 body > .container {
   padding: 60px 15px 70px;

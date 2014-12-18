@@ -63,10 +63,7 @@
 $(function () {
   $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-      "iDisplayLength": 5,
-      "tableTools": {
-            "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
-        }
+      "iDisplayLength": 5
   });
 });
 </script>
