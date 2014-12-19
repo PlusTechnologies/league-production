@@ -38,10 +38,11 @@ class Payment extends Eloquent {
         return $object;
     }
 
-    public function receipt($param, $id){
+    public function receipt($param, $id, $playerid){
         setlocale(LC_MONETARY,"en_US");
         $club = Club::Find($id);
         $user = Auth::user();
+        $player = Player::find($playerid);
         $query = array(
             'report_type'       => 'customer_vault',
             'customer_vault_id' => $user->profile->customer_vault,
@@ -55,12 +56,17 @@ class Payment extends Eloquent {
         //$club = array_unique($club);
         //cart content
         $items = Cart::contents();
-        $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items);
+        $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items, 'club'=>$club, 'player'=>$player);
         $mail = Mail::send('emails.receipt.default', $data, function($message) use ($user, $club){
-            $message->to($user->email, $user->firstname.' '.$user->lastname)
+            
+            $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
             ->subject('Purchased Receipt');
-            $message->to($club->email, $club->name)
-            ->subject('Purchased Receipt - Copy');
+            
+            foreach ($club->users()->get() as $value) {
+               $message->to($value->email, $club->name)
+                ->subject('Purchased Receipt - Copy');
+            }
+            
         });
         return ;
     }

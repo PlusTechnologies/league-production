@@ -12,7 +12,7 @@ class ClubController extends \BaseController {
 	{
 
 		$user =Auth::user();
-		$club = $user->Clubs()->FirstOrFail();
+		$club = $user->Clubs()->FirstOrFail(); 
 		$title = 'League Together - Club';
 		return View::make('app.club.index')
 			->with('page_title', $title)

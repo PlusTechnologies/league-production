@@ -28,6 +28,8 @@ class CreatePaymentTable extends Migration {
 			$table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			$table->string('player_id', 36)->index();
+			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
 			$table->timestamps();
 			$table->primary(array('id')); 
 		});

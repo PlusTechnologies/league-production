@@ -71,6 +71,7 @@ Route::group(array('prefix' => 'club'), function() {
 	Route::get('/{id}/event/{item}/checkout/success',  	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentSuccess'));
 	Route::post('/{id}/event/{item}/checkout/store',   	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentStore'));
 	Route::post('/{id}/event/{item}/checkout/validate',	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentValidate'));
+	Route::post('/{id}/event/{item}/checkout/clear',		array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentRemoveCartItem'));
 	Route::post('/{id}/event/{item}/checkout/discount',	array('before' => 'auth.club',	'uses'=>'DiscountController@validate'));
 });
 

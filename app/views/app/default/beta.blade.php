@@ -10,7 +10,7 @@
         <div id="login-title">Invite Only</div>
         
         <div class="">
-          <p>We are excited to open registration to everyone soon, in the meantime, if you like received an invitation to have your club join early please email us at <a href="mailto:sales@leaguetogether.com">sales@leaguetogether.com</a></p>
+          <p>We are excited to open registration to everyone soon, in the meantime, if you would like to receive an invitation to have your club join early please email us at <a href="mailto:sales@leaguetogether.com">sales@leaguetogether.com</a></p>
         </div>
       </div>
     </div>

@@ -46,87 +46,102 @@
                   </thead>
                   <tbody>
                     <tr>
-                <td class="text-right"><b>Event date:</b></td>
-                <td colspan='3'>{{$event->date}} to {{$event->end}}</td>
-              </tr>
-              <tr>
-                <td class="text-right"><b>Event schedule:</b></td>
-                <td colspan='3'>
-                   @foreach($schedule as $date=>$item)
-                    {{$date}} <br>
-                      @foreach($item as $time)
-                        &nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
-                      @endforeach
-                  @endforeach
-                </td>
-              </tr>
-              
-              <tr>
-                <td class="text-right"><b>Registration fee:</b></td>
-                <td>{{$event->fee}}</td>
-              </tr>
-              <tr>
-                <td class="text-right"><b>Open registration:</b></td>
-                <td >{{$event->open}}</td>
-                <td class="text-right"><b>Close registration:</b></td>
-                <td>{{$event->close}}</td>
-              </tr>
-              <tr>
-                <td class="text-right"><b>Early registration:</b></td>
-                <td>{{$event->early_fee}}</td>
-                <td class="text-right"><b>Before:</b></td>
-                <td>{{$event->early_deadline}}</td>
-              </tr>
-              <tr>
-                <td class="text-right"><b>Location:</b></td>
-                <td colspan='3'>{{$event->location}}</td>
-              </tr>
-                  </tbody>
-                </table>
-              </div>
-              <p>Shared registration link</p>
-              {{ Form::text('name',Request::root()."/club/$club->id/event/$event->id", array('class' => 'form-control block-input')) }}
-              <br>
+                      <td class="text-right"><b>Event date:</b></td>
+                      @if($event->end == $event->date || !$event->end)
+                      <td colspan='3'>{{$event->date}}</td>
+                      @else
+                      <td colspan='3'>{{$event->date}} to {{$event->end}}</td>
+                      @endif
+                    </tr>
+                    @if(!$schedule)
+                    <tr>
+                      <td class="text-right"><b>Event schedule:</b></td>
+                      <td colspan='3'>
+                       @foreach($schedule as $date=>$item)
+                       {{$date}} <br>
+                       @foreach($item as $time)
+                       &nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
+                       @endforeach
+                       @endforeach
+                     </td>
+                   </tr>
+                   @endif
+
+                   <tr>
+                    <td class="text-right"><b>Registration fee:</b></td>
+                    <td>{{$event->fee}}</td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>Open registration:</b></td>
+                    <td >{{$event->open}}</td>
+                    <td class="text-right"><b>Close registration:</b></td>
+                    <td>{{$event->close}}</td>
+                  </tr>
+                  @if(!$event->early_fee)
+                  <tr>
+                    <td class="text-right"><b>Early registration:</b></td>
+                    <td>{{$event->early_fee}}</td>
+                    <td class="text-right"><b>Before:</b></td>
+                    <td>{{$event->early_deadline}}</td>
+                  </tr>
+                  @endif
+                  <tr>
+                    <td class="text-right"><b>Location:</b></td>
+                    @if($event->location)
+                    <td colspan='3'>{{$event->location}}</td>
+                    @else
+                    <td colspan='3'>TBD</td>
+                    @endif
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="col-md-4">
-              <div id="map_canvas"> </div>
-            </div>
+            <p>Shared registration link</p>
+            {{ Form::text('name',Request::root()."/club/$club->id/event/$event->id", array('class' => 'form-control block-input')) }}
+            <br>
+          </div>
+
+          <div class="col-md-4">
+            @if($event->location)
+            <div id="map_canvas"> </div>
+            @endif
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h3>Registered Players</h3>
-          <hr />
-          <table class="table table-striped" id="grid">
-            <thead>
-              <tr>
-                <th class="col-sm-2">Created</th>
-                <th class="col-sm-2">Transaction ID</th>
-                <th class="col-sm-2">User</th>
-                <th class="col-sm-1">Relationship</th>
-                <th class="col-sm-2">Player</th>
-                <th class="col-sm-1">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($event->participants as $item)
-                <tr class="clickable" data-id="">
-                  <td>{{$item->created_at}}</td>
-                  <td>{{$item->transaction}}</td>
-                  <td>{{$item->ufirstname}} {{$item->ulastname}}</td>
-                  <td>{{$item->relation}}</td>
-                  <td>{{$item->pfirstname}} {{$item->plastname}}</td>
-                  <td>${{number_format($item->total, 2) }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
-
     </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Registered Players</h3>
+        <hr />
+        <table class="table table-striped" id="grid">
+          <thead>
+            <tr>
+              <th class="col-sm-2">Created</th>
+              <th class="col-sm-2">Transaction ID</th>
+              <th class="col-sm-2">User</th>
+              <th class="col-sm-1">Relationship</th>
+              <th class="col-sm-2">Player</th>
+              <th class="col-sm-1">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($event->participants as $item)
+            <tr class="clickable" data-id="">
+              <td>{{$item->created_at}}</td>
+              <td>{{$item->transaction}}</td>
+              <td>{{$item->ufirstname}} {{$item->ulastname}}</td>
+              <td>{{$item->relation}}</td>
+              <td>{{$item->pfirstname}} {{$item->plastname}}</td>
+              <td>${{number_format($item->total, 2) }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
+</div>
 </div>
 @stop
 @section("script")

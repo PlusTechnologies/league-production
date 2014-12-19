@@ -12,6 +12,9 @@ class EventTypeTableSeeder extends Seeder {
     	array('name' => 'tryouts', 'description' => 'Tryouts allow players to show their skill.')
 		);	
 		
+		DB::table('event_type')->insert(
+    	array('name' => 'clinic', 'description' => 'Tryouts allow players to show their skill.')
+		);
 	}
 
 }

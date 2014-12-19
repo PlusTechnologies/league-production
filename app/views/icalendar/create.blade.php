@@ -3,7 +3,12 @@
 	date_default_timezone_set('America/Chicago');
 
 	$start 	= date('Ymd', strtotime($event->date));
-	$end 		= date('Ymd', strtotime($event->end . " +1 days"));
+  if($event->end == $event->date || !$event->end){
+  $end    = date('Ymd', strtotime($event->date . " +1 days"));
+  }else{
+  $end    = date('Ymd', strtotime($event->end . " +1 days"));
+  }
+	
 	$lo = str_replace(', USA',' United States', $event->location);
 
   $summary     = $club->name.' | '.$event->name ;

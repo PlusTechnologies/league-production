@@ -146,9 +146,14 @@ class ClubPublicController extends \BaseController {
 		$today = Carbon::Now();
 		$early = new Carbon($event->early_deadline);
 		$price = $event->getOriginal('fee');
-		if($today->startOfDay() <= $early->startOfDay()){
-			$price = $event->getOriginal('early_fee');
+		
+		//early bird pricing logic
+		if($event->early_deadline){
+			if($today->startOfDay() <= $early->startOfDay()){
+				$price = $event->getOriginal('early_fee');
+			}
 		}
+		
 
 		//session club id
 		Session::put('club', $club->id);
@@ -177,12 +182,20 @@ class ClubPublicController extends \BaseController {
 
 	public function selectPlayer($club, $id)
 	{
+
+		//return Cart::contents(true);
+
 		$user =Auth::user();
 		$players = $user->players;
 		$list = $players->lists('TenantFullName','id');
 		$club = Club::find($club);
 		$event = Evento::find($id);
 		$title = 'League Together - Club | '. $club->name;
+
+		if(!Cart::contents(true)){
+			return Redirect::action('ClubPublicController@eventSingle', array($club->id, $event->id) );
+		}
+
 		return View::make('app.public.club.select')
 		->with('page_title', $title)
 		->with('club', $club)
@@ -353,21 +366,23 @@ class ClubPublicController extends \BaseController {
 			return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))->with('error',$transaction->responsetext);
 		}else{
 
-			$payment->id						= $uuid;
-			$payment->customer     	= $user->profile->customer_vault;
-			$payment->transaction   = $transaction->transactionid;	
-			$payment->subtotal 			= $transaction->subtotal;
-			$payment->service_fee   = $transaction->fee;
-			$payment->total   			= $transaction->total;
-			$payment->promo      		= $transaction->promo;
-			$payment->tax   				= $transaction->tax;
-			$payment->discount   		= $transaction->discount;
-			$payment->club_id				= $club->id;
-			$payment->user_id				= $user->id;
-			$payment->event_type		= $event->type_id;
-			$payment->save();
-
 			foreach( Cart::contents() as $item){
+				$payment->id						= $uuid;
+				$payment->customer     	= $user->profile->customer_vault;
+				$payment->transaction   = $transaction->transactionid;	
+				$payment->subtotal 			= $transaction->subtotal;
+				$payment->service_fee   = $transaction->fee;
+				$payment->total   			= $transaction->total;
+				$payment->promo      		= $transaction->promo;
+				$payment->tax   				= $transaction->tax;
+				$payment->discount   		= $transaction->discount;
+				$payment->club_id				= $club->id;
+				$payment->user_id				= $user->id;
+				$payment->player_id 		= $item->player_id;
+				$payment->event_type		= $event->type_id;
+				$payment->save();
+
+
 				$salesfee = ($item->price / getenv("SV_FEE")) - $item->price; 
 				$sale = new Item;
 				$sale->description 	= $item->name;
@@ -388,7 +403,7 @@ class ClubPublicController extends \BaseController {
 			}	
 
 			//email receipt 
-			$payment->receipt($transaction, $club->id);
+			$payment->receipt($transaction, $club->id, $item->player_id);
 			return Redirect::action('ClubPublicController@PaymentSuccess', array($club->id, $event->id))->with('result',$transaction);
 		}
 
@@ -423,8 +438,15 @@ class ClubPublicController extends \BaseController {
 		->with('page_title', 'Payment Complete')
 		->withUser($user)
 		->with('products', $items)
-		->with('result',$result)
+		->with('result', $result)
 		->with('vault', $vault);
+	}
+	public function PaymentRemoveCartItem($club, $id){
+		$club = Club::Find($club);
+		$event = Evento::Find($id);
+		// Clean the cart
+		Cart::destroy();
+		return Redirect::action('ClubPublicController@selectPlayer', array($club->id, $event->id) );
 	}
 
 }

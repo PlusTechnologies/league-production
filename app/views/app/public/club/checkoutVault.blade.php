@@ -57,7 +57,7 @@
 									</tr>
 								</tbody>
 							</table>
-							{{ Form::open(array('action' => array('ClubPublicController@PaymentStore', $club->id, $event->id), 'class'=>'form-horizontal','method' => 'post')) }}
+							{{ Form::open(array('action' => array('ClubPublicController@PaymentStore', $club->id, $event->id), 'class'=>'form-horizontal p','method' => 'post')) }}
 							<button class="btn btn-success btn-lg btn-outline process pull-right" type="submit">Place Order</button>
 							{{Form::close()}}
 						</div>
@@ -115,9 +115,11 @@
 								<hr>
 								<div class="row">
 									<div class="col-md-12">	
-										<a href="/account" class="btn btn-primary btn-outline ">Edit Card</a>
-										<a href="/account/players" class="btn btn-primary btn-outline ">Edit Player</a>
-										<a href="" class="btn btn-danger btn-outline ">Remove Player</a>
+										
+										{{ Form::open(array('action' => array('ClubPublicController@PaymentRemoveCartItem', $club->id, $event->id),'method' => 'post')) }}
+										<a href="/account/player" class="btn btn-primary btn-outline ">Edit Player</a>
+										<button type="submit" class="btn btn-danger btn-outline ">Remove Player</button>
+										{{Form::close()}}
 									</div>
 								</div>
 							</div>
@@ -138,7 +140,7 @@
 		$(".card-mask").kendoMaskedTextBox({
 			mask: "0000 0000 0000 0000"
 		});
-		$( "form" ).submit(function( event ) {
+		$( "form.p" ).submit(function( event ) {
 			$('.process').prop('disabled', true);
 			$('.process').text('');
 			$('.process').html('<i class="fa fa-refresh fa-spin"></i>');

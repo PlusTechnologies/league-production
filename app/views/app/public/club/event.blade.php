@@ -13,16 +13,20 @@
 						{{$club->name}}
 					</h1>
 					<h4 class="club-subtitle">{{$event->name}}</h4>
+					@if($event->end == $event->date || !$event->end)
+					<h4 class="club-subtitle">{{$event->date}}</h4>
+					@else
 					<h4 class="club-subtitle">{{$event->date}} to {{$event->end}}</h4>
+					@endif
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
 					<h1>About Event </h1>
 					<p>{{$event->description}}</p>
 					<br>
 					{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
-          	<button type="submit" class="btn btn-default btn-outline" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
-          {{ Form::close() }}
-          <br>
+					<button type="submit" class="btn btn-default btn-outline" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
+					{{ Form::close() }}
+					<br>
 					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
 					<br><br><br>
 				</div>
@@ -48,19 +52,25 @@
 						<tbody>
 							<tr>
 								<td class="text-right"><b>Event date:</b></td>
+								@if($event->end == $event->date || !$event->end)
+								<td colspan='3'>{{$event->date}}</td>
+								@else
 								<td colspan='3'>{{$event->date}} to {{$event->end}}</td>
+								@endif
 							</tr>
+							@if(!$schedule)
 							<tr>
 								<td class="text-right"><b>Event schedule:</b></td>
 								<td colspan='3'>
-									 @foreach($schedule as $date=>$item)
-                    {{$date}} <br>
-                    	@foreach($item as $time)
-                    		&nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
-                    	@endforeach
-                  @endforeach
+									@foreach($schedule as $date=>$item)
+									{{$date}} <br>
+									@foreach($item as $time)
+									&nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
+									@endforeach
+									@endforeach
 								</td>
 							</tr>
+							@endif
 							
 							<tr>
 								<td class="text-right"><b>Registration fee:</b></td>
@@ -72,15 +82,21 @@
 								<td class="text-right"><b>Close registration:</b></td>
 								<td>{{$event->close}}</td>
 							</tr>
+							@if(!$event->early_fee)
 							<tr>
 								<td class="text-right"><b>Early registration:</b></td>
 								<td>{{$event->early_fee}}</td>
 								<td class="text-right"><b>Before:</b></td>
 								<td>{{$event->early_deadline}}</td>
 							</tr>
+							@endif
 							<tr>
 								<td class="text-right"><b>Location:</b></td>
+								@if($event->location)
 								<td colspan='3'>{{$event->location}}</td>
+								@else
+								<td colspan='3'>TBD</td>
+								@endif
 							</tr>
 						</tbody>
 					</table>
@@ -88,14 +104,14 @@
 				<div class="row">
 					<div class="col-md-6">
 
-					{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
-          	<button type="submit" class="btn btn-primary btn-outline btn-block" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
-          {{ Form::close() }}
+						{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
+						<button type="submit" class="btn btn-primary btn-outline btn-block" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
+						{{ Form::close() }}
 
-				</div>
-				<div class="col-md-6">
-					<a class="btn btn-primary btn-outline btn-block" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
-				</div>
+					</div>
+					<div class="col-md-6">
+						<a class="btn btn-primary btn-outline btn-block" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
+					</div>
 				</div>
 				
 				
@@ -103,7 +119,9 @@
 			</div>
 			<div class="col-md-6">
 				<br>
+				@if($event->location)
 				<div id="map_canvas"> </div>
+				@endif
 				<br>
 				<p>Shared registration link</p>
 				{{ Form::text('name',Request::root()."/club/$club->id/event/$event->id", array('class' => 'form-control block-input')) }}

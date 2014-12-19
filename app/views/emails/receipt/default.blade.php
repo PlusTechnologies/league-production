@@ -672,7 +672,10 @@
                      <tr>
                       <td valign="top" class="mcnTextContent" style="padding: 9px 0px 9px 18px;color: #CACACA;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align: right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;line-height: 150%;">
                        <img align="none" height="18" src="http://gallery.mailchimp.com/17f9a4283a5c17dc2cf4966de/images/2d757c21-01da-472a-a613-518037274bf3.png" style="width: 26px;height: 18px;margin: 0px;border: 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="26">&nbsp;{{$vault->customer_vault->customer->cc_number}}<br>
-                        {{$vault->customer_vault->customer->first_name}} {{$vault->customer_vault->customer->last_name}} <br>
+                       <br><br>
+                        {{$vault->customer_vault->customer->first_name}} {{$vault->customer_vault->customer->last_name}} 
+                        <br>
+                        <b>Player:</b> {{$player->firstname}} {{$player->lastname}}<br>
                         {{$vault->customer_vault->customer->email}}<br>
                         {{$vault->customer_vault->customer->address_1}}<br>
                         {{$vault->customer_vault->customer->city}}, 
@@ -792,16 +795,6 @@
                  <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                   <tbody>
                    <tr>
-                    <td valign="top" class="mcnTextContent" style="padding: 9px 18px;text-align: center;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-family: Helvetica;font-size: 11px;line-height: 125%;">
-                     <em>Copyright © 2014 LeagueTogether, All rights reserved.</em><br>
-                     <br>
-                     <strong>Our mailing address is:</strong><br>
-                     123 N Texas Rd<br>
-                     Reno, TX 83442<br>
-                     <br>
-                     <a class="utilityLink" href="#" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-weight: normal;text-decoration: underline;">LeagueTogether Policy</a>&nbsp;&nbsp;&nbsp; <a class="utilityLink" href="#" style="word-wrap: break-word;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;font-weight: normal;text-decoration: underline;">Manage Preferences</a>&nbsp;<br>
-                     <br>
-                    </td>
                    </tr>
                   </tbody>
                  </table>

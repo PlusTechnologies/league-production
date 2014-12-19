@@ -62,13 +62,13 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Start Date</label>
 								<div class="col-sm-9">
-									{{ Form::text('date',null, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('date',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">End Date</label>
 								<div class="col-sm-9">
-									{{ Form::text('end',null, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('end',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
 						</div>
@@ -88,13 +88,14 @@
 								<label class="col-sm-3 control-label">Early Bird Fee</label>
 								<div class="col-sm-9">
 									{{ Form::text('early_fee',null, array('class' => 'dollar')) }}
+									<span id="helpBlock" class="help-block">Optional - Leave blank and no discount will be provided.</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Dealine</label>
 								<div class="col-sm-9">
-									{{ Form::text('early_deadline',null, array('class' => 'form-control datepicker')) }}
-									<span id="helpBlock" class="help-block">Last day of early bird.</span>
+									{{ Form::text('early_deadline',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
+									<span id="helpBlock" class="help-block">Last day of early bird. Required when early bird fee present.</span>
 								</div>
 							</div>
 						</div>
@@ -106,14 +107,14 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Open</label>
 								<div class="col-sm-9">
-									{{ Form::text('open',null, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('open',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
 									<span id="helpBlock" class="help-block">First date to register for the event</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Close</label>
 								<div class="col-sm-9">
-									{{ Form::text('close',null, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('close',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
 									<span id="helpBlock" class="help-block">Last date to register for the event</span>
 								</div>
 							</div>

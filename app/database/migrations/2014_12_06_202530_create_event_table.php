@@ -16,13 +16,13 @@ class CreateEventTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->text('description');
-			$table->string('location');
+			$table->string('location')->nullable();
 			$table->text('notes');
 			$table->double('fee');
-			$table->double('early_fee');
-			$table->date('early_deadline');
+			$table->double('early_fee')->nullable();
+			$table->date('early_deadline')->nullable();
 			$table->date('date');
-			$table->date('end');
+			$table->date('end')->nullable();
 			$table->date('open');
 			$table->date('close');
 			$table->integer('max');
