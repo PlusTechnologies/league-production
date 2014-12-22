@@ -20,7 +20,7 @@ class Team extends Eloquent {
         return $this->hasOne('Program', "id", "program_id");
     }
     public function Members() {
-        return $this->belongsToMany('Player','Members', 'team_id', 'player_id')->select('*')->withTimestamps();    
+        return $this->belongsToMany('Player','Member', 'team_id', 'player_id')->select('*')->withTimestamps();    
     }
     public function Season() {
         return $this->hasOne('Seasons', "id", "season_id");    
