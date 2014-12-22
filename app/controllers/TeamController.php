@@ -19,7 +19,7 @@ class TeamController extends BaseController {
 	{
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
-		$program = Program::where('club_id','=',$club->id);
+		$program = Program::with('teams')->where('club_id','=',$club->id)->get();
 		$seasons = Seasons::all();
 
 		return $program;
