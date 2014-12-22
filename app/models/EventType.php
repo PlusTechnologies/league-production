@@ -7,4 +7,8 @@ class EventType extends \Eloquent {
 	public function event() {
 		return $this->belongsTo('Evento');
 	}
+
+	public function getNameAttribute($value){
+        return ucfirst($value);
+    }
 }

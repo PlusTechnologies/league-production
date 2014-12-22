@@ -116,7 +116,6 @@ class Evento extends Eloquent {
         if($value){
             return "$".number_format($value, 2);
         }
-        
     }
 
     public function getNotesAttribute($value) {

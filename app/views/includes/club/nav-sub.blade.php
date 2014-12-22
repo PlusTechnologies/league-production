@@ -10,7 +10,7 @@
             </a>
           </li>
           <li class="{{ HTML::smart_link('account.club.teams.index') }} col-xs-1">
-            <a href="">
+            <a href="{{URL::action('TeamController@index')}}">
               <span class="icon-am retinaicon-communication-006"></span> 
               <span class="subnav-link-name ng-scope">Teams</span>
             </a>

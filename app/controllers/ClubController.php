@@ -13,10 +13,12 @@ class ClubController extends \BaseController {
 
 		$user =Auth::user();
 		$club = $user->Clubs()->FirstOrFail(); 
+		$payment = Payment::where('club_id', '=', $club->id)->get();
 		$title = 'League Together - Club';
 		return View::make('app.club.index')
 			->with('page_title', $title)
 			->with('club', $club)
+			->with('payments', $payment)
 			->withUser($user);
 
 	}
@@ -26,7 +28,7 @@ class ClubController extends \BaseController {
 		$user =Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
 		$title = 'League Together - Club';
-		return View::make('app.club.edit')
+		return View::make('app.club.settings.index')
 			->with('page_title', $title)
 			->with('club', $club)
 			->withUser($user);
@@ -71,7 +73,36 @@ class ClubController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$user= Auth::user();
+		$validator= Validator::make(Input::all(), Club::$rules_update);
+
+		if($validator->passes()){
+
+			$club = Club::find($id);
+			$club->name      		= Input::get( 'name' );
+			$club->phone     		= Input::get( 'contactphone' );
+			$club->website    	= Input::get( 'website' );
+			$club->email     		= Input::get( 'contactemail' );
+			$club->add1   			= Input::get( 'add1' );
+			$club->city     		= Input::get( 'city' );
+			$club->state       	= Input::get( 'state' );
+			$club->zip       		= Input::get( 'zip' );
+			$club->logo 				= Input::get('logo');
+			$club->save();
+
+			$status = $club->save();
+
+			if ( $status )
+			{
+				return Redirect::back()
+				->with( 'notice', 'Club updated successfully');
+			}
+		}
+
+		$error = $validator->errors()->all(':message');
+		return Redirect::back()
+		->withErrors($validator)
+		->withInput();
 	}
 
 	/**

@@ -16,6 +16,17 @@ class Club extends Eloquent{
 		'processor_user'=>'required',
 		'processor_pass'=>'required'
 		);
+	public static $rules_update = array(
+		'name'					=>'required|min:3',
+		'contactphone'	=>'required',
+		'contactemail'	=>'required',
+		'website'				=>'required',
+		'add1'					=>'required | min:2',
+		'city'					=>'required | min:2',
+		'state'					=>'required | min:2|max:2',
+		'zip'						=>'required | digits:5',
+		'logo'					=>'required',
+	);
 
 	public function users() {
 		return $this->belongsToMany('User')->withTimestamps();    
@@ -24,6 +35,11 @@ class Club extends Eloquent{
 	public function events()
 	{
 		return $this->hasMany('Evento');
+	}
+
+	public function programs()
+	{
+		return $this->hasMany('Program', 'club_id','id');
 	}
 
 	// public function Programs()

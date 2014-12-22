@@ -20,11 +20,13 @@ class EventoController extends BaseController {
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
 		$event = Evento::where('club_id', '=', $club->id)->with('Type')->get();
+		$payment = Payment::where('club_id', '=', $club->id)->get();
 		$title = 'League Together - '.$club->name.' Event';
 		return View::make('app.club.event.index')
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('events', $event)
+		->with('payment', $payment)
 		->withUser($user);
 	}
 

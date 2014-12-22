@@ -19,6 +19,14 @@ class Payment extends Eloquent {
         return $this->hasMany('Item');
     }
 
+    public function player(){
+        return $this->hasOne('Player', 'id','player_id');
+    }
+
+    public function type() {
+        return $this->hasOne('EventType', 'id','event_type');
+    }
+
     public function sale($param){
         $cart = CardFlex::sale($param);
         $object = json_decode(json_encode($cart), FALSE);
@@ -86,6 +94,10 @@ class Payment extends Eloquent {
     public function getTotalAttribute($value) 
     {
        return "$".number_format($value, 2);
+    }
+
+    public function getSubtotalAttribute($value) {
+        return "$".number_format($value, 2);
     }
 
 }

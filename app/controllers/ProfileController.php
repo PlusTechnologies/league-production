@@ -83,13 +83,13 @@ class ProfileController extends BaseController {
 
 			if ( $status )
 			{
-				return Redirect::action('AccountController@settings')
+				return Redirect::back()
 				->with( 'notice', 'Profile updated successfully');
 			}
 		}
 
 		$error = $validator->errors()->all(':message');
-		return Redirect::action('AccountController@settings')
+		return Redirect::back()
 		->withErrors($validator)
 		->withInput();
 	}

@@ -39,7 +39,8 @@ class CreateEventTable extends Migration {
 		Schema::create('event_schedule', function(Blueprint $table) {
 			$table->increments('id');
 			$table->date('date');
-			$table->time('time');
+			$table->time('statTime');
+			$table->time('endTime');
 			$table->text('notes');
 			$table->integer('event_id')->unsigned();
       $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');

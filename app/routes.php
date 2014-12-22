@@ -33,8 +33,7 @@ Route::group(array('prefix' => 'account/administrator'), function() {
 });
 
 Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Club Routes
-	Route::get ('club/settings', 					array('as' =>'account.club.settings', 'uses' => 'ClubController@settings'));
-	Route::get ('club',										array('as' =>'account.club', 					'uses' => 'ClubController@index'));
+
 	Route::group(array('prefix' => 'club'), function() {
 		Route::resource('event','EventoController');//Event Routes
 		Route::get('event/{id}/invite', 		array('as' =>'event.invite', 			'uses' => 'EventoController@invite'));
@@ -42,7 +41,17 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
 		Route::post('event/{id}/invite', 		array('as' =>'event.doInvite', 		'uses' => 'EventoController@doInvite'));
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
+		Route::resource('discount', 				'DiscountController');
+		Route::resource('team', 						'TeamController');
+		Route::resource('programs', 				'ProgramController');
+		Route::resource('communication', 		'CommunicationController');
+		Route::resource('team.member', 			'MemberController');
+		Route::resource('team.member.plan',	'PlanController');
 	});
+
+	Route::get ('club/settings', 					array('as' =>'account.club.settings', 'uses' => 'ClubController@settings'));
+	Route::get ('club',										array('as' =>'account.club', 					'uses' => 'ClubController@index'));
+	Route::resource('club', 						'ClubController');
 });
 
 Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Club Routes
@@ -51,7 +60,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::post ('settings/user', 	array('uses' => 'UsersController@update'));
 	Route::post('settings/profile', array('uses' => 'ProfileController@update'));
 	Route::get ('player/delete/{id}', array('as' =>'account.player.delete', 	'uses' => 'PlayerController@delete'));
-	Route::resource('player','PlayerController');
+	Route::resource('player', 'PlayerController');
 });
 
 Route::group(array('prefix' => 'club'), function() { 

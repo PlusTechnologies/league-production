@@ -32,15 +32,19 @@ class UsersController extends Controller
 
             if ( $status )
             {
-                return Redirect::action('AccountController@settings')
+                return Redirect::back()
                 ->with( 'notice', 'Credentials updated successfully');
             }
         }
 
         $error = $validator->errors()->all(':message');
-        return Redirect::action('AccountController@settings')
+        
+        return Redirect::back()
         ->withErrors($validator)
         ->withInput();
+
+
+        
     }
 
     /**

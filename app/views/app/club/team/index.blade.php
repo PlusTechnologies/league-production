@@ -2,15 +2,17 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-sm-10 col-sm-offset-1">
       <div class="row">
         <div class="col-sm-5">
-          <h2>Overview </h2>
+          <h2>Team Management</h2>
           <p>
-            Review the most relevant information about your club.
+            Review the most relevant information about your teams.
           </p>
+          <br />
+          <a href="{{URL::action('TeamController@create') }}" class="btn btn-primary btn-outline">Create Team</a>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-7 ">
           <div class="row">
             <div class="col-sm-4">
               <div class="tile blue">
@@ -33,44 +35,49 @@
           </div>
         </div><!-- end of col-sm-7 row -->
       </div><!-- end of first row -->
+      <div class="row ">
+        <div class="col-sm-12">
+          <h3>Programs</h3>
+        </div>
+      </div>
+      <br>
       <div class="row">
         <div class="col-md-12">
-          <h3>Recent Payments</h3>
-          <hr />
-          <table class="table table-striped" id="grid">
+          <table class="table" id="grid">
             <thead>
               <tr>
-                <th class="col-md-2">Date</th>
-                <th class="col-md-2">Transaction</th>
-                <th>Player</th>
-                <th>Type</th>
-                <th>Amount</th>
+                <th data-field="id">Program Name</th>
+                <th data-field="date">Teams</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($payments as $payment)
+              @foreach ($program as $group)
               <tr>
-                <td>{{$payment->created_at}}</td>
-                <td>{{$payment->transaction}}</td>
-                <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
-                <td>{{$payment->type->name}}</td>
-                <td>{{$payment->subtotal}}</td>
+                <td class="col-sm-2">{{$group->name}}</td>
+                <td class="col-sm-2">
+                  @foreach ($group->teams as $team)
+                  <p><a href= "{{ URL::action('TeamController@show', $team->id) }}">{{$team->name}}</a></p>
+                  @endforeach
+                </td>
               </tr>
               @endforeach
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 @stop
 @section("script")
 <script type="text/javascript">
 $(function () {
+  $('#grid').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/club/event/" + $(this).data("id"));
+  });
   $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-      "iDisplayLength": 5
+      "iDisplayLength": 5,
   });
 });
 </script>

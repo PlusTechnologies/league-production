@@ -112,11 +112,13 @@ class ClubPublicController extends \BaseController {
 
 	public function eventSingle($club, $id)
 	{
+
 		$club = Club::find($club);
 		$event = Evento::find($id);
 		$status = $event->status['id'];
 		$title = 'League Together - Club | '. $club->name;
 		$schedule = $event->schedule->groupBy('date');
+		
 		//return $schedule;
 		if($status){
 
