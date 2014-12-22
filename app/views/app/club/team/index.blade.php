@@ -55,7 +55,9 @@
               <tr>
                 <td class="col-sm-2">{{$group->name}}</td>
                 <td class="col-sm-2">
-                  
+                  @foreach($group->teams as $team)
+                  <p>{{$team->name}}</p>
+                  @endforeach
                 </td>
               </tr>
               @endforeach

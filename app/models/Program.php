@@ -16,7 +16,7 @@ class Program extends Eloquent {
 
     public function teams()
     {
-        return $this->hasMany('team','program_id', 'id');
+        return $this->hasMany('Team','program_id', 'id');
     }
 
     public function getTeams($user){
