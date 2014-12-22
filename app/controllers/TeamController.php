@@ -22,7 +22,7 @@ class TeamController extends BaseController {
 		$program = Program::where('club_id','=',$club->id)->get();
 		$seasons = Seasons::all();
 
-		//return $program;
+		return Team::all();
 		$title = 'League Together - '.$club->name.' Teams';
 		return View::make('app.club.team.index')
 		->with('page_title', $title)
