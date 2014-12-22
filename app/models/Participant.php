@@ -12,12 +12,12 @@ class Participant extends Eloquent {
 
     public function Payments()
     {
-        return $this->belongsTo('payment', 'payment');
+        return $this->belongsTo('Payment', 'payment');
     }
 
     public function Users()
     {
-        return $this->belongsTo('user', 'users');
+        return $this->belongsTo('User', 'users');
     }
 
 

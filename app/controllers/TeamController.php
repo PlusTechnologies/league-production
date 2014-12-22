@@ -118,7 +118,7 @@ class TeamController extends BaseController {
 	{
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
-		$team = Team::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+		$team = Team::find($id);
 		$title = 'League Together - '.$club->name.' Teams';
 		return View::make('app.club.team.show')
 		->with('page_title', $title)
