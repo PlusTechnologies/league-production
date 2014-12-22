@@ -19,10 +19,10 @@ class TeamController extends BaseController {
 	{
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
-		$program = Program::with('teams')->where('club_id','=',$club->id)->get();
+		$program = Program::where('club_id','=',$club->id)->get();
 		$seasons = Seasons::all();
 
-		return Team::all();
+		//return $program;
 		$title = 'League Together - '.$club->name.' Teams';
 		return View::make('app.club.team.index')
 		->with('page_title', $title)
