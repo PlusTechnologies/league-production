@@ -17,7 +17,7 @@ class Team extends Eloquent {
 
     public function Program()
     {
-        return $this->hasOne('program', "id", "program_id");
+        return $this->hasOne('Program', "id", "program_id");
     }
     public function Members() {
         return $this->belongsToMany('player','members', 'team_id', 'player_id')->select('*')->withTimestamps();    
