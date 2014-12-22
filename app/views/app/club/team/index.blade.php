@@ -51,7 +51,14 @@
               </tr>
             </thead>
             <tbody>
-             
+              @foreach ($program as $group)
+              <tr>
+                <td class="col-sm-2">{{$group->name}}</td>
+                <td class="col-sm-2">
+                  
+                </td>
+              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
