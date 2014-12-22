@@ -23,11 +23,11 @@ class Team extends Eloquent {
         return $this->belongsToMany('player','members', 'team_id', 'player_id')->select('*')->withTimestamps();    
     }
     public function Season() {
-        return $this->hasOne('seasons', "id", "season_id");    
+        return $this->hasOne('Seasons', "id", "season_id");    
     }
     public function Club()
     {
-        return $this->hasOne('club', "id", "club_id");
+        return $this->hasOne('Club', "id", "club_id");
     }
 
     public function setEarlyDueDeadlineAttribute($value)

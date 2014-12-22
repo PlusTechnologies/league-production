@@ -64,7 +64,7 @@ class Discount extends Eloquent {
 
 	public function Club()
     {
-        return $this->belongsTo('club');
+        return $this->belongsTo('Club');
     }
 
     public function expired($org)

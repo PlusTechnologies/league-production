@@ -10,7 +10,7 @@ class Member extends Eloquent {
 
 
 	public function Player() {
-		return $this->hasOne("player", "id", "player_id");   
+		return $this->hasOne("Player", "id", "player_id");   
 	}
 	
 	public function getDueAttribute($value) 

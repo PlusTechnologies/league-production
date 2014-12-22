@@ -11,7 +11,7 @@ class Program extends Eloquent {
 
     public function Club()
     {
-        return $this->belongsTo('club');
+        return $this->belongsTo('Club');
     }
 
     public function teams()
