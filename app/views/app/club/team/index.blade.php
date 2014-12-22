@@ -51,16 +51,7 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($program as $group)
-              <tr>
-                <td class="col-sm-2">{{$group->name}}</td>
-                <td class="col-sm-2">
-                  @foreach ($group->teams as $team)
-                  <p><a href= "{{ URL::action('TeamController@show', $team->id) }}">{{$team->name}}</a></p>
-                  @endforeach
-                </td>
-              </tr>
-              @endforeach
+             
             </tbody>
           </table>
         </div>

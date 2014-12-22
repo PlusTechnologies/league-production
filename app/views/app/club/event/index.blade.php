@@ -18,7 +18,7 @@
             </div>
             <div class="col-sm-6">
               <div class="tile blue">
-                <h3 class="title">${{number_format($payment->sum('subtotal'), 2)}}</h3>
+                <h3 class="title">${{number_format($payment->sum('total'), 2)}}</h3>
                 <p>YTD Sales</p>
               </div>
             </div>
