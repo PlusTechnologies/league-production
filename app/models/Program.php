@@ -14,9 +14,9 @@ class Program extends Eloquent {
         return $this->belongsTo('club');
     }
 
-    public function Teams()
+    public function teams()
     {
-        return $this->hasMany('team', "program_id");
+        return $this->hasMany('team','id',"program_id");
     }
 
     public function getTeams($user){
