@@ -5,13 +5,9 @@
     <div class="col-sm-10 col-sm-offset-1 app-frame">
       <div class="row">
         <div class="col-sm-5">
-          <h2>Team {{$team->name}}</h2>
-          <p>Program: {{$team->program->name}}</p>
-          <p>Season: {{$team->season->name}}</p>
+          <h2>{{$team->name}}</h2>
+          <h4>{{$team->program->name}} | {{$team->season->name}} </h4>
           <hr>
-          <p>
-            Review the most relevant information about your club.
-          </p>
           <div class="row">
             <div class="col-md-12">
               {{ Form::open(array('action' => array('TeamController@destroy',$team->id), 'method' => 'delete', 'class'=>'btn-trash')) }}
@@ -33,7 +29,7 @@
       <br>
       <div class="row">
         <div class="col-md-12">
-          <table class="table" id="grid">
+          <table class="table table-condensed table-striped" id="grid">
             <thead>
               <tr>
                 <th data-field="date">Added on</th>

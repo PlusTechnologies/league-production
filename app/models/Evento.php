@@ -40,10 +40,11 @@ class Evento extends Eloquent {
         ->join('profile', 'event_participant.user_id', '=', 'profile.user_id')
         ->join('payments', 'event_participant.payment_id', '=', 'payments.id')
         ->select('players.firstname as pfirstname', 
+            'players.id as playerid', 
             'players.lastname as plastname', 
-            'players.relation', 
+            'players.position', 
             'profile.firstname as ufirstname', 
-            'profile.lastname as ulasttname',
+            'profile.lastname as ulastname',
             'payments.subtotal as total',
             'payments.transaction',
             'event_participant.created_at'

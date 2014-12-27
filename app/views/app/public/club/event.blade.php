@@ -58,14 +58,13 @@
 								<td colspan='3'>{{$event->date}} to {{$event->end}}</td>
 								@endif
 							</tr>
-							@if(!$schedule)
+							@if($schedule->count() > 0)
 							<tr>
 								<td class="text-right"><b>Event schedule:</b></td>
 								<td colspan='3'>
-									@foreach($schedule as $date=>$item)
-									{{$date}} <br>
+									@foreach($schedule as $date => $item)
 									@foreach($item as $time)
-									&nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
+									{{$time->startTime}} to {{$time->endTime}} &nbsp; | &nbsp; {{$date}}<br>
 									@endforeach
 									@endforeach
 								</td>
@@ -82,7 +81,7 @@
 								<td class="text-right"><b>Close registration:</b></td>
 								<td>{{$event->close}}</td>
 							</tr>
-							@if(!$event->early_fee)
+							@if($event->early_fee)
 							<tr>
 								<td class="text-right"><b>Early registration:</b></td>
 								<td>{{$event->early_fee}}</td>

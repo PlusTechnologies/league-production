@@ -37,28 +37,30 @@
       </div><!-- end of first row -->
       <div class="row ">
         <div class="col-sm-12">
-          <h3>Programs</h3>
+          <h3>Teams</h3>
         </div>
       </div>
       <br>
       <div class="row">
         <div class="col-md-12">
-          <table class="table" id="grid">
+          <table class="table table-condensed table-striped" id="grid">
             <thead>
               <tr>
-                <th data-field="id">Program Name</th>
-                <th data-field="date">Teams</th>
+                <th class="col-sm-2">Created</th>
+                <th class="col-sm-3">Team</th>
+                <th class="col-sm-2">Season</th>
+                <th class="col-sm-3">Program Name</th>
+                <th class="col-sm-2">Roster</th>
               </tr>
             </thead>
             <tbody>
-              @foreach ($program as $group)
-              <tr>
-                <td class="col-sm-2">{{$group->name}}</td>
-                <td class="col-sm-2">
-                  @foreach ($group->teams as $team)
-                  <p><a href= "{{ URL::action('TeamController@show', $team->id) }}">{{$team->name}}</a></p>
-                  @endforeach
-                </td>
+              @foreach($team as $data)
+              <tr class="clickable" data-id="{{$data->id}}">
+                <td>{{$data->created_at}}</td>
+                <td>{{$data->name}}</td>
+                <td>{{$data->season->name}}</td>
+                <td>{{$data->program->name}}</td>
+                <td></td>
               </tr>
               @endforeach
             </tbody>
@@ -73,7 +75,7 @@
 <script type="text/javascript">
 $(function () {
   $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/event/" + $(this).data("id"));
+    window.location = ("/account/club/team/" + $(this).data("id"));
   });
   $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],

@@ -22,6 +22,18 @@ class ClubController extends \BaseController {
 			->withUser($user);
 
 	}
+	public function playerShow($id){
+		$user =Auth::user();
+		$club = $user->Clubs()->FirstOrFail(); 
+		$player = Player::find($id);
+		$title = 'League Together - Player Profile';
+		return View::make('app.club.player.show')
+			->with('page_title', $title)
+			->with('player', $player)
+			->with('club', $club)
+			->withUser($user);
+
+	}
 
 	public function settings()
 	{
@@ -116,5 +128,7 @@ class ClubController extends \BaseController {
 	{
 		//
 	}
+
+
 
 }

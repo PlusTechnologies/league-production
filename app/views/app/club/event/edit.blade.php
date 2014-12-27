@@ -164,7 +164,7 @@
 							<hr />
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
-									<a href="{{URL::action('EventoController@update')}}" class="btn btn-default">Cancel</a>
+									<a href="{{URL::action('EventoController@index')}}" class="btn btn-default">Cancel</a>
 									<button type="submit" class="btn btn-primary btn-outline">Update Event</button>
 								</div>
 							</div>

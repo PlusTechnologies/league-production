@@ -15,7 +15,7 @@ class EventSchedule extends \Eloquent {
 
     public function getDateAttribute($value) 
     {
-       return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+       return Carbon::createFromFormat('Y-m-d', $value)->format('M, d');
     }
 
     public function getstartTimeAttribute($value) 

@@ -35,7 +35,7 @@
           <div class="row">
             <div class="col-md-8">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table table-condensed table-striped ">
                   <thead>
                     <tr>
                       <th class="col-md-4"></th>
@@ -53,15 +53,14 @@
                       <td colspan='3'>{{$event->date}} to {{$event->end}}</td>
                       @endif
                     </tr>
-                    @if(!$schedule)
+                    @if($schedule->count() > 0)
                     <tr>
                       <td class="text-right"><b>Event schedule:</b></td>
                       <td colspan='3'>
-                       @foreach($schedule as $date=>$item)
-                       {{$date}} <br>
-                       @foreach($item as $time)
-                       &nbsp;&nbsp;{{$time->startTime}} - {{$time->endTime}} <br>
-                       @endforeach
+                       @foreach($schedule as $date => $item)
+                         @foreach($item as $time)
+                         {{$time->startTime}} to {{$time->endTime}} &nbsp; | &nbsp; {{$date}}<br>
+                         @endforeach
                        @endforeach
                      </td>
                    </tr>
@@ -77,7 +76,7 @@
                     <td class="text-right"><b>Close registration:</b></td>
                     <td>{{$event->close}}</td>
                   </tr>
-                  @if(!$event->early_fee)
+                  @if($event->early_fee)
                   <tr>
                     <td class="text-right"><b>Early registration:</b></td>
                     <td>{{$event->early_fee}}</td>
@@ -119,19 +118,19 @@
               <th class="col-sm-2">Created</th>
               <th class="col-sm-2">Transaction ID</th>
               <th class="col-sm-2">User</th>
-              <th class="col-sm-1">Relationship</th>
               <th class="col-sm-2">Player</th>
-              <th class="col-sm-1">Amount</th>
+              <th class="col-sm-2">Position</th>
+              <th class="col-sm-2">Amount</th>
             </tr>
           </thead>
           <tbody>
             @foreach($event->participants as $item)
-            <tr class="clickable" data-id="">
+            <tr class="clickable" data-id="{{$item->playerid}}">
               <td>{{$item->created_at}}</td>
               <td>{{$item->transaction}}</td>
               <td>{{$item->ufirstname}} {{$item->ulastname}}</td>
-              <td>{{$item->relation}}</td>
               <td>{{$item->pfirstname}} {{$item->plastname}}</td>
+              <td>{{$item->position}}</td>
               <td>${{number_format($item->total, 2) }}</td>
             </tr>
             @endforeach
@@ -148,7 +147,7 @@
 <script type="text/javascript">
 $(function () {
   $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/event/" + $(this).data("id"));
+    window.location = ("/account/club/player/" + $(this).data("id"));
   });
   $('#grid').DataTable({
     "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],

@@ -36,6 +36,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 
 	Route::group(array('prefix' => 'club'), function() {
 		Route::resource('event','EventoController');//Event Routes
+		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
+		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
 		Route::get('event/{id}/invite', 		array('as' =>'event.invite', 			'uses' => 'EventoController@invite'));
 		Route::get('event/{id}/duplicate', 	array('as' =>'event.duplicate', 	'uses' => 'EventoController@duplicate'));
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
@@ -47,6 +49,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('communication', 		'CommunicationController');
 		Route::resource('team.member', 			'MemberController');
 		Route::resource('team.member.plan',	'PlanController');
+
 	});
 
 	Route::get ('club/settings', 					array('as' =>'account.club.settings', 'uses' => 'ClubController@settings'));

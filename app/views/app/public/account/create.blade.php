@@ -193,6 +193,7 @@ $(document).ready(function() {
 var cropperOptions = {
 	doubleZoomControls:true,
 	imgEyecandy:true,
+	modal:true,
 	uploadUrl:'/api/image/upload',
 	cropUrl:'/api/image/crop',
 	outputUrlId:'croppic',
