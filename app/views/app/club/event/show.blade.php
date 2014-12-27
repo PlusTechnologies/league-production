@@ -58,9 +58,9 @@
                       <td class="text-right"><b>Event schedule:</b></td>
                       <td colspan='3'>
                        @foreach($schedule as $date => $item)
-                         @foreach($item as $time)
-                         {{$time->startTime}} to {{$time->endTime}} &nbsp; | &nbsp; {{$date}}<br>
-                         @endforeach
+                       @foreach($item as $time)
+                       {{$time->startTime}} to {{$time->endTime}} &nbsp; | &nbsp; {{$date}}<br>
+                       @endforeach
                        @endforeach
                      </td>
                    </tr>
@@ -108,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row print-area">
       <div class="col-md-12">
         <h3>Registered Players</h3>
         <hr />
@@ -151,8 +151,13 @@ $(function () {
   });
   $('#grid').DataTable({
     "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-    "iDisplayLength": 5
+    "iDisplayLength": 5,
+    dom: 'T<"clear">lfrtip',
+    tableTools: {
+            "aButtons": ["print" ]
+    }
   });
+  
 });
 </script>
 @include('shared.geomap')

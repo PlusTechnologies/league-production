@@ -12,5 +12,6 @@
 {{ HTML::script('/js/helpers/kendo.all.min.js') }}
 {{HTML::script('//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js')}}
 {{HTML::script('//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js')}}
+{{HTML::script('/js/helpers/dataTables.tableTools.min.js')}}
 {{ HTML::script('js/standard.js')}}
 <!-- {{ HTML::script('js/classie.js')}} -->
