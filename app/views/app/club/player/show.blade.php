@@ -85,7 +85,7 @@
 							</table>
 						</div>
 					</div>
-					<h3>Player Stats</h3>
+					<h3>Player Statistics</h3>
 					<br>
 					<div class="row">
 						<div class="col-md-12">

@@ -51,7 +51,7 @@
                 <td>{{$event->date}}</td>
                 <td>{{$event->fee}}</td>
                 <td>{{$event->status['name']}}</td>
-                <td>{{$event->count()}} of {{$event->max}}</td>
+                <td>{{$event->participants->count()}} of {{$event->max}}</td>
               </tr>
               @endforeach
             </tbody>
