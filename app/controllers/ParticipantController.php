@@ -130,15 +130,14 @@ class ParticipantController extends BaseController {
 				$sale->event_id   	= $event->id;
 				$sale->save();
 
-				$participant->delete();
-				return Redirect::action('EventoController@show', $event->id);
+				
 
 			}//end of transaction result
 
 		} //end of amount test 
 		
-		return "No refund";
-
+		$participant->delete();
+		return Redirect::action('EventoController@show', $event->id);
 
 	}
 
