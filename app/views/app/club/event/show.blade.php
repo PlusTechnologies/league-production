@@ -117,10 +117,10 @@
             <tr>
               <th class="col-sm-2">Created</th>
               <th class="col-sm-2">Transaction ID</th>
-              <th class="col-sm-2">User</th>
-              <th class="col-sm-2">Player</th>
+              <th class="col-sm-3">Player</th>
               <th class="col-sm-2">Position</th>
               <th class="col-sm-2">Amount</th>
+              <th class="col-sm-1">Remove</th>
             </tr>
           </thead>
           <tbody>
@@ -128,10 +128,10 @@
             <tr class="clickable" data-id="{{$item->playerid}}">
               <td>{{$item->created_at}}</td>
               <td>{{$item->transaction}}</td>
-              <td>{{$item->ufirstname}} {{$item->ulastname}}</td>
               <td>{{$item->pfirstname}} {{$item->plastname}}</td>
               <td>{{$item->position}}</td>
               <td>${{number_format($item->total, 2) }}</td>
+              <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($event->id, $item->paymentid))}}" class="btn btn-xs btn-danger btn-delete"><i class="fa fa-trash-o"></i></a></td>
             </tr>
             @endforeach
           </tbody>

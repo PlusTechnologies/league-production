@@ -45,6 +45,7 @@ class Evento extends Eloquent {
             'players.position', 
             'profile.firstname as ufirstname', 
             'profile.lastname as ulastname',
+            'payments.id as paymentid',
             'payments.subtotal as total',
             'payments.transaction',
             'event_participant.created_at'

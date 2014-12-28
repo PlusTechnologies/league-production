@@ -162,7 +162,7 @@ class ClubPublicController extends \BaseController {
 
 		$item = array(
 			'id' 							=> $event->id,
-			'name'						=> $event->name. ' - Player Registration',
+			'name'						=> $event->name,
 			'price'						=> $price,
 			'quantity'				=> 1,
 			'organization' 		=> $club->name,
@@ -175,7 +175,7 @@ class ClubPublicController extends \BaseController {
 		Cart::insert($item);
 		//limit to one registration per session
 		foreach (Cart::contents() as $item) {
-			$item->name = $event->name. ' - Player Registration';
+			$item->name = $event->name;
 			$item->quantity = 1;
 		}	
 
@@ -382,6 +382,7 @@ class ClubPublicController extends \BaseController {
 				$payment->user_id				= $user->id;
 				$payment->player_id 		= $item->player_id;
 				$payment->event_type		= $event->type_id;
+				$payment->type					= $transaction->type;
 				$payment->save();
 
 

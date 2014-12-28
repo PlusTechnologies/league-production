@@ -12,7 +12,7 @@
 					<p class="text-center"><img src="{{$player->avatar}}" width="200" height="200"></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h3>Player profile</h3>
+					<h3>User profile</h3>
 					<br>
 					<div class="row">
 						<div class="col-xs-12">

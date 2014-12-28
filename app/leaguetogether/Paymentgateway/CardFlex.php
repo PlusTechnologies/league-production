@@ -67,7 +67,7 @@ class CardFlex{
 				'email'										=> $user->email,
 				'phone'										=> $user->mobile,
 				'orderdescription'				=> $desc,
-				'merchant_defined_field_1'=> $fee
+				'merchant_defined_field_1'=> number_format($fee, 2, '.', '')
 		);
 
 		$merge = array_merge($type,$param,$credentials);
@@ -126,8 +126,6 @@ class CardFlex{
 
 	public function query($param){
 
-
-
 		$user =Auth::user();
 		$club = Club::Find($param['club']);
 		unset($param['club']);
@@ -152,10 +150,49 @@ class CardFlex{
 		curl_close($ch);
 		//$response = array_merge_recursive($output);
 		return $out;
-
-
-		
 	}
+
+	public function transaction($param, $type){
+
+		$now = new DateTime;
+    	$now->setTimezone(new DateTimeZone('America/Chicago'));
+    	$now->format('M d, Y at h:i:s A');
+
+		$user =Auth::user();
+		$club = Club::Find($param['club']);
+
+		$charged = array(
+				'date'			=> $now,
+				'total'			=> $param['amount']
+		);
+
+		unset($param['club']);
+		unset($param['amount']);
+
+		$credentials = array(
+				'username'				=> Crypt::decrypt($club->processor_user),
+				'password'				=> Crypt::decrypt($club->processor_pass),
+		);
+
+		$merge = array_merge($type,$credentials,$param);
+		$params = http_build_query($merge) . "\n";
+		
+		//return $params;
+
+		$uri = "https://secure.cardflexonline.com/api/transact.php";
+		$ch = curl_init($uri);
+		curl_setopt_array($ch, array(
+		CURLOPT_RETURNTRANSFER  =>true,
+		CURLOPT_VERBOSE     => 1,
+		CURLOPT_POSTFIELDS =>$params
+		));
+		$out = curl_exec($ch) or die(curl_error());
+		parse_str($out, $output);
+		curl_close($ch);
+		$response = array_merge_recursive($output,$charged);
+		return $response;
+	}
+
 
 	
 
@@ -189,7 +226,11 @@ class CardFlex{
 	}
 
 	public function refund($param){
-		return $reponse;
+
+		$type = array('type'=> 'refund');
+		$transaction = CardFlex::transaction($param, $type);
+		return  $transaction;
+
 	}
 
 	public function credit($param){

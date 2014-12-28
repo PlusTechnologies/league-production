@@ -53,7 +53,7 @@
                 <td>{{$payment->created_at}}</td>
                 <td>{{$payment->transaction}}</td>
                 <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
-                <td>{{$payment->type->name}}</td>
+                <td>{{$payment->eventType->name}}</td>
                 <td>{{$payment->subtotal}}</td>
               </tr>
               @endforeach
@@ -69,8 +69,8 @@
 <script type="text/javascript">
 $(function () {
   $('#grid').DataTable({
-      "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-      "iDisplayLength": 5
+      "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
+      "iDisplayLength": 10
   });
 });
 </script>

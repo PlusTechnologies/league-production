@@ -38,6 +38,11 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('event','EventoController');//Event Routes
 		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
 		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
+
+		Route::get('user/{id}', 						array('as' =>'user.show', 			'uses' => 'ClubController@playerShow'));
+		Route::get('user/{id}/edit', 				array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
+		Route::get('event/{id}/participant/{payment}/delete', array('as' =>'event.participant', 'uses' => 'ParticipantController@delete'));
+		Route::post('event/{id}/participant/{payment}/delete', array('as' =>'event.participant', 'uses' => 'ParticipantController@destroy'));
 		Route::get('event/{id}/invite', 		array('as' =>'event.invite', 			'uses' => 'EventoController@invite'));
 		Route::get('event/{id}/duplicate', 	array('as' =>'event.duplicate', 	'uses' => 'EventoController@duplicate'));
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
