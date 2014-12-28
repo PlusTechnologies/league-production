@@ -30,7 +30,7 @@
         <div class="col-md-12">
           <h3>Event History</h3>
           <hr />
-          <table class="table table-condensed table-striped" id="grid">
+          <table class="table table-striped" id="grid">
             <thead>
               <tr>
                 <th class="col-sm-2" data-field="date">Created</th>

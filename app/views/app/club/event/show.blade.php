@@ -35,7 +35,7 @@
           <div class="row">
             <div class="col-md-8">
               <div class="table-responsive">
-                <table class="table table-condensed table-striped ">
+                <table class="table table-striped ">
                   <thead>
                     <tr>
                       <th class="col-md-4"></th>

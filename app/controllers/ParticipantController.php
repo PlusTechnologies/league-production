@@ -102,7 +102,7 @@ class ParticipantController extends BaseController {
 			);
 
 			$transaction = $payment->refund($param);
-			//return Response::json($transaction);
+			return Response::json($transaction);
 			
 			if($transaction->response == 3 || $transaction->response == 2 ){
 				return Response::json($transaction);
