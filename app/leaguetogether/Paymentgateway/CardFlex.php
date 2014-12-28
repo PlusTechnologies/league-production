@@ -167,7 +167,7 @@ class CardFlex{
 		);
 
 		unset($param['club']);
-		unset($param['amount']);
+		//unset($param['amount']);
 
 		$credentials = array(
 				'username'				=> Crypt::decrypt($club->processor_user),
