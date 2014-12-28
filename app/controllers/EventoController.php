@@ -107,16 +107,20 @@ class EventoController extends BaseController {
 		$event = Evento::find($id);
 		$participants = $event->participants;
 		$schedule = $event->schedule->groupBy('date');
-		
+		$emaillist="";
+		foreach ($event->participants as $item) {
+			$emaillist .= $item->email.",";
+		}
 		$title = 'League Together - '.$event->name.' Event';
-		//return $participants;
+
 		return View::make('app.club.event.show')
 		->with('page_title', $title)
 		->withEvent($event)
 		->withClub($club)
 		->withUser($user)
 		->with('schedule', $schedule)
-		->withParticipants($participants);
+		->withParticipants($participants)
+		->with('emailList', $emaillist);
 	}
 
 	/**

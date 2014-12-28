@@ -8,7 +8,9 @@
           <h2>{{$event->name}}</h2>
           <br>
           <a href="{{URL::action('EventoController@edit', $event->id)}}" class="btn btn-primary btn-outline">Edit</a> 
-          <a href="{{URL::action('EventoController@invite', $event->id)}}" class="btn btn-primary btn-outline">Invite</a> 
+          <a href="mailto:{{$emailList}}" class="btn btn-primary btn-outline">
+            Announcement
+          </a> 
           <a href="{{URL::action('EventoController@duplicate', $event->id)}}" class="btn btn-primary btn-outline">Duplicate</a> 
           <a href="{{URL::action('EventoController@delete', $event->id)}}" class="btn btn-danger btn-outline">Delete</a>
         </div>
