@@ -102,7 +102,6 @@ class ParticipantController extends BaseController {
 			);
 
 			$transaction = $payment->refund($param);
-			return Response::json($transaction);
 			
 			if($transaction->response == 3 || $transaction->response == 2 ){
 				return Response::json($transaction);
@@ -136,17 +135,9 @@ class ParticipantController extends BaseController {
 
 			}//end of transaction result
 
-
 		} //end of amount test 
 		
 		return "No refund";
-
-		// $status = $participant->delete();
-
-		// if($status){
-		// 	return Redirect::action('EventoController@index');
-		// }
-		// return Redirect::action('EventoController@index')->withErrors($status);
 
 
 	}
