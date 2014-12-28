@@ -16,7 +16,7 @@
           <br>
           {{Form::open(array('action' => array('ParticipantController@destroy', $event->id, $payment->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
           <h4>Refund</h4>
-          <p>Eligiable amount: {{$payment->subtotal}}</p>
+          <p>Eligible amount: {{$payment->subtotal}}</p>
           <div class="form-group">
             <label class="col-sm-3 control-label">Amount:</label>
             <div class="col-sm-9">
