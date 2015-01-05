@@ -65,6 +65,10 @@ body > .container {
 /* Data table overwrite*/
 table.dataTable thead > tr > th {
   padding-left: 8px;
+  
+}
+.table-user-information>thead>tr>th{
+  border-bottom: 0 ;
 }
 .table-user-information > tbody > tr {
   border-top: 1px solid rgb(221, 221, 221);
@@ -73,5 +77,9 @@ table.dataTable thead > tr > th {
   border-top: 0;
 }
 .table-user-information > tbody > tr > td {
-border-top: 0;
+  border-top: 0;
+
+}
+.DTTT_container{
+  margin-bottom: 0 !important;
 }

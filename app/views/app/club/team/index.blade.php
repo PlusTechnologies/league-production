@@ -50,7 +50,8 @@
                 <th class="col-sm-3">Team</th>
                 <th class="col-sm-2">Season</th>
                 <th class="col-sm-3">Program Name</th>
-                <th class="col-sm-2">Roster</th>
+                <th class="col-sm-3">Dues</th>
+                <th class="col-sm-2">Capacity</th>
               </tr>
             </thead>
             <tbody>
@@ -60,7 +61,8 @@
                 <td>{{$data->name}}</td>
                 <td>{{$data->season->name}}</td>
                 <td>{{$data->program->name}}</td>
-                <td></td>
+                <td>{{$data->due}}</td>
+                <td>{{$data->members->count()}} of {{$data->max}}</td>
               </tr>
               @endforeach
             </tbody>

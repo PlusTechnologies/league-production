@@ -53,7 +53,7 @@
                 <td>{{$payment->created_at}}</td>
                 <td>{{$payment->transaction}}</td>
                 <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
-                <td>{{$payment->eventType->name}}</td>
+                <td>{{$payment->type}}</td>
                 <td>{{$payment->subtotal}}</td>
               </tr>
               @endforeach

@@ -22,7 +22,8 @@ class CreatePaymentTable extends Migration {
 			$table->double('tax',15, 2);
 			$table->double('discount',15, 2);
 			$table->double('total',15, 2);
-			$table->integer('event_type')->unsigned();
+			$table->string('type');
+			$table->integer('event_type')->unsigned()->nullable();
       $table->foreign('event_type')->references('id')->on('event_type')->onDelete('cascade');
 			$table->string('club_id', 36)->index();
 			$table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');

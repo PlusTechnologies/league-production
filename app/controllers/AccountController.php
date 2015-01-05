@@ -14,10 +14,11 @@ class AccountController extends \BaseController {
 		$title = 'League Together - Club';
 		$payment = Payment::where('user_id', $user->id)->with('items')->get();
 
+
 		return View::make('app.account.index')
-			->with('page_title', $title)
-			->with('payment', $payment)
-			->withUser($user);
+		->with('page_title', $title)
+		->with('payment', $payment)
+		->withUser($user);
 	}
 
 	public function player()
@@ -25,19 +26,128 @@ class AccountController extends \BaseController {
 		$user =Auth::user();
 		$title = 'League Together - Club';
 		return View::make('app.account.player.index')
-			->with('page_title', $title)
-			->with('players', $user->players)
-			->withUser($user);
+		->with('page_title', $title)
+		->with('players', $user->players)
+		->withUser($user);
 	}
 
 	public function settings()
 	{
 		$user =Auth::user();
 		$title = 'League Together - Settings';
-		return View::make('app.account.settings.index')
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+		$club = Club::find($follow->club_id);
+
+		if($user->profile->customer_vault){
+			$param = array(
+				'report_type'	=> 'customer_vault',
+				'customer_vault_id'	=> $user->profile->customer_vault,
+				'club'							=> $club->id
+				);
+			$payment = new Payment;
+			$vault = $payment->ask($param);
+		}
+
+		if(isset($vault)){
+			return View::make('app.account.settings.indexVault')
 			->with('page_title', $title)
+			->with('vault',$vault)
 			->withUser($user);
+		}	
+
+		return View::make('app.account.settings.index')
+		->with('page_title', $title)
+		->withUser($user);
 	}
+
+	public function vaultEdit($id)
+	{
+		$user =Auth::user();
+		$title = 'League Together - Settings';
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+		$club = Club::find($follow->club_id);
+
+		if($user->profile->customer_vault){
+			$param = array(
+				'report_type'	=> 'customer_vault',
+				'customer_vault_id'	=> $user->profile->customer_vault,
+				'club'							=> $club->id
+				);
+			$payment = new Payment;
+			$vault = $payment->ask($param);
+		}
+
+		if(isset($vault)){
+			return View::make('app.account.settings.vaultEdit')
+			->with('page_title', $title)
+			->with('vault',$vault)
+			->withUser($user);
+		}	
+
+		return Redirect::action('AccountController@settings');
+
+	}
+
+
+	public function vaultUpdate($id)
+	{
+		$user =Auth::user();
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+		$club = Club::find($follow->club_id);
+
+		$validator = Validator::make(Input::all(), Payment::$rules);
+
+		if($validator->passes()){
+
+		//validation done prior ajax
+			$param = array(
+				'customer_vault_id' => $id,
+				'club'							=> $club->id,
+				'ccnumber'		=> Input::get('card'),
+				'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
+				'cvv'      		=> Input::get('cvv'),
+				'address1'    => Input::get('address'),
+				'city'      	=> Input::get('city'),
+				'state'      	=> Input::get('state'),
+				'zip'					=> Input::get('zip')
+				);
+
+			$payment = new Payment;
+			$transaction = $payment->update_customer($param, $user);
+
+			if($transaction->response == 3 || $transaction->response == 2 ){
+				$data = array(
+					'success'  	=> false,
+					'error' 	=> $transaction, 
+					);
+				return $data;
+			}else{
+			//update user customer #
+			$user->profile->customer_vault = $transaction->customer_vault_id;
+			$user->profile->save();
+			//retrived data save from API - See API documentation
+				$data = array(
+					'success'  	=> true,
+					'customer' 	=> $transaction->customer_vault_id, 
+					'card'		=> substr($param['ccnumber'], -4),
+					'ccexp'		=> $param['ccexp'],
+					'zip'		=> $param['zip']
+					);
+			return Redirect::action('AccountController@settings')
+				->with( 'notice', 'Payment information updated successfully');
+			}
+		}return Redirect::back()
+		->withErrors($validator)
+		->withInput();
+
+
+
+		
+		return Redirect::action('AccountController@settings');
+
+	}
+
+
 
 	/**
 	 * Show the form for creating a new resource.

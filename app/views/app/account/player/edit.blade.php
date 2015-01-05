@@ -147,6 +147,7 @@ $(document).ready(function() {
 });
 
 var cropperOptions = {
+	modal:true,
 	doubleZoomControls:true,
 	imgEyecandy:true,
 	uploadUrl:'/api/image/upload',

@@ -54,6 +54,40 @@
           </table>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>Invites</h3>
+          <hr />
+          <table class="table table-striped" id="grid1">
+            <thead>
+              <tr>
+                <th class="">Created</th>
+                <th class="">Player</th>
+                <th class="">Club</th>
+                <th class="">Team</th>
+                <th class="">Cost</th>
+                <th class="text-right"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($invites as $item)
+              <tr class="clickable" data-id="{{$item->id}}">
+                <td>{{$item->created_at}}</td>
+                <td>{{$item->firstname}} {{$item->lastname}}</td>
+                <td>{{$item->team->club->name}}</td>
+                <td>{{$item->team->name}}</td>
+                <td>{{$item->due}}</td>
+                <td class="text-right" >
+                  <a href="{{URL::action('MemberController@accept',$item->id)}}" class="btn btn-success btn-outline">Accept</a>
+                  <a href="{{URL::action('MemberController@decline',$item->id)}}" class="btn btn-danger btn-outline">Decline</a>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -62,10 +96,10 @@
 
 <script type="text/javascript">
 $(function () {
-  $('#grid').delegate('tbody > tr', 'click', function (e) {
+  $('#grid, #grid1').delegate('tbody > tr', 'click', function (e) {
     window.location = ("/account/player/" + $(this).data("id") +"/edit");
   });
-  $('#grid').DataTable({
+  $('#grid, #grid1').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
       "iDisplayLength": 5
   });

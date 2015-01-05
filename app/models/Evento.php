@@ -103,11 +103,6 @@ class Evento extends Eloquent {
         }
     }
 
-
-    public function getStatusAttribute($value){
-        if($value){ return array('name'=>'Available', 'id'=>1);};
-        return array('name'=>'Unavailable', 'id'=>0);
-    }
     public function getFeeAttribute($value) {
         return "$".number_format($value, 2);
     }

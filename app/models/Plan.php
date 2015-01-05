@@ -1,14 +1,17 @@
 <?php
 
 class Plan extends Eloquent {
-	protected $fillable = [];
+	protected $fillable = array('id','name','total','initial','recurring', 'frequency_id','on');
 	/**
      * Validation rules
      */
 	public static $rules = array(
-		'frequency_id'	=> 'required',
-		'start'      		=> 'required|date',
-		'end'			   		=> 'required|date',
+		'name'			=> 'required',
+		'total'   	=> 'required',
+		'initial' 	=> 'required',
+		'recurring'	=> 'required',
+		'frequency_id' =>'required',
+		'on'	 			=> 'required'
 		);
 
 	public static $rules_validation = array(
@@ -26,19 +29,34 @@ class Plan extends Eloquent {
 	{
 		return $this->hasMany('schedulepayment');
 	}
-
-	public function Members()
+	public function getInitialAttribute($value) 
 	{
-		return $this->belongsTo('member');
+		return "$".number_format($value, 2);
 	}
 
-	public function setStartAttribute($value)
+	public function getTotalAttribute($value) 
 	{
-		$this->attributes['start'] =   date('Y-m-d', strtotime($value));
+		return "$".number_format($value, 2);
 	}
-	public function setEndAttribute($value)
+
+	public function getOnAttribute($value) 
 	{
-		$this->attributes['end'] =   date('Y-m-d', strtotime($value));
+		$number = $value;
+
+		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
+		if (($number %100) >= 11 && ($number%100) <= 13)
+			$abbreviation = $number. 'th';
+		else
+			$abbreviation = $number. $ends[$number % 10];
+
+		return $abbreviation;
+	}
+
+	
+
+	public function getRecurringAttribute($value) 
+	{
+		return "$".number_format($value, 2);
 	}
 
 

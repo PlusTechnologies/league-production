@@ -12,9 +12,22 @@ class PlayerController extends \BaseController {
 	{
 		$user =Auth::user();
 		$title = 'League Together - Club';
+		$players =  $user->players;
+		$invites = [];
+		//get player from follower
+		foreach ($players as $player) {
+			$member = Member::where('player_id','=',$player->id)->where('accepted_on','=',null)->where('declined_on','=',null)->get();
+			if($member){
+				foreach ($member as $data) {
+					$invites[] = $data;
+				}
+			}
+		}
+
 		return View::make('app.account.player.index')
 		->with('page_title', $title)
 		->with('players', $user->players)
+		->with('invites', $invites)
 		->withUser($user);
 	}
 

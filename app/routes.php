@@ -48,12 +48,13 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
 		Route::post('event/{id}/invite', 		array('as' =>'event.doInvite', 		'uses' => 'EventoController@doInvite'));
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
+		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
 		Route::resource('discount', 				'DiscountController');
 		Route::resource('team', 						'TeamController');
 		Route::resource('programs', 				'ProgramController');
 		Route::resource('communication', 		'CommunicationController');
 		Route::resource('team.member', 			'MemberController');
-		Route::resource('team.member.plan',	'PlanController');
+		Route::resource('plan',							'PlanController');
 
 	});
 
@@ -65,9 +66,22 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Club Routes
 	Route::get ('/', 								array('as' =>'account.index', 	'uses' => 'AccountController@index'));
 	Route::get ('settings', 				array('as' =>'account.settings',	'uses' => 'AccountController@settings'));
-	Route::post ('settings/user', 	array('uses' => 'UsersController@update'));
-	Route::post('settings/profile', array('uses' => 'ProfileController@update'));
-	Route::get ('player/delete/{id}', array('as' =>'account.player.delete', 	'uses' => 'PlayerController@delete'));
+	Route::get ('settings/vault/{id}/edit',				array('as' =>'account.settings.vault.edit',		'uses' => 'AccountController@vaultEdit'));
+	Route::post ('settings/vault/{id}/update',		array('as' =>'account.settings.vault.update',	'uses' => 'AccountController@vaultUpdate'));
+	Route::post ('settings/user', 								array('uses' => 'UsersController@update'));
+	Route::post('settings/profile', 							array('uses' => 'ProfileController@update'));
+	Route::get ('player/delete/{id}', 						array('as' =>'account.player.delete', 		'uses' => 'PlayerController@delete'));
+	Route::get('member/{id}/accept', 							array('as' =>'account.member.accept',			'uses' => 'MemberController@accept'));
+	Route::get('member/{id}/decline',	 						array('as' =>'account.member.decline',		'uses' => 'MemberController@decline'));
+	Route::post('member/{id}/decline',	 					array('as' =>'account.member.doDecline',	'uses' => 'MemberController@doDecline'));
+	Route::get('member/{id}/payment', 						array('as' =>'account.member.pay',			'uses' => 'MemberController@paymentSelect'));
+	Route::post('member/{id}/payment', 						array('as' =>'account.member.dopay',		'uses' => 'MemberController@doPaymentSelect'));
+	Route::get('member/{id}/checkout',         		array('as'=>'account.member.checkout',	'uses' => 'MemberController@paymentCreate'));
+	Route::get('member/{id}/checkout/success',  	array('as'=>'account.member.success', 	'uses' => 'MemberController@paymentSuccess'));
+	Route::post('member/{id}/checkout/store',   	array('as'=>'account.member.store', 		'uses' => 'MemberController@paymentStore'));
+	Route::post('member/{id}/checkout/validate',	array('as'=>'account.member.validate', 	'uses' => 'MemberController@paymentValidate'));
+	Route::post('member/{id}/checkout/clear',			array('as'=>'account.member.clear', 		'uses' => 'MemberController@paymentRemoveCartItem'));
+	Route::post('member/{id}/checkout/discount',	array('as'=>'account.member.discount', 	'uses' => 'DiscountController@validate'));
 	Route::resource('player', 'PlayerController');
 });
 

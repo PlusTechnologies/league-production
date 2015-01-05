@@ -59,6 +59,11 @@ class ClubPublicController extends \BaseController {
 				$player->user_id   	= $user->id;
 				$player->save();
 
+				$follower = new Follower;
+				$follower->user_id = $user->id;
+				$follower->club_id = $club->id;
+				$follower->save();
+
 
 				if (Config::get('confide::signup_email')) {
 					Mail::queueOn(
@@ -115,11 +120,11 @@ class ClubPublicController extends \BaseController {
 
 		$club = Club::find($club);
 		$event = Evento::find($id);
-		$status = $event->status['id'];
+		$status = $event->status;
 		$title = 'League Together - Club | '. $club->name;
 		$schedule = $event->schedule->groupBy('date');
 		
-		//return $schedule;
+		//return $status;
 		if($status){
 
 			return View::make('app.public.club.event')

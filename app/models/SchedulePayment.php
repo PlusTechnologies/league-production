@@ -9,9 +9,14 @@ class SchedulePayment extends Eloquent {
 		$this->attributes['date'] =   date('Y-m-d', strtotime($value));
 	}
 
-	public function Plans()
+	public function plan()
 	{
-		return $this->belongsTo('plans', 'id', 'plan_id');
+		return $this->belongsTo('Plan', 'id', 'plan_id');
+	}
+
+	public function member()
+	{
+		return $this->belongsTo('Member', 'id', 'member_id');
 	}
 
 	public function getStatusAttribute($value) 
@@ -22,11 +27,5 @@ class SchedulePayment extends Eloquent {
 			return "<span class='text-info'>Scheduled</span>";
 		}
 	}
-
-	public function getTotalAttribute($value) 
-	{
-		return money_format('%.2n',$value);
-	}
-
 
 }

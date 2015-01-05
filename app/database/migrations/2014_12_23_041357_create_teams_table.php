@@ -20,6 +20,13 @@ class CreateTeamsTable extends Migration {
 			$table->double('due');
 			$table->double('early_due');
 			$table->date('early_due_deadline');
+			$table->date('open');
+			$table->date('close');
+			$table->integer('max');
+			$table->boolean('allow_plan');
+			$table->boolean('status');
+			$table->string('plan_id', 36)->index()->nullable();
+			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
 			$table->string('club_id', 36)->index();
 			$table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');
 			$table->integer('season_id')->unsigned();

@@ -45,6 +45,13 @@ class Payment extends Eloquent {
         return $object ;
     }
 
+    public function update_customer($param, $user){
+        $cart = CardFlex::vault_update($param, $user);
+        $object = json_decode(json_encode($cart), FALSE);
+        return $object ;
+    }
+
+
     public function ask($param){
         $cart = CardFlex::query($param);
         $xml = simplexml_load_string($cart);
@@ -74,11 +81,11 @@ class Payment extends Eloquent {
         $mail = Mail::send('emails.receipt.default', $data, function($message) use ($user, $club){
             
             $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
-            ->subject('Purchased Receipt');
+            ->subject("Purchased Receipt | $club->name");
             
             foreach ($club->users()->get() as $value) {
                $message->to($value->email, $club->name)
-                ->subject('Purchased Receipt - Copy');
+                ->subject("Purchased Receipt - $club->name");
             }
             
         });

@@ -133,7 +133,7 @@
               <td>{{$item->pfirstname}} {{$item->plastname}}</td>
               <td>{{$item->position}}</td>
               <td>${{number_format($item->total, 2) }}</td>
-              <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($event->id, $item->paymentid))}}" class="btn btn-xs btn-danger btn-delete"><i class="fa fa-trash-o"></i></a></td>
+              <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($event->id, $item->paymentid))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
             </tr>
             @endforeach
           </tbody>
@@ -148,8 +148,18 @@
 @section("script")
 <script type="text/javascript">
 $(function () {
+
   $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/player/" + $(this).data("id"));
+    var data = $(this).data("id");
+    if(data){
+      window.location = ("/account/club/player/" + data );
+    }
+    return false;
+    
+  });
+
+  $('#grid tbody > tr').find('td:last').on('click', function(e) {
+        e.stopPropagation();
   });
   $('#grid').DataTable({
     "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],

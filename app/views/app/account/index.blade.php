@@ -18,7 +18,7 @@
             <div class="col-sm-6">
               <div class="tile blue">
                 <h3 class="title">$00.00</h3>
-                <p>Account Balance</p>
+                <p>Balance Due</p>
               </div>
             </div>
           </div>

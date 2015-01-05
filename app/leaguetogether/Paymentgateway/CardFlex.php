@@ -65,7 +65,7 @@ class CardFlex{
 				'password'								=> Crypt::decrypt($club->processor_pass),
 				'amount' 									=> $total,
 				'email'										=> $user->email,
-				'phone'										=> $user->mobile,
+				'phone'										=> $user->profile->mobile,
 				'orderdescription'				=> $desc,
 				'merchant_defined_field_1'=> number_format($fee, 2, '.', '')
 		);
@@ -122,6 +122,39 @@ class CardFlex{
 		return $response;
 		
 	}
+
+	public function vault_update($param, $user){	
+
+		$club = Club::Find($param['club']);
+		unset($param['club']);
+
+		$credentials = array(
+				'customer_vault'	=> 'update_customer',
+				'username'				=> Crypt::decrypt($club->processor_user),
+				'password'				=> Crypt::decrypt($club->processor_pass),
+				'first_name' 			=> $user->profile->firstname,
+				'last_name'				=> $user->profile->lastname,
+				'email' 					=> $user->email,
+				'phone'						=> $user->profile->mobile
+		);
+
+		$merge 	= array_merge($credentials,$param);
+		$params = http_build_query($merge) . "\n";
+		$uri 		= "https://secure.cardflexonline.com/api/transact.php";
+		$ch 		= curl_init($uri);
+		curl_setopt_array($ch, array(
+		CURLOPT_RETURNTRANSFER  => true,
+		CURLOPT_VERBOSE     		=> 1,
+		CURLOPT_POSTFIELDS 			=> $params
+		));
+		$out = curl_exec($ch) or die(curl_error());
+		parse_str($out, $output);
+		curl_close($ch);
+		$response = array_merge_recursive($output);
+		return $response;
+		
+	}
+
 
 
 	public function query($param){

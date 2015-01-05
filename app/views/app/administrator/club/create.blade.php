@@ -80,7 +80,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">DOB</label>
 								<div class="col-sm-9">
-									{{ Form::text('dob',null, array('class' => 'form-control datepicker', 'placeholder'=>'DOB')) }}
+									{{ Form::text('dob',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
 									<span id="helpBlock" class="help-block"><small>This is required so that we can comply with the Children’s Online Privacy Protection Act and other age restrictions.</small></span>
 								</div>
 							</div>

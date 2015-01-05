@@ -21,6 +21,7 @@ class CreateProfileTable extends Migration {
 			$table->string('lastname');
 			$table->string('customer_vault');
 			$table->string('mobile');
+			$table->string('second_email');
 			$table->string('avatar');
 			$table->date('dob');
 			$table->timestamps();

@@ -31,6 +31,18 @@
 						</div>
 					</div>
 					@endif
+					@if(Session::has('notice'))
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<div class="alert alert-dismissable">
+									<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+									<p class="text-success">{{Session::get('notice')}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					@endif
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>General Information</h4>

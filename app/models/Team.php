@@ -7,46 +7,87 @@ class Team extends Eloquent {
      * Validation rules
      */
     public static $rules = array(
-        'name'    		        => 'required',
-        'season_id'	            => 'required',
-        'program_id'            => 'required',
-        'due'			        => 'required',
-        'early_due'             => 'required',
-        'early_due_deadline'    => 'required|date',
+        'name'          => 'required',
+        'season_id'     => 'required',
+        'program_id'    => 'required',
+        'description'   => 'required',
+        'early_due'     => 'required',
+        'early_due_deadline' => 'required|date',
+        'due'           => 'required',
+        'plan_id'       => 'required',
+        'open'          => 'required|date',
+        'close'         => 'required|date',
+        'max'           => 'required|integer',
+        'status'        => 'required'
     );
 
-    public function Program()
-    {
+    public function program(){
         return $this->hasOne('Program', "id", "program_id");
     }
-    public function Members() {
-        return $this->belongsToMany('Player','members', 'team_id', 'player_id')->select('*')->withTimestamps();    
+    public function members() {
+        return $this->belongsToMany('Player','members')->withPivot('accepted_on','created_at','id');    
     }
-    public function Season() {
+    public function season() {
         return $this->hasOne('Seasons', "id", "season_id");    
     }
-    public function Club()
+    public function plan() {
+        return $this->hasOne('Plan', "id", "plan_id");    
+    }
+
+    public function club()
     {
         return $this->hasOne('Club', "id", "club_id");
     }
 
     public function setEarlyDueDeadlineAttribute($value)
     {
-        $this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
+        if($value){
+            $this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
+        }
     }
 
     public function getEarlyDueDeadlineAttribute($value) 
     {
-       return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+        if($value){
+            return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+        }
     }
     public function getDueAttribute($value) 
     {
-       return money_format('%.2n',$value);
+       return "$".number_format($value, 2);
     }
 
     public function getEarlyDueAttribute($value) 
     {
-       return money_format('%.2n',$value);
+       return "$".number_format($value, 2);
     }
+
+    public function setOpenAttribute($value)
+    {
+        $this->attributes['open'] =   date('Y-m-d', strtotime($value));
+    }
+
+    public function getOpenAttribute($value) 
+    {
+        return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+
+    }
+
+    public function setCloseAttribute($value)
+    {
+        $this->attributes['close'] =   date('Y-m-d', strtotime($value));
+    }
+
+    public function getCloseAttribute($value) 
+    {
+        return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+
+    }
+
+    public function getStatusAttribute($value){
+        if($value){ return array('name'=>'Available', 'id'=>1);};
+        return array('name'=>'Unavailable', 'id'=>0);
+    }
+
 
 }
