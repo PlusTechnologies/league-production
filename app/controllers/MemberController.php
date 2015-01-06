@@ -41,8 +41,6 @@ class MemberController extends BaseController {
 			}
 		}
 
-		return Follower::all();
-
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::find($id);
 		return View::make('app.club.member.create')
