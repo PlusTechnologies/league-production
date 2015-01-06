@@ -39,7 +39,7 @@ class CreateEventTable extends Migration {
 		Schema::create('event_schedule', function(Blueprint $table) {
 			$table->increments('id');
 			$table->date('date');
-			$table->time('statTime');
+			$table->time('startTime');
 			$table->time('endTime');
 			$table->text('notes');
 			$table->integer('event_id')->unsigned();
