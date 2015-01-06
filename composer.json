@@ -12,7 +12,8 @@
 		"intervention/image":"*",
 		"nesbot/carbon": "*",
 		"webpatser/laravel-uuid": "1.*",
-		"moltin/laravel-cart": "dev-master"
+		"moltin/laravel-cart": "dev-master",
+		"indatus/dispatcher":"~1.4"
 	},
 	"autoload": {
 		"classmap": [

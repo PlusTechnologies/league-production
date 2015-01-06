@@ -39,7 +39,7 @@ class Club extends Eloquent{
 
 	public function plans()
 	{
-		return $this->hasMany('plan','club_id','id');
+		return $this->hasMany('Plan','club_id','id');
 	}
 
 	public function programs()

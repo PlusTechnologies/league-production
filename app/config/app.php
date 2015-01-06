@@ -127,6 +127,7 @@ return array(
 		'Intervention\Image\ImageServiceProvider',
 		'Moltin\Cart\CartServiceProvider',
 		'leaguetogether\Paymentgateway\CardFlexServiceProvider',
+		'Indatus\Dispatcher\ServiceProvider',
 
 	),
 

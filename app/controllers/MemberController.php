@@ -25,7 +25,7 @@ class MemberController extends BaseController {
 		$user= Auth::user();
 		$club = $user->clubs()->FirstOrFail();
 		$plan = $club->plans()->lists('name','id');
-		$followers =  $club->followers;
+		$followers =  Follower::all();
 
 		$players = [];
 		//get player from follower
@@ -40,6 +40,8 @@ class MemberController extends BaseController {
 				}
 			}
 		}
+
+		return Follower::all();
 
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::find($id);
@@ -606,7 +608,7 @@ public function PaymentStore($id){
 				$member->status = 1;
 				$member->save();
 
-				//create payments plan
+				//create payments plan schedule
 				if($item->type == "plan"){
 					$subtotal = $member->plan->getOriginal('recurring');
 					$fee 		= ($subtotal / getenv("SV_FEE")) - $subtotal ;
@@ -614,7 +616,23 @@ public function PaymentStore($id){
 					for ($x = 1; $x < $member->plan->recurrences + 1; $x++) {
 						$today = Carbon::now();
 						$today->addMonths($x);
-						$payday = Carbon::create($today->year, $today->month, $member->plan->getOriginal('on'), 0);
+
+						$payon = $member->plan->getOriginal('on');
+
+						//make sure the payday is a valid day
+						if($payon == 31 ){
+							if($today->month == 2){
+								$payon = 28;
+							}
+							if(	$today->month == 4 || 
+									$today->month == 6 ||
+									$today->month == 9 ||
+									$today->month == 11){
+								$payon = 30;
+							}
+						}
+
+						$payday = Carbon::create($today->year, $today->month, $payon, 0);
     				$schedule = new SchedulePayment;
     				$schedule->date = $payday;
     				$schedule->description = "Membership Team ".$member->team->name;

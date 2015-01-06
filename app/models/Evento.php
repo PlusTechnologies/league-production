@@ -122,10 +122,16 @@ class Evento extends Eloquent {
         return "No additional instructions";
     }
 
-    public function getStatusAttribute($value) 
-    {
-       if($value){ return array('name'=>'Available', 'id'=>1);};
-       return array('name'=>'Unavailable', 'id'=>0);
+    public function getStatusAttribute($value){
+        switch ($value) {
+            case 1:
+                return [id,]"Available";
+            case 0:
+                return "Unavailable";
+            default:
+                return "Unavailable";
+        }
+        
     }
 
 
