@@ -2,9 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
-                <p class="text-muted">Copyright &copy; LeagueTogether&#0153; 2014. All Rights Reserved | 
-                	<a href="/privacy">Privacy Policy</a>  | 
-                	<a href="/terms">Terms & Conditions</a>  | 
+                <p class="text-muted">Copyright &copy; LeagueTogether&#0153; 2014. All Rights Reserved
+                <span class="pull-right">
+                    <a href="/privacy">Privacy Policy</a> | 
+                    <a href="/terms">Terms & Conditions</a>
+                </span>
                 </p>
             </div>
         </div>

@@ -8,7 +8,6 @@
                     <a href="/terms">Terms & Conditions</a>
                 </span>
                 </p>
-                
             </div>
         </div>
     </div>
