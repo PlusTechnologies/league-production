@@ -2,7 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <p class="text-muted">Copyright &copy; LeagueTogether&#0153; 2014. All Rights Reserved | <a href="/terms">Privacy Policy</a></p>
+                <p class="text-muted">Copyright &copy; LeagueTogether&#0153; 2014. All Rights Reserved | 
+                	<a class="pull-right" href="/privacy">Privacy Policy</a>  | 
+                	<a class="pull-right" href="/terms">Terms & Conditions</a>  | 
+                </p>
             </div>
         </div>
     </div>

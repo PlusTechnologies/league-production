@@ -28,4 +28,8 @@ class HomeController extends BaseController {
 		$title = 'League Together - Privacy Policy';
 		return View::make('app.default.terms')->with('page_title', $title);
 	}
+	public function showPrivacy(){
+		$title = 'League Together - Terms';
+		return View::make('app.default.privacy')->with('page_title', $title);
+	}
 }

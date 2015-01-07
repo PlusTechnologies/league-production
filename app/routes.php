@@ -14,6 +14,7 @@
 Route::get('/',	array('as' =>'home', 'uses' => 'HomeController@showHome'));
 Route::get('beta', array('as' =>'home', 'uses' => 'HomeController@showBeta'));
 Route::get('terms', array('as' =>'home', 'uses' => 'HomeController@showTerms'));
+Route::get('privacy', array('as' =>'home', 'uses' => 'HomeController@showPrivacy'));
 
 
 Route::group(								array('prefix' => 'account'), function() { 
