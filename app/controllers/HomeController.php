@@ -24,4 +24,8 @@ class HomeController extends BaseController {
 		$title = 'League Together - Beta Notice';
 		return View::make('app.default.beta')->with('page_title', $title);
 	}
+	public function showTerms(){
+		$title = 'League Together - Privacy Policy';
+		return View::make('app.default.terms')->with('page_title', $title);
+	}
 }

@@ -22,10 +22,10 @@ class MemberController extends BaseController {
 	public function create($id)
 	{
 
-		$user= Auth::user();
+		$user = Auth::user();
 		$club = $user->clubs()->FirstOrFail();
 		$plan = $club->plans()->lists('name','id');
-		$followers =  Follower::all();
+		$followers = $club->followers;
 
 		$players = [];
 		//get player from follower

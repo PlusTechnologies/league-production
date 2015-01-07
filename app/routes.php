@@ -13,6 +13,8 @@
 
 Route::get('/',	array('as' =>'home', 'uses' => 'HomeController@showHome'));
 Route::get('beta', array('as' =>'home', 'uses' => 'HomeController@showBeta'));
+Route::get('terms', array('as' =>'home', 'uses' => 'HomeController@showTerms'));
+
 
 Route::group(								array('prefix' => 'account'), function() { 
 	// Confide routes
