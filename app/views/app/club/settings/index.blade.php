@@ -202,7 +202,7 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Club Terms of services and Libility waiver</h4>
+							<h4>Club Terms of services and Liability waiver</h4>
 							<p>All fields required</p>
 							<div class="form-group">
 								<div class="col-sm-12">
