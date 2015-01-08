@@ -40,7 +40,7 @@ class PlanSchedule extends ScheduledCommand {
 	 */
 	public function schedule(Schedulable $scheduler)
 	{
-		return $scheduler->minutes(5);
+		return $scheduler->everyMinutes(5);
 	}
 
 	/**
