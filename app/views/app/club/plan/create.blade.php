@@ -108,8 +108,8 @@
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
 
-                      <button type="submit" class="btn btn-primary btn-outline">Add Plan</button>
-                      <a href="{{ URL::action('TeamController@index') }}" class="btn btn-default btn-outline" >Cancel</a>
+                      <button type="submit" class="btn btn-primary btn-outline">Create Plan</button>
+                      <a href="{{ URL::action('PlanController@index') }}" class="btn btn-default btn-outline" >Cancel</a>
                     </div>
                   </div>
                 </div>

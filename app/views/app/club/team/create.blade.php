@@ -120,7 +120,7 @@
                            <div class="form-group">
                               <label class="col-sm-3 control-label">Payment Plan</label>
                               <div class="col-sm-9">
-                                 {{ Form::select('plan_id', $plan,'', array('class' => 'form-control', 'tabindex'=>'8') ) }}
+                                 {{ Form::select('plan_id', [null =>'Select Plan'] + $plan,'', array('class' => 'form-control', 'tabindex'=>'8') ) }}
                               </div>
                            </div>
                         </div>

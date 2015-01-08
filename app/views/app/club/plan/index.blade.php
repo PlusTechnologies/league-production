@@ -5,12 +5,12 @@
     <div class="col-sm-10 col-sm-offset-1">
       <div class="row">
         <div class="col-sm-5">
-          <h2>Programs Management</h2>
+          <h2>Plans Management</h2>
           <p>
-            Review the most relevant information about your Programs.
+            Review the most relevant information about your Plans.
           </p>
           <br />
-          <a href="{{URL::action('ProgramController@create') }}" class="btn btn-primary btn-outline">Create Program</a>
+          <a href="{{URL::action('PlanController@create') }}" class="btn btn-primary btn-outline">Create Plan</a>
         </div>
         <div class="col-sm-7 ">
 
@@ -28,18 +28,18 @@
             <thead>
               <tr>
                 <th>Created</th>
-                <th>Program Name</th>
-                <th>Description</th>
+                <th>Plan Name</th>
+                <th>Total amount</th>
                 <th>Remove</th>
               </tr>
             </thead>
             <tbody>
-              @foreach ($programs as $program)
-              <tr class="clickable" data-id="{{$program->id}}">
-                <td>{{$program->created_at}}</td>
-                <td>{{$program->name}}</td>
-                <td>{{$program->description}}</td>
-                <td class="text-right"><a href="{{URL::action('ProgramController@delete', array($program->id))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
+              @foreach ($plans as $plan)
+              <tr class="clickable" data-id="{{$plan->id}}">
+                <td>{{$plan->created_at}}</td>
+                <td>{{$plan->name}}</td>
+                <td>{{$plan->total}}</td>
+                <td class="text-right"><a href="{{URL::action('PlanController@delete', array($plan->id))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
               </tr>
               @endforeach
             </tbody>
@@ -54,7 +54,7 @@
 <script type="text/javascript">
 $(function () {
   $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/programs/" + $(this).data("id") + "/edit");
+    window.location = ("/account/club/plan/" + $(this).data("id") + "/edit");
   });
   $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],

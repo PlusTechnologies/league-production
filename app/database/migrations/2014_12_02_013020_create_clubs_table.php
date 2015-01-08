@@ -26,6 +26,7 @@ class CreateClubsTable extends Migration {
 			$table->string('processor_user');
 			$table->string('processor_pass');
 			$table->string('processor_key');
+			$table->text('waiver')->nullable();
 			$table->string('add1');
 			$table->string('city');
 			$table->string('state');

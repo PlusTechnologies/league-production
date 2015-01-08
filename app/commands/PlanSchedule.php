@@ -51,7 +51,7 @@ class PlanSchedule extends ScheduledCommand {
 	public function fire()
 	{
 		$today = Carbon::now();
-		$payments = SchduledPayment::all();
+		//$payments = SchedulePayment::all();
 		return Log::info($today);
 	}
 

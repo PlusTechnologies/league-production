@@ -42,16 +42,18 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
 		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
 
-		Route::get('user/{id}', 						array('as' =>'user.show', 			'uses' => 'ClubController@playerShow'));
+		Route::get('user/{id}', 						array('as' =>'user.show', 				'uses' => 'ClubController@playerShow'));
 		Route::get('user/{id}/edit', 				array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
-		Route::get('event/{id}/participant/{payment}/delete', array('as' =>'event.participant', 'uses' => 'ParticipantController@delete'));
-		Route::post('event/{id}/participant/{payment}/delete', array('as' =>'event.participant', 'uses' => 'ParticipantController@destroy'));
+		Route::get('event/{id}/participant/{payment}/delete', array('as' 	=>'event.participant', 'uses' => 'ParticipantController@delete'));
+		Route::post('event/{id}/participant/{payment}/delete', array('as'	=>'event.participant', 'uses' => 'ParticipantController@destroy'));
 		Route::get('event/{id}/invite', 		array('as' =>'event.invite', 			'uses' => 'EventoController@invite'));
 		Route::get('event/{id}/duplicate', 	array('as' =>'event.duplicate', 	'uses' => 'EventoController@duplicate'));
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
 		Route::post('event/{id}/invite', 		array('as' =>'event.doInvite', 		'uses' => 'EventoController@doInvite'));
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
+		Route::get('plan/{id}/delete/', 		array('as' =>'plan.delete', 			'uses' => 'PlanController@delete'));
+		Route::get('program/{id}/delete/', 	array('as' =>'program.delete', 		'uses' => 'ProgramController@delete'));
 		Route::resource('discount', 				'DiscountController');
 		Route::resource('team', 						'TeamController');
 		Route::resource('programs', 				'ProgramController');

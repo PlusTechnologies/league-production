@@ -213,6 +213,17 @@
 
 					<div class="row">
 						<div class="col-xs-12">
+							<h4>Club Terms of services and Libility waiver</h4>
+							<p>All fields required</p>
+							<div class="form-group">
+								<div class="col-sm-12">
+									{{ Form::textarea('waiver', null,array('class'=>'form-control', 'id'=>'editor')) }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
 							<h4>Club CardFlex Credentials</h4>
 							<p>All fields required</p>
 							<div class="form-group">
@@ -230,7 +241,6 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Club Brand</h4>
@@ -270,10 +280,10 @@ $(document).ready(function() {
 	$(".datepicker").bind("focus", function () {
 		$(this).data("kendoDatePicker").open();
 	});
-
 	$(".mobile").kendoMaskedTextBox({
 	    mask: "(999) 000-0000"
 	});
+	$("#editor").kendoEditor();
 });
 
 var cropperOptions = {

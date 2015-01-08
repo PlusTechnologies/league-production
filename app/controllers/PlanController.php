@@ -10,10 +10,16 @@ class PlanController extends BaseController {
 	 */
 	public function index()
 	{	
-		
+		$user= Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$plans = $club->plans;
 
-
-		return Plan::all();
+		$title = 'League Together - '.$club->name.' Plans';
+		return View::make('app.club.plan.index')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('plans', $plans)
+		->withUser($user);
 	}
 
 	/**
@@ -122,8 +128,32 @@ class PlanController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$plan = Plan::find($id);
+		$frequency = Frequency::where('name','=','Monthly')->lists('name', 'id');
+		$title = 'League Together - '.$club->name.' Plan';
+		return View::make('app.club.plan.edit')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('plan', $plan)
+		->with('frequency',$frequency)
+		->withUser($user);
 	}
+
+	public function delete($id)
+	{
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$plan = Plan::find($id);
+		$title = 'League Together - '.$club->name.' Plan';
+		return View::make('app.club.plan.delete')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('plan', $plan)
+		->withUser($user);
+	}
+
 
 	/**
 	 * Update the specified resource in storage.
@@ -134,7 +164,53 @@ class PlanController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+
+		$user =Auth::user();
+		$club = $user->clubs()->FirstOrFail();	
+		$validator= Validator::make(Input::all(), Plan::$rules);
+
+		//check if recurrences
+
+		if($validator->passes()){
+
+
+			$amount = Input::get('total') - Input::get('initial');
+			$recurring = Input::get('recurring');
+			$recurrences = $amount / $recurring;
+			$recidual = $amount % $recurring;
+
+			if($recidual > 0){
+				return Redirect::action('PlanController@create')
+				->withInput()
+				->with( 'warning', "Please check the recurring amount and initial amount.");
+			}
+
+			$plan = Plan::find($id);
+			$plan->name 				= Input::get('name');
+			$plan->total 				= Input::get('total');
+			$plan->initial 			= Input::get('initial');
+			$plan->recurring 		= Input::get('recurring');
+			$plan->recurrences 	= $recurrences;
+			$plan->frequency_id = Input::get('frequency_id');
+			$plan->on 					= Input::get('on');
+			$status 						= $plan->save();
+			
+			if ( $status )
+			{
+				return Redirect::action('PlanController@edit', $plan->id )
+				->with( 'notice', 'Plan updated successfully');
+			}
+
+			return Redirect::action('PlanController@edit', $plan->id)
+				->with( 'warning', $status);
+
+		}
+
+		$error = $validator->errors()->all(':message');
+		return Redirect::action('PlanController@edit', $plan->id)
+		->withErrors($validator)
+		->withInput();
+		
 	}
 
 	/**
@@ -144,11 +220,11 @@ class PlanController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($team, $member, $id)
+	public function destroy($id)
 	{
 		$plan = Plan::find($id);
 		$plan->delete();
-		return Redirect::back();
+		return Redirect::action('PlanController@index');
 	}
 
 	public function summary()

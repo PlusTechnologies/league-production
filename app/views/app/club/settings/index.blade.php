@@ -202,6 +202,18 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
+							<h4>Club Terms of services and Libility waiver</h4>
+							<p>All fields required</p>
+							<div class="form-group">
+								<div class="col-sm-12">
+									{{ Form::textarea('waiver', htmlspecialchars_decode($club->waiver),array('class'=>'form-control', 'id'=>'editor')) }}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
 							<h4>Club Brand</h4>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Logo</label>
@@ -232,8 +244,35 @@
 							<hr />
 							<div class="form-group">
 								<div class="col-sm-12 ">
-									<a href="{{URL::action('ProgramController@index')}}" class="btn btn-primary btn-outline">Manage Programs</a>
+									
 									<a href="{{URL::action('ProgramController@create')}}" class="btn btn-success btn-outline">Create</a>
+									<a href="{{URL::action('ProgramController@index')}}" class="btn btn-primary btn-outline">Manage Programs</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br><br>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Plans Settings</h4>
+							<hr />
+							<div class="form-group">
+								<div class="col-sm-12 ">
+									<a href="{{URL::action('PlanController@create')}}" class="btn btn-success btn-outline">Create</a>
+									<a href="{{URL::action('PlanController@index')}}" class="btn btn-primary btn-outline">Manage Plans</a>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<br><br>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Private Login page</h4>
+							<hr />
+							<div class="form-group">
+								<div class="col-sm-12">
+								{{ Form::text('name',Request::root()."/club/$club->id/account/login", array('class' => 'form-control block-input', 'readonly'=>"readonly")) }}
 								</div>
 							</div>
 						</div>
@@ -256,6 +295,7 @@ $(document).ready(function() {
 	$(".mobile").kendoMaskedTextBox({
 	    mask: "(999) 000-0000"
 	});
+	$("#editor").kendoEditor();
 });
 
 var cropperOptions = {

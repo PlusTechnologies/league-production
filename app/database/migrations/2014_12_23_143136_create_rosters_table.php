@@ -21,7 +21,7 @@ class CreateRostersTable extends Migration {
 			$table->double('early_due');
 			$table->date('early_due_deadline');
 			$table->string('method');
-			$table->string('plan_id', 36)->index();
+			$table->string('plan_id', 36)->index()->nullable();
 			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
 			$table->string('player_id', 36)->index();
 			$table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');

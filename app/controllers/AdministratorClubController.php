@@ -67,6 +67,7 @@ public function store()
 			$club->state       		= Input::get( 'state' );
 			$club->zip       			= Input::get( 'zip' );
 			$club->logo 					= Input::get('logo');
+			$club->waiver 				= Input::get('waiver');
 			$club->processor_user	= Crypt::encrypt(Input::get('processor_user'));
 			$club->processor_pass	= Crypt::encrypt(Input::get('processor_pass'));
 			$club->save();

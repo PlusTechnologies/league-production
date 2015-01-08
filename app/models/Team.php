@@ -14,7 +14,6 @@ class Team extends Eloquent {
         'early_due'     => 'required',
         'early_due_deadline' => 'required|date',
         'due'           => 'required',
-        'plan_id'       => 'required',
         'open'          => 'required|date',
         'close'         => 'required|date',
         'max'           => 'required|integer',
@@ -45,6 +44,14 @@ class Team extends Eloquent {
             $this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
         }
     }
+
+    public function setPlanIdAttribute($value)
+    {
+        if($value==""){
+            $this->attributes['plan_id'] =   null;
+        }
+    }
+
 
     public function getEarlyDueDeadlineAttribute($value) 
     {

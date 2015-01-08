@@ -1,7 +1,8 @@
 <?php
 
-class AdministratorClub extends \Eloquent {
-
+class AdministratorClub extends Eloquent {
+	protected $fillable = array('waiver', 'email', 'password', 'firstname', 'lastname', 'mobile', 'name', 'contactphone', 'contactemail', 'website', 'add1', 'city'
+		,'state','zip','logo','processor_user','processor_pass');
 	public static $rules = array(
 		'email'					=>'required|email|unique:users,email',
 		'password' 			=>'required|min:3|confirmed',
@@ -18,6 +19,7 @@ class AdministratorClub extends \Eloquent {
 		'state'					=>'required | min:2|max:2',
 		'zip'						=>'required | digits:5',
 		'logo'					=>'required',
+		'waiver'				=>'required',
 		'processor_user'=>'required',
 		'processor_pass'=>'required'
 		);

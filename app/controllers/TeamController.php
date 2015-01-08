@@ -38,6 +38,7 @@ public function index()
 */
 public function create()
 {
+
 	setlocale(LC_MONETARY,"en_US");
 	$user= Auth::user();
 	$club = $user->Clubs()->FirstOrFail();
@@ -59,7 +60,7 @@ public function create()
 * @return Response
 */
 public function store()
-{
+{	
 	//get current club
 	$user = Auth::user();
 	$club = $user->Clubs()->FirstOrFail();

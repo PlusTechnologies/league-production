@@ -24,9 +24,7 @@ class MemberController extends BaseController {
 
 		$user = Auth::user();
 		$club = $user->clubs()->FirstOrFail();
-		$plan = $club->plans()->lists('name','id');
 		$followers = $club->followers;
-
 		$players = [];
 		//get player from follower
 		foreach ($followers as $follower) {
@@ -43,6 +41,20 @@ class MemberController extends BaseController {
 
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::find($id);
+
+		$plan = $club->plans()->lists('name','id');
+		if(!$plan){
+
+			return View::make('app.club.member.createNoPlan')
+			->with('page_title', $title)
+			->with('team',$team)
+			->with('club', $club)
+			->with('followers', $followers)
+			->with('players', json_encode($players) )
+			->withUser($user);
+
+		}		
+		
 		return View::make('app.club.member.create')
 		->with('page_title', $title)
 		->with('team',$team)
@@ -70,7 +82,6 @@ class MemberController extends BaseController {
 		$messages = array('player.required' => 'Please select at least one player');
 		$validator= Validator::make(Input::all(),Member::$rules, $messages);
 		
-
 		
 		if(empty(Input::get('due'))){ $due = $team->getOriginal('due'); }else{$due = Input::get('due'); }
 		if(empty(Input::get('early_due'))){ $early_due = $team->getOriginal('early_due'); }else{ $early_due =  Input::get('early_due');};
@@ -278,7 +289,7 @@ class MemberController extends BaseController {
 			return Redirect::action('PlayerController@index');
 		}
 
-	
+
 
 	}
 
@@ -288,6 +299,8 @@ class MemberController extends BaseController {
 		$user= Auth::user();
 		$member = Member::find($id);
 		$title = 'League Together - '.$member->team->club->name.' Teams';
+
+
 
 		$price = $member->getOriginal('due');
 		$today = Carbon::Now();
@@ -303,13 +316,38 @@ class MemberController extends BaseController {
 				->withUser($user);
 			}
 		}
+		if($member->plan){
 
-		return View::make('app.club.member.payment')
-		->with('page_title', $title)
-		->with('member',$member)
-		->with('price', "$".number_format($price, 2))
-		->with('notice', false)
-		->withUser($user);
+			return View::make('app.club.member.payment')
+			->with('page_title', $title)
+			->with('member',$member)
+			->with('price', "$".number_format($price, 2))
+			->with('notice', false)
+			->withUser($user);
+
+		}
+
+		$item = array(
+			'id' 							=> $member->id,
+			'name'						=> "Membership Team ".$member->team->name,
+			'price'						=> $price,
+			'quantity'				=> 1,
+			'organization' 		=> $member->team->club->name,
+			'organization_id'	=> $member->team->club->id,
+			'member_id'				=> $member->id,
+			'player_id'				=> $member->player->id,
+			'user_id'					=> $user->id,
+			'type' 						=> "full"
+			);
+		Cart::insert($item);
+		foreach (Cart::contents() as $item) {
+			$item->name = "Membership Team ".$member->team->name;
+			$item->quantity = 1;
+		}
+		return Redirect::action('MemberController@paymentCreate', array($member->id));
+
+
+
 	}
 
 	public function doPaymentSelect($id)
@@ -548,7 +586,7 @@ class MemberController extends BaseController {
 		->withInput();
 	}
 
-public function PaymentStore($id){
+	public function PaymentStore($id){
 
 		$user 	= Auth::user();
 		$member = Member::find($id);
@@ -569,7 +607,7 @@ public function PaymentStore($id){
 
 
 		if($transaction->response == 3 || $transaction->response == 2 ){
-			return Redirect::action('MemberController@PaymentCreate', array($club->id, $event->id))->with('error',$transaction->responsetext);
+			return Redirect::action('MemberController@paymentCreate', array($member->id))->with('error',$transaction->responsetext);
 		}else{
 
 			foreach( Cart::contents() as $item){
@@ -623,26 +661,26 @@ public function PaymentStore($id){
 								$payon = 28;
 							}
 							if(	$today->month == 4 || 
-									$today->month == 6 ||
-									$today->month == 9 ||
-									$today->month == 11){
+								$today->month == 6 ||
+								$today->month == 9 ||
+								$today->month == 11){
 								$payon = 30;
-							}
 						}
+					}
 
-						$payday = Carbon::create($today->year, $today->month, $payon, 0);
-    				$schedule = new SchedulePayment;
-    				$schedule->date = $payday;
-    				$schedule->description = "Membership Team ".$member->team->name;
-    				$schedule->subtotal = number_format($subtotal, 2);
-    				$schedule->fee = number_format($fee, 2);
-    				$schedule->total = number_format($total, 2);
-    				$schedule->plan_id = $member->plan->id;
-    				$schedule->member_id = $member->id;
-    				$status = $schedule->save();
-    				if(!$status){
-    					return "We process your payment but and error occurred in the process, please contact us: support@leaguetogether.com Error# 597";
-    				}
+					$payday = Carbon::create($today->year, $today->month, $payon, 0);
+					$schedule = new SchedulePayment;
+					$schedule->date = $payday;
+					$schedule->description = "Membership Team ".$member->team->name;
+					$schedule->subtotal = number_format($subtotal, 2);
+					$schedule->fee = number_format($fee, 2);
+					$schedule->total = number_format($total, 2);
+					$schedule->plan_id = $member->plan->id;
+					$schedule->member_id = $member->id;
+					$status = $schedule->save();
+					if(!$status){
+						return "We process your payment but and error occurred in the process, please contact us: support@leaguetogether.com Error# 597";
+					}
 					}//end for loop
 				}//end if plan
 			}	

@@ -100,6 +100,7 @@ class ClubController extends \BaseController {
 			$club->state       	= Input::get( 'state' );
 			$club->zip       		= Input::get( 'zip' );
 			$club->logo 				= Input::get('logo');
+			$club->waiver 			= Input::get('waiver');
 			$club->save();
 
 			$status = $club->save();

@@ -148,6 +148,18 @@ class ProgramController extends BaseController {
 		->withErrors($validator)
 		->withInput();
 	}
+	public function delete($id)
+	{
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$program = Program::find($id);
+		$title = 'League Together - '.$club->name.' Program';
+		return View::make('app.club.program.delete')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('program', $program)
+		->withUser($user);
+	}
 
 	/**
 	 * Remove the specified resource from storage.
@@ -156,17 +168,11 @@ class ProgramController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($club, $id)
+	public function destroy($id)
 	{
 		$program = Program::find($id);
-		$status = $program->delete();
-		
-		if($status){
-			$success[] = array('Program deleted');
-			return Redirect::action('ProgramController@index', $club)->withErrors($success);
-		}else{
-			return Redirect::action('ProgramController@index', $club)->withErrors($status);
-		}
+		$program->delete();
+		return Redirect::action('ProgramController@index');
 
 		
 	}
