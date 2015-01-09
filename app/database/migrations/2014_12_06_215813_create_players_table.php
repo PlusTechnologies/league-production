@@ -27,6 +27,7 @@ class CreatePlayersTable extends Migration {
 			$table->string('laxid');
 			$table->string('laxid_exp');
 			$table->string('relation');
+			$table->string('uniform');
 			$table->integer('user_id')->unsigned()->index();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->timestamps();

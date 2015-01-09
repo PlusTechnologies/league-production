@@ -140,6 +140,15 @@ class PlayerController extends \BaseController {
 			$player->gender 		= Input::get('gender');
 			$player->year 			= Input::get('year');
 			$player->avatar 		= Input::get('avatar');
+
+			$player->email 			= Input::get('email');
+			$player->mobile 		= Input::get('mobile');
+			$player->school 		= Input::get('school');
+			$player->laxid 			= Input::get('laxid');
+			$player->laxid_exp	= Input::get('laxid_exp');
+			$player->uniform 		= Input::get('uniform');
+			
+
 			$status = $player->save();
 
 			if ( $status )
