@@ -32,6 +32,7 @@ class AccountingController extends \BaseController {
 		$to = date('Y-m-d', strtotime(Input::get('to')));
 
 		$payment = Payment::where('club_id', '=', $club->id)
+		->with('player')
 		->whereBetween('created_at', array($from , $to))->get();
 
 		return $payment;

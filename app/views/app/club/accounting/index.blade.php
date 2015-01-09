@@ -67,16 +67,14 @@
           <table class="table table-striped" id="grid">
             <thead>
               <tr>
-                <th class="col-sm-2" data-field="date">Created</th>
-                <th class="col-sm-1" data-field="id">Type</th>
-                <th class="col-sm-3" data-field="name">Name</th>
-                <th class="col-sm-2" data-field="e_date">Date</th>
-                <th class="col-sm-1" data-field="fee">Fee</th>
-                <th class="col-sm-1" data-field="status">Status</th>
-                <th class="col-sm-1" data-field="fee">Capacity</th>
+                <th class="col-md-2">Date</th>
+                <th class="col-md-2">Transaction</th>
+                <th>Player</th>
+                <th>Type</th>
+                <th>Amount</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="targetData">
 
             </tbody>
           </table>
@@ -109,13 +107,24 @@ $(function () {
   $('#load').click(function(e){
     e.preventDefault();
     if (validator.validate()) {
-      loadData();
+      loadData(function(){
+        newTable();
+      });
     } else {
       alert('Please make sure you entered valid dates');
     }
 
     
   });
+  function newTable(){
+    $('#grid').DataTable({
+      "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
+      "iDisplayLength": 5,
+      "tableTools": {
+        "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+      }
+    });
+  }
 
   function loadData(){
 
@@ -135,12 +144,17 @@ $(function () {
       dataType: "json"
     });
 
-    request.done(function( msg ) {
+    request.done(function( data ) {
 
-        
+     $.each(data, function(item, dt) {
 
-      
-    });
+       $("#targetData").append('<tr data-id="'+ dt.transaction +'"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.total +'</td></tr>');
+       $('#grid').dataTable().fnDestroy();
+       
+     });
+
+
+   });
 
     request.fail(function( jqXHR, textStatus ) {
       alert( "Request failed: " + textStatus );
