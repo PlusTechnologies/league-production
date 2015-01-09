@@ -54,9 +54,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-						{{ Form::open(array('action' => array('ClubPublicController@addTeamCart', $club->id, $team->id),'method' => 'post')) }}
-					<button type="submit" class="btn btn-default btn-outline" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
-					{{ Form::close() }}
+						<a  class="btn btn-default btn-outline" href="{{URL::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->id))}}"> Register Player</a>
 					</div>
 				</div>
 			</div>

@@ -495,13 +495,6 @@ class ClubPublicController extends \BaseController {
 		if($team->early_due_deadline){
 			if($today->startOfDay() <= $early->startOfDay()){
 				$price = $team->getOriginal('early_due');
-				return View::make('app.public.club.team.payment')
-				->with('page_title', $title)
-				->with('club', $club)
-				->with('team',$team)
-				->with('price', "$".number_format($price, 2))
-				->with('notice', 'Congratulation! Early Bird price eligible.')
-				->withUser($user);
 			}
 		}
 
@@ -516,20 +509,19 @@ class ClubPublicController extends \BaseController {
 		}
 		
 		$item = array(
-			'id' 							=> $member->id,
-			'name'						=> "Membership Team ".$member->team->name,
+			'id' 							=> $team->id,
+			'name'						=> "Membership Team ".$team->name,
 			'price'						=> $price,
 			'quantity'				=> 1,
-			'organization' 		=> $member->team->club->name,
-			'organization_id'	=> $member->team->club->id,
-			'member_id'				=> $member->id,
-			'player_id'				=> $member->player->id,
+			'organization' 		=> $team->club->name,
+			'organization_id'	=> $club->id,
+			'player_id'				=> '',
 			'user_id'					=> $user->id,
-			'type' 						=> "full"
+			'type' 						=> $type
 			);
 		Cart::insert($item);
 		foreach (Cart::contents() as $item) {
-			$item->name = "Membership Team ".$member->team->name;
+			$item->name = "Membership Team ".$team->name;
 			$item->quantity = 1;
 		}
 		return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->id));
