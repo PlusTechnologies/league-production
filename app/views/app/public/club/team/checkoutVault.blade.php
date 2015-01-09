@@ -12,8 +12,7 @@
 					<h1 class="text-center"> 
 						{{$club->name}}
 					</h1>
-					<h4 class="text-center">{{$event->name}}</h4>
-					<h4 class="text-center">{{$event->date}}</h4>
+					<h4 class="text-center">Team {{$team->name}}</h4>
 					<br><br><br>
 				</div>
 				<div class="col-md-6 col-md-offset-1 same-height">
@@ -57,7 +56,7 @@
 									</tr>
 								</tbody>
 							</table>
-							{{ Form::open(array('action' => array('ClubPublicController@PaymentStore', $club->id, $event->id), 'class'=>'form-horizontal p','method' => 'post')) }}
+							{{ Form::open(array('action' => array('ClubPublicController@PaymentStoreTeam', $club->id, $team->id), 'class'=>'form-horizontal p','method' => 'post')) }}
 							<button class="btn btn-success btn-lg btn-outline process pull-right" type="submit">Place Order</button>
 							{{Form::close()}}
 						</div>
@@ -115,7 +114,8 @@
 								<hr>
 								<div class="row">
 									<div class="col-md-12">	
-										{{ Form::open(array('action' => array('ClubPublicController@PaymentRemoveCartItem', $club->id, $event->id),'method' => 'post')) }}
+										
+										{{ Form::open(array('action' => array('ClubPublicController@PaymentRemoveCartItemTeam', $club->id, $team->id),'method' => 'post')) }}
 										<a href="/account/player" class="btn btn-primary btn-outline ">Edit Player</a>
 										<a href="/account/settings" class="btn btn-primary btn-outline ">Edit Credit Card</a>
 										<button type="submit" class="btn btn-danger btn-outline ">Remove Player</button>

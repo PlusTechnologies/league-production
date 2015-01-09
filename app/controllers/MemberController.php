@@ -299,9 +299,6 @@ class MemberController extends BaseController {
 		$user= Auth::user();
 		$member = Member::find($id);
 		$title = 'League Together - '.$member->team->club->name.' Teams';
-
-
-
 		$price = $member->getOriginal('due');
 		$today = Carbon::Now();
 		$early = new Carbon($member->early_due_deadline);
@@ -317,16 +314,14 @@ class MemberController extends BaseController {
 			}
 		}
 		if($member->plan){
-
 			return View::make('app.club.member.payment')
 			->with('page_title', $title)
 			->with('member',$member)
 			->with('price', "$".number_format($price, 2))
 			->with('notice', false)
 			->withUser($user);
-
 		}
-
+		
 		$item = array(
 			'id' 							=> $member->id,
 			'name'						=> "Membership Team ".$member->team->name,
@@ -345,9 +340,6 @@ class MemberController extends BaseController {
 			$item->quantity = 1;
 		}
 		return Redirect::action('MemberController@paymentCreate', array($member->id));
-
-
-
 	}
 
 	public function doPaymentSelect($id)
@@ -604,8 +596,7 @@ class MemberController extends BaseController {
 
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
-
-
+		
 		if($transaction->response == 3 || $transaction->response == 2 ){
 			return Redirect::action('MemberController@paymentCreate', array($member->id))->with('error',$transaction->responsetext);
 		}else{
@@ -667,7 +658,6 @@ class MemberController extends BaseController {
 								$payon = 30;
 						}
 					}
-
 					$payday = Carbon::create($today->year, $today->month, $payon, 0);
 					$schedule = new SchedulePayment;
 					$schedule->date = $payday;
@@ -684,7 +674,6 @@ class MemberController extends BaseController {
 					}//end for loop
 				}//end if plan
 			}	
-
 			//email receipt 
 			$payment->receipt($transaction, $club->id, $item->player_id);
 			return Redirect::action('MemberController@paymentSuccess', array($member->id))->with('result',$transaction);

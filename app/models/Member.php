@@ -75,6 +75,8 @@ class Member extends Eloquent {
         if($value==""){
             $this->attributes['plan_id'] =   null;
         }
+
+        $this->attributes['plan_id'] =   $value;
     }
 
 

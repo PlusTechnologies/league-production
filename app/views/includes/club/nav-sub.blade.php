@@ -28,7 +28,7 @@
             </a>
           </li>
           <li class="{{ HTML::smart_link('account.club.accounting.index') }} col-xs-1">
-            <a href=" ">
+            <a href="{{URL::action('AccountingController@index')}}">
               <span class="icon-am retinaicon-business-026"></span>
               <span class="subnav-link-name ng-scope">Accounting</span>
             </a>

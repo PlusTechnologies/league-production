@@ -21,8 +21,14 @@
           </div>
         </div>
         <div class="col-sm-7 ">
+          <br>
+        <p>Shared registration link</p>
+        {{ Form::text('name',Request::root()."/club/$club->id/team/$team->id", array('class' => 'form-control block-input')) }}
+        <br>
         </div><!-- end of col-sm-7 row -->
       </div><!-- end of first row -->
+      
+
       <div class="row ">
         <div class="col-sm-12">
           <h3>Roster</h3>

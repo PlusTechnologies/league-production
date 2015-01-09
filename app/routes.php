@@ -60,6 +60,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('communication', 		'CommunicationController');
 		Route::resource('team.member', 			'MemberController');
 		Route::resource('plan',							'PlanController');
+		Route::resource('accounting',				'AccountingController');
 
 	});
 
@@ -109,6 +110,27 @@ Route::group(array('prefix' => 'club'), function() {
 	Route::post('/{id}/event/{item}/checkout/validate',	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentValidate'));
 	Route::post('/{id}/event/{item}/checkout/clear',		array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentRemoveCartItem'));
 	Route::post('/{id}/event/{item}/checkout/discount',	array('before' => 'auth.club',	'uses'=>'DiscountController@validate'));
+
+	//open team registration routes
+
+	Route::get('/{id}/team', 								'ClubPublicController@teamIndex');
+	Route::get('/{id}/team/{item}',					'ClubPublicController@teamSingle');
+	Route::post('/{id}/team/{item}/add',		'ClubPublicController@addTeamCart');
+	Route::get('/{id}/team/{item}/player',	array('before' => 'auth.club', 	'uses' => 'ClubPublicController@selectTeamPlayer'));
+	Route::post('/{id}/team/{item}/player',	array('before' => 'auth.club', 	'uses' => 'ClubPublicController@doSelectTeamPlayer'));
+	Route::get('/{id}/team/{item}/payment', array('before' => 'auth.club',	'uses' => 'ClubPublicController@paymentSelectTeam'));
+	Route::post('/{id}/team/{item}/payment',array('before' => 'auth.club',	'uses' => 'ClubPublicController@doPaymentSelectTeam'));
+
+	Route::get('/{id}/team/{item}/checkout',         	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentCreateTeam'));
+	Route::get('/{id}/team/{item}/checkout/success',  array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentSuccessTeam'));
+	Route::post('/{id}/team/{item}/checkout/store',   array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentStoreTeam'));
+	Route::post('/{id}/team/{item}/checkout/validate',array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentValidateTeam'));
+	Route::post('/{id}/team/{item}/checkout/clear',		array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentRemoveCartItemTeam'));
+
+	// Route::get('/{id}/event/{item}/checkout',	'ClubPublicController@eventCheckout');
+	// Route::post('/{id}/event/{item}/add',			'ClubPublicController@addEventCart');
+	// Route::post('/{id}/event/{item}/remove',	'ClubPublicController@removeEventCart');
+	
 });
 
 //Payment Process routes
