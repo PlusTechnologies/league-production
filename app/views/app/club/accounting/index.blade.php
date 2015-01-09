@@ -31,39 +31,37 @@
         <div class="col-md-12">
           <h3>Transactions</h3>
           <hr />
-          <form class="form-inline " role="form">
+          <form class="form-horizontal " role="form" id="DateRange">
             <div class="row">
-              <div class="col-xs-12">
+              <div class="col-xs-5">
                 <div class="form-group">
-                  <label class="control-label">Report</label>
-                  <div class="">
-                    <select class="form-control">
+                  <label class="col-md-3 control-label">Report</label>
+                  <div class="col-md-9">
+                    <select class="form-control" name="type">
                       <option value="1">All activity</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label">From</label>
-                  <div class="">
-                    <input type="Text" class="form-control datepicker" name="name" placeholder="DD/MM/YY">
+                  <label class="col-md-3 control-label">From <span class="k-invalid-msg" data-for="from"></span></label>
+                  <div class="col-md-9">
+                    <input type="Text" class="form-control datepicker" name="from" placeholder="DD/MM/YY" required>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label">To</label>
-                  <div class="">
-                    <input type="Text" class="form-control datepicker" name="name" placeholder="DD/MM/YY">
+                  <label class="col-md-3 control-label">To  <span class="k-invalid-msg" data-for="to"></span></label>
+                  <div class="col-md-9">
+                    <input type="Text" class="form-control datepicker" name="to" placeholder="DD/MM/YY" required>
                   </div>
                 </div>
-                <div class="form-group pull-right">
-                  <label class="control-label"></label>
-                  <div class="">
-                    <button type="submit" class="btn btn-primary btn-outline">Generate</button>
+                <div class="form-group">
+                  <div class="col-md-12 ">
+                    <button type="submit" id="load" class="btn btn-primary btn-outline pull-right">Generate</button>
                   </div>
                 </div>
               </div>
             </div>
           </form>
-          <br>
           <hr>
           <br>
           <table class="table table-striped" id="grid">
@@ -92,6 +90,9 @@
 <script type="text/javascript">
 $(function () {
   $(".datepicker").kendoDatePicker();
+  var validator = $(".datepicker").kendoValidator().data("kendoValidator");
+  validator.hideMessages();
+
   $(".datepicker").bind("focus", function () {
     $(this).data("kendoDatePicker").open();
   });
@@ -105,6 +106,48 @@ $(function () {
       "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
     }
   });
+  $('#load').click(function(e){
+    e.preventDefault();
+    if (validator.validate()) {
+      loadData();
+    } else {
+      alert('Please make sure you entered valid dates');
+    }
+
+    
+  });
+
+  function loadData(){
+
+    var from = $( "input[name=from]" ).val();
+    var to = $( "input[name=to]" ).val();
+    var type = $( "select[name=type]" ).val();
+
+    if(from =="" || to==""){
+      alert("Please enter a date in the form fields");
+      return false;
+    }
+
+    var request = $.ajax({
+      url: "accounting/report",
+      type: "POST",
+      data: { from: from, to:to, type:type },
+      dataType: "json"
+    });
+
+    request.done(function( msg ) {
+
+        
+
+      
+    });
+
+    request.fail(function( jqXHR, textStatus ) {
+      alert( "Request failed: " + textStatus );
+    });
+  }
+
+
 });
 </script>
 @stop

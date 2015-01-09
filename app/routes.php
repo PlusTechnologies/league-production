@@ -54,6 +54,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
 		Route::get('plan/{id}/delete/', 		array('as' =>'plan.delete', 			'uses' => 'PlanController@delete'));
 		Route::get('program/{id}/delete/', 	array('as' =>'program.delete', 		'uses' => 'ProgramController@delete'));
+		Route::post('accounting/report', 		array('as' =>'accounting.report',	'uses' => 'AccountingController@doReport'));
 		Route::resource('discount', 				'DiscountController');
 		Route::resource('team', 						'TeamController');
 		Route::resource('programs', 				'ProgramController');
@@ -126,10 +127,6 @@ Route::group(array('prefix' => 'club'), function() {
 	Route::post('/{id}/team/{item}/checkout/store',   array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentStoreTeam'));
 	Route::post('/{id}/team/{item}/checkout/validate',array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentValidateTeam'));
 	Route::post('/{id}/team/{item}/checkout/clear',		array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentRemoveCartItemTeam'));
-
-	// Route::get('/{id}/event/{item}/checkout',	'ClubPublicController@eventCheckout');
-	// Route::post('/{id}/event/{item}/add',			'ClubPublicController@addEventCart');
-	// Route::post('/{id}/event/{item}/remove',	'ClubPublicController@removeEventCart');
 	
 });
 

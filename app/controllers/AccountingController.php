@@ -22,6 +22,22 @@ class AccountingController extends \BaseController {
 		->withUser($user);
 	}
 
+	public function doReport()
+	{
+		$user= Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+
+		$type = Input::get('type');
+		$from = date('Y-m-d', strtotime(Input::get('from')));
+		$to = date('Y-m-d', strtotime(Input::get('to')));
+
+		$payment = Payment::where('club_id', '=', $club->id)
+		->whereBetween('created_at', array($from , $to))->get();
+
+		return $payment;
+
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 * GET /accounting/create

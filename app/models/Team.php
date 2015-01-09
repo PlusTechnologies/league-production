@@ -47,8 +47,8 @@ class Team extends Eloquent {
 
     public function setPlanIdAttribute($value)
     {
-        if($value==""){
-            $this->attributes['plan_id'] =   null;
+        if($value == ""){
+           return  $this->attributes['plan_id'] =   null;
         }
 
         $this->attributes['plan_id'] =   $value;
