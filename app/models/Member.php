@@ -73,7 +73,7 @@ class Member extends Eloquent {
 	public function setPlanIdAttribute($value)
     {
         if($value==""){
-            $this->attributes['plan_id'] =   null;
+           return $this->attributes['plan_id'] =   null;
         }
 
         $this->attributes['plan_id'] =   $value;

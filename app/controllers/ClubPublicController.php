@@ -254,6 +254,7 @@ class ClubPublicController extends \BaseController {
 		$total = $fee + $tax + $subtotal;
 
 		if(!$total){
+			//add participant for free !idea
 			return Redirect::action('HomeController@getIndex');
 		}
 		if($user->profile->customer_vault){
@@ -511,7 +512,7 @@ class ClubPublicController extends \BaseController {
 		$item = array(
 			'id' 							=> $team->id,
 			'name'						=> "Membership Team ".$team->name,
-			'price'						=> $price,
+			'price'						=> $team->getOriginal('due'),
 			'quantity'				=> 1,
 			'organization' 		=> $team->club->name,
 			'organization_id'	=> $club->id,
@@ -613,13 +614,12 @@ class ClubPublicController extends \BaseController {
 
 	public function doSelectTeamPlayer($club, $id)
 	{
-		$user =Auth::user();
+		$user = Auth::user();
+		$club = Club::find($club);
+		$team = Team::find($id);
 		$player = Player::find(Input::get('player'));
 		$cart = Cart::item(Input::get('item'));
 		$cart->player_id 	= $player->id; 
-
-		$club = Club::find($club);
-		$team = Team::find($id);
 
 		$title = 'League Together - Club | '. $club->name;
 		return Redirect::action('ClubPublicController@PaymentCreateTeam', array($club->id, $team->id))
@@ -635,6 +635,7 @@ class ClubPublicController extends \BaseController {
 		$club = Club::find($club);
 		$team = Team::find($id);
 		$cart = Cart::contents(true);
+		$uuid 	= Uuid::generate();
 		
 		foreach (Cart::contents() as $item) {
 			$player = Player::Find($item->player_id);
@@ -654,7 +655,26 @@ class ClubPublicController extends \BaseController {
 		$total = $fee + $tax + $subtotal;
 
 		if(!$total){
-			return Redirect::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->$id));
+
+			$member = new Member;
+			$member->id 							= $uuid;
+			$member->firstname 				= $player->firstname;
+			$member->lastname 				= $player->lastname;
+			$member->due  						= $team->getOriginal('due');
+			$member->early_due 				= $team->getOriginal('early_due');
+			$member->early_due_deadline 	= $team->getOriginal('early_due_deadline');
+			$member->plan_id 					= null;
+			$member->player_id 				= $player->id;
+			$member->team_id					= $team->id;
+			$member->accepted_on = Carbon::Now();
+			$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
+			$member->accepted_user = $user->id;
+			$member->method = $item->type;
+			$member->status = 1;
+			$member->save();
+
+			return "You've been added to the team for free, please close this window to complete transaction";
+			return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
 		}
 		if($user->profile->customer_vault){
 			$param = array(

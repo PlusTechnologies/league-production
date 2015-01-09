@@ -13,8 +13,8 @@ class Evento extends Eloquent {
 
         'max'           =>'required|integer',
 
-        'fee'			=>'required|numeric',
-        'early_fee'     =>'numeric',
+        'fee'			=>'required|numeric|min:1',
+        'early_fee'     =>'numeric|min:1',
         'early_deadline'=>'date|before:date',
 
         'open'			=>'required|date',
