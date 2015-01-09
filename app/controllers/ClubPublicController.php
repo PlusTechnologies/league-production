@@ -654,7 +654,7 @@ class ClubPublicController extends \BaseController {
 		$total = $fee + $tax + $subtotal;
 
 		if(!$total){
-			return Redirect::action('ClubPublicController@paymentSelectTeam', $club->id, $team->$id);
+			return Redirect::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->$id));
 		}
 		if($user->profile->customer_vault){
 			$param = array(
