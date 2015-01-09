@@ -517,7 +517,7 @@ class ClubPublicController extends \BaseController {
 			'organization_id'	=> $club->id,
 			'player_id'				=> '',
 			'user_id'					=> $user->id,
-			'type' 						=> $type
+			'type' 						=> 'full'
 			);
 		Cart::insert($item);
 		foreach (Cart::contents() as $item) {
