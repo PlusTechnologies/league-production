@@ -84,7 +84,7 @@ class Payment extends Eloquent {
             ->subject("Purchased Receipt | $club->name");
             
             foreach ($club->users()->get() as $value) {
-               $message->to($value->email, $club->name)
+               $message->bcc($value->email, $club->name)
                 ->subject("Purchased Receipt - $club->name");
             }
             

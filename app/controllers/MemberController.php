@@ -299,6 +299,9 @@ class MemberController extends BaseController {
 		Cart::destroy();
 		$user= Auth::user();
 		$member = Member::find($id);
+		$player = $member->player;
+		$club = Club::find($member->team->club->id);
+
 		$title = 'League Together - '.$member->team->club->name.' Teams';
 		$price = $member->getOriginal('due');
 		$today = Carbon::Now();
@@ -322,7 +325,32 @@ class MemberController extends BaseController {
 			->with('notice', false)
 			->withUser($user);
 		}
-		
+		//evaludate payment due  == 0 
+		if($member->due = 0){
+
+			$member->accepted_on = Carbon::Now();
+			$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
+			$member->accepted_user = $user->id;
+			$member->method = 'full';
+			$member->status = 1;
+			$member->save();
+
+			//send email notification of acceptance
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
+			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
+				$message->to($user->email, $member->accepted_by)
+				->subject("Thank you for joining our team | ".$club->name);
+				foreach ($club->users()->get() as $value) {
+					$message->bcc($value->email, $club->name);
+				}
+			});
+
+			return Redirect::action('PlayerController@index');
+			
+		}
+
+
+		//payment in full
 		$item = array(
 			'id' 							=> $member->id,
 			'name'						=> "Membership Team ".$member->team->name,
@@ -340,6 +368,10 @@ class MemberController extends BaseController {
 			$item->name = "Membership Team ".$member->team->name;
 			$item->quantity = 1;
 		}
+
+		
+
+
 		return Redirect::action('MemberController@paymentCreate', array($member->id));
 	}
 
@@ -351,7 +383,7 @@ class MemberController extends BaseController {
 		$title = 'League Together - '.$member->team->club->name.' Teams';
 		$type = Input::get('type');
 		
-		$club = Club::find($member->team->club);
+		$club = Club::find($member->team->club->id);
 
 		switch ($type) 
 		{
@@ -677,6 +709,16 @@ class MemberController extends BaseController {
 			}	
 			//email receipt 
 			$payment->receipt($transaction, $club->id, $item->player_id);
+			
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
+			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
+				$message->to($user->email, $member->accepted_by)
+				->subject("Thank you for joining our team | ".$club->name);
+				foreach ($club->users()->get() as $value) {
+					$message->bcc($value->email, $club->name);
+				}
+			});
+
 			return Redirect::action('MemberController@paymentSuccess', array($member->id))->with('result',$transaction);
 		}
 	}

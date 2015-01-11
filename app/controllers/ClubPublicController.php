@@ -673,8 +673,19 @@ class ClubPublicController extends \BaseController {
 			$member->status = 1;
 			$member->save();
 
-			return "You've been added to the team for free, please close this window to complete transaction";
-			return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
+			//send email notification of acceptance
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
+			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
+				$message->to($user->email, $member->accepted_by)
+				->subject("Thank you for joining our team | ".$club->name);
+				foreach ($club->users()->get() as $value) {
+					$message->bcc($value->email, $club->name);
+				}
+			});
+
+			return Redirect::action('AccountController@index');
+			//return "You've been added to the team for free, please close this window to complete transaction";
+			//return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
 		}
 		if($user->profile->customer_vault){
 			$param = array(
