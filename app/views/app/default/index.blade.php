@@ -29,7 +29,7 @@
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<a href="http://www.cardflexnow.com/" target="_blank"><img src="/img/client/cardflex.png" alt="CardFlex"></a>
-				<a href="http://www.uslacrosse.com" target="_blank"><img src="/img/client/uslacrosse.png" alt="Parcel"></a>
+				<!-- <a href="http://www.uslacrosse.com" target="_blank"><img src="/img/client/uslacrosse.png" alt="Parcel"></a> -->
 				<a href="https://www.facebook.com/CSquaredCompanies" target="_blank"><img src="/img/client/cc.jpg" alt="CSquaredCompanies"></a>
 			</div>
 		</div>
