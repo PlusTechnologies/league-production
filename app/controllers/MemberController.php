@@ -326,7 +326,7 @@ class MemberController extends BaseController {
 			->withUser($user);
 		}
 		//evaludate payment due  == 0 
-		if($member->due = 0){
+		if($member->due == 0){
 
 			$member->accepted_on = Carbon::Now();
 			$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
@@ -368,8 +368,6 @@ class MemberController extends BaseController {
 			$item->name = "Membership Team ".$member->team->name;
 			$item->quantity = 1;
 		}
-
-		
 
 
 		return Redirect::action('MemberController@paymentCreate', array($member->id));
