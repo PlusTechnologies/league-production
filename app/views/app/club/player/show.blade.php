@@ -44,11 +44,15 @@
 									</tr>
 									<tr>
 										<td><b>US Lacrosse #:</b></td>
-										<td>{{$player->school}}</td>
+										<td>{{$player->laxid}}</td>
 									</tr>
 									<tr>
 										<td><b>USL # expiration date:</b></td>
-										<td>{{$player->school}}</td>
+										<td>{{$player->laxid_exp}}</td>
+									</tr>
+									<tr>
+										<td><b>Prefer Uniform #:</b></td>
+										<td>{{$player->uniform}}</td>
 									</tr>
 								</tbody>
 							</table>
