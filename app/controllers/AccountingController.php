@@ -61,6 +61,8 @@ class AccountingController extends \BaseController {
 		$transaction = $payment->ask($param);
 		$title = 'League Together - '.$club->name.' Transaction';
 
+		return Response::json($transaction);
+
 		return View::make('app.club.accounting.transaction')
 		->with('page_title', $title)
 		->with('club', $club)
