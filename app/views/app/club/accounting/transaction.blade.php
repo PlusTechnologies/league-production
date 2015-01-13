@@ -58,7 +58,11 @@
                            <tbody>
                               <tr>
                                  <td>Amount</td>
-                                 <td>${{$transaction->transaction->action->amount}}</td>
+                                 @foreach($action as $item)
+                                    @if($item->action_type == 'sale')
+                                    <td>${{$item->amount}}</td>
+                                    @endif
+                                 @endforeach
                               </tr>
                               <tr>
                                  <td>Service Fee</td>

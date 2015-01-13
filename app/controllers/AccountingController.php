@@ -60,14 +60,15 @@ class AccountingController extends \BaseController {
 
 		$transaction = $payment->ask($param);
 		$title = 'League Together - '.$club->name.' Transaction';
-
-		return Response::json($transaction);
+		//wrap action in array to parsing in view
+		$actions = array($transaction->transaction->action);
 
 		return View::make('app.club.accounting.transaction')
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('payment', $payment)
 		->with('transaction',$transaction)
+		->with('action', $actions)
 		->with('history', $history)
 		->withUser($user);
 	}
