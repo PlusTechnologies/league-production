@@ -13,12 +13,13 @@ class AccountingController extends \BaseController {
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
 		$payment = Payment::where('club_id', '=', $club->id);
-
+		$sales = New Payment;
 		$title = 'League Together - '.$club->name.' Event';
 		return View::make('app.club.accounting.index')
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('payment', $payment)
+		->with('sales', $sales)
 		->withUser($user);
 	}
 
@@ -45,9 +46,28 @@ class AccountingController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function transaction($id)
 	{
-		//
+		$user= Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+		$history = Payment::where('user_id','=',$payment->user->id)->whereNotIn('transaction', array($payment->transaction))->get();
+		//get transaction data from CF
+		$param = array(
+				'transaction_id'	=> $payment->transaction,
+				'club'						=> $club->id
+				);
+
+		$transaction = $payment->ask($param);
+		$title = 'League Together - '.$club->name.' Transaction';
+
+		return View::make('app.club.accounting.transaction')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('payment', $payment)
+		->with('transaction',$transaction)
+		->with('history', $history)
+		->withUser($user);
 	}
 
 	/**

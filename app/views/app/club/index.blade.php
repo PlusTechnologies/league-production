@@ -14,20 +14,20 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="tile blue">
-                <h3 class="title"></h3>
+                <h3 class="title">${{$sales->ytdSales($club->id)}}</h3>
                 <p>YTD Sales</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile red">
-                <h3 class="title"></h3>
+                <h3 class="title">${{$sales->arSales($club->id)}}</h3>
                 <p>Receivables</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile green">
-                <h3 class="title"></h3>
-                <p>Players</p>
+                <h3 class="title">{{$club->followers->count()}}</h3>
+                <p>Followers</p>
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@
             </thead>
             <tbody>
               @foreach($payments as $payment)
-              <tr>
+              <tr data-id="{{$payment->transaction}}">
                 <td>{{$payment->created_at}}</td>
                 <td>{{$payment->transaction}}</td>
                 <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
@@ -68,6 +68,9 @@
 @section("script")
 <script type="text/javascript">
 $(function () {
+  $('#grid').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
+  });
   $('#grid').DataTable({
       "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
       "iDisplayLength": 10

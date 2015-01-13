@@ -55,6 +55,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('plan/{id}/delete/', 		array('as' =>'plan.delete', 			'uses' => 'PlanController@delete'));
 		Route::get('program/{id}/delete/', 	array('as' =>'program.delete', 		'uses' => 'ProgramController@delete'));
 		Route::post('accounting/report', 		array('as' =>'accounting.report',	'uses' => 'AccountingController@doReport'));
+		Route::get('accounting/transaction/{id}', array('as' =>'accounting.transaction',	'uses' => 'AccountingController@transaction'));
 		Route::resource('discount', 				'DiscountController');
 		Route::resource('team', 						'TeamController');
 		Route::resource('programs', 				'ProgramController');

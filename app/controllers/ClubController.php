@@ -14,11 +14,13 @@ class ClubController extends \BaseController {
 		$user =Auth::user();
 		$club = $user->Clubs()->FirstOrFail(); 
 		$payment = Payment::where('club_id', '=', $club->id)->get();
+		$sales = New Payment;
 		$title = 'League Together - Club';
 		return View::make('app.club.index')
 			->with('page_title', $title)
 			->with('club', $club)
 			->with('payments', $payment)
+			->with('sales', $sales)
 			->withUser($user);
 
 	}

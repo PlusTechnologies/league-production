@@ -22,6 +22,9 @@ class Payment extends Eloquent {
     public function player(){
         return $this->hasOne('Player', 'id','player_id');
     }
+    public function user(){
+        return $this->hasOne('User', 'id','user_id');
+    }
 
     public function eventType() {
         return $this->hasOne('EventType', 'id','event_type');
@@ -117,6 +120,29 @@ class Payment extends Eloquent {
            return "($".number_format(abs($value), 2).")"; 
         }
         return "$".number_format($value, 2);
+    }
+
+    public function ytdSales($value){
+        $now = Carbon::now();
+        $total = DB::table('payments')->where('club_id', $value)->where(DB::raw('YEAR(created_at)'),"=", $now->year)->sum('subtotal');
+        return number_format($total, 2);
+    }
+    public function arSales($value){
+        $now = Carbon::now();
+        $total = DB::table('payment_schedule')->where('club_id', $value)->where(DB::raw('YEAR(created_at)'),"=", $now->year)->sum('subtotal');
+        return number_format($total, 2);
+    }
+
+    public function ytdSalesEvents($value){
+        $now = Carbon::now();
+        $total = DB::table('payments')->where('club_id', $value)->whereNotNull('event_type')->where(DB::raw('YEAR(created_at)'),"=", $now->year)->sum('subtotal');
+        return number_format($total, 2);
+    }
+
+    public function ytdSalesTeams($value){
+        $now = Carbon::now();
+        $total = DB::table('payments')->where('club_id', $value)->whereNull('event_type')->where(DB::raw('YEAR(created_at)'),"=", $now->year)->sum('subtotal');
+        return number_format($total, 2);
     }
 
 }

@@ -52,6 +52,11 @@ class Club extends Eloquent{
 		return $this->hasMany('Follower', 'club_id','id');
 	}
 
+	public function teams()
+	{
+		return $this->hasMany('Team', 'club_id','id');
+	}
+
 	// public function Programs()
 	// {
 	// 	return $this->hasMany('program');

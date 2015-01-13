@@ -21,12 +21,14 @@ public function index()
 	$club = $user->Clubs()->FirstOrFail();
 	$team = Team::where('club_id','=',$club->id)->get();
 	$seasons = Seasons::all();
+	$sales = New Payment;
 	$title = 'League Together - '.$club->name.' Teams';
 	return View::make('app.club.team.index')
 	->with('page_title', $title)
 	->with('club', $club)
 	->with('seasons', $seasons)
 	->with('team', $team)
+	->with('sales', $sales)
 	->withUser($user);
 }
 

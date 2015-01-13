@@ -892,6 +892,7 @@ class ClubPublicController extends \BaseController {
 					$schedule->fee = number_format($fee, 2);
 					$schedule->total = number_format($total, 2);
 					$schedule->plan_id = $member->plan->id;
+					$schedule->club_id = $club->id;
 					$schedule->member_id = $member->id;
 					$status = $schedule->save();
 					if(!$status){
