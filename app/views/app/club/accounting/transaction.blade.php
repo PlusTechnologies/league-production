@@ -81,7 +81,7 @@
                                     @endforeach
 
                                  @else
-                                    <td>${{$action->action_type}}</td>
+                                    <td>{{$action->action_type}}</td>
                                  @endif
                               </tr>
 
