@@ -62,6 +62,7 @@ class AccountingController extends \BaseController {
 		$title = 'League Together - '.$club->name.' Transaction';
 		//wrap action in array to parsing in view
 		$actions = array($transaction->transaction->action);
+		return $actions;
 
 		return View::make('app.club.accounting.transaction')
 		->with('page_title', $title)
