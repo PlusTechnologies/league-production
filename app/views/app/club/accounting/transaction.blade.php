@@ -58,11 +58,18 @@
                            <tbody>
                               <tr>
                                  <td>Amount</td>
-                                 @foreach($action as $item)
-                                    @if($item->action_type == 'sale')
-                                    <td>${{$item->amount}}</td>
-                                    @endif
-                                 @endforeach
+                                 @if(count($action) > 1)
+
+                                    @foreach($action as $item)
+                                       @if($item->action_type == 'sale')
+                                       <td>${{$item->amount}}</td>
+                                       @endif
+                                    @endforeach
+
+                                 @else
+                                    <td>${{$action->amount}}</td>
+                                 @endif
+                                 
                               </tr>
                               <tr>
                                  <td>Service Fee</td>
