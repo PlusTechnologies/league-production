@@ -57,11 +57,11 @@
                            </tbody>
                            <tbody>
                               <tr>
-                                 <td>Amount</td>
+                                 <td><b>Amount</b></td>
                                  @if(count($action) > 1)
 
                                     @foreach($action as $item)
-                                       @if($item->action_type == 'sale')
+                                       @if($item->action_type == 'sale' || $item->action_type == 'refund' )
                                        <td>${{$item->amount}}</td>
                                        @endif
                                     @endforeach
@@ -69,31 +69,45 @@
                                  @else
                                     <td>${{$action->amount}}</td>
                                  @endif
-                                 
                               </tr>
                               <tr>
-                                 <td>Service Fee</td>
-                                 <td>${{$transaction->transaction->merchant_defined_field}}</td>
-                              </tr>
-                              <tr>
-                                 <td>Status</td>
-                                 <td>{{$transaction->transaction->condition}}</td>
-                              </tr>
-                              <tr>
-                                 <td>Description</td>
-                                 <td>{{$transaction->transaction->order_description}}</td>
+                                 <td><b>Type</b></td>
+                                 @if(count($action) > 1)
+
+                                    @foreach($action as $item)
+                                       @if($item->action_type == 'sale' || $item->action_type == 'refund' )
+                                       <td>${{$item->action_type}}</td>
+                                       @endif
+                                    @endforeach
+
+                                 @else
+                                    <td>${{$action->action_type}}</td>
+                                 @endif
                               </tr>
 
                               <tr>
-                                 <td>Card name</td>
-                                 <td>{{$transaction->transaction->first_name}} {{$transaction->transaction->last_name}}</td>
+                                 <td><b>Service Fee</b></td>
+                                 <td>${{$transaction->merchant_defined_field}}</td>
                               </tr>
                               <tr>
-                                 <td>Method</td>
-                                 <td>{{$transaction->transaction->cc_number}}</td>
+                                 <td>Status</td>
+                                 <td>{{$transaction->condition}}</td>
                               </tr>
                               <tr>
-                                 <td>Date</td>
+                                 <td><b>Description</b></td>
+                                 <td>{{$transaction->order_description}}</td>
+                              </tr>
+
+                              <tr>
+                                 <td><b>Card name</b></td>
+                                 <td>{{$transaction->first_name}} {{$transaction->last_name}}</td>
+                              </tr>
+                              <tr>
+                                 <td><b>Method</b></td>
+                                 <td>{{$transaction->cc_number}}</td>
+                              </tr>
+                              <tr>
+                                 <td><b>Date</b></td>
                                  <td>{{$payment->created_at}}</td>
                               </tr>
 

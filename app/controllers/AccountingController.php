@@ -55,20 +55,28 @@ class AccountingController extends \BaseController {
 		//get transaction data from CF
 		$param = array(
 				'transaction_id'	=> $payment->transaction,
-				'club'						=> $club->id
+				'club'						=> $club->id,
+				'action_type' => $payment->type
 				);
 
 		$transaction = $payment->ask($param);
+		$values = $transaction->transaction;
 		$title = 'League Together - '.$club->name.' Transaction';
-		//wrap action in array to parsing in view
-		$actions = $transaction->transaction->action;
-	
+		if(count($transaction->transaction) > 1){
+			foreach ($transaction->transaction as $value) {
+				if($value->transaction_id == $payment->transaction)
+				$values = $value;
+			}
+		}
+
+		//return Response::json($values);
+		$actions = $values->action;
 
 		return View::make('app.club.accounting.transaction')
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('payment', $payment)
-		->with('transaction',$transaction)
+		->with('transaction',$values)
 		->with('action', $actions)
 		->with('history', $history)
 		->withUser($user);
