@@ -12,7 +12,7 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="tile blue">
-                <h3 class="title">${{$sales->ytdSalesTeams($club->id)}}</h3>
+                <h3 class="title">${{$sales->ytdSales($club->id)}}</h3>
                 <p>YTD Sales</p>
               </div>
             </div>

@@ -76,7 +76,7 @@
 
                                     @foreach($action as $item)
                                        @if($item->action_type == 'sale' || $item->action_type == 'refund' )
-                                       <td>${{$item->action_type}}</td>
+                                       <td>{{$item->action_type}}</td>
                                        @endif
                                     @endforeach
 
