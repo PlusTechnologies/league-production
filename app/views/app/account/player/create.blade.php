@@ -175,7 +175,7 @@
 							<hr />
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
-									<a href="/" class="btn btn-default">Cancel</a>
+									<a href="{{URL::action('PlayerController@index')}}" class="btn btn-default">Cancel</a>
 									<button type="submit" class="btn btn-primary btn-outline">Save</button>
 								</div>
 							</div>
