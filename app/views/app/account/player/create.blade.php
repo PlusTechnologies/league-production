@@ -104,37 +104,37 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Email </label>
 								<div class="col-sm-9">
-									{{ Form::text('email',$player->email, array('class' => 'form-control', 'placeholder'=>'Email')) }}
+									{{ Form::text('email','', array('class' => 'form-control', 'placeholder'=>'Email')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Mobile</label>
 								<div class="col-sm-9">
-									{{ Form::text('mobile',$player->mobile, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
+									{{ Form::text('mobile','', array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">School </label>
 								<div class="col-sm-9">
-									{{ Form::text('school',$player->school, array('class' => 'form-control', 'placeholder'=>'School Name')) }}
+									{{ Form::text('school','', array('class' => 'form-control', 'placeholder'=>'School Name')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">US Lacrosse #</label>
 								<div class="col-sm-9">
-									{{ Form::text('laxid',$player->laxid, array('class' => 'form-control', 'placeholder'=>'US Lax ID')) }}
+									{{ Form::text('laxid','', array('class' => 'form-control', 'placeholder'=>'US Lax ID')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">USL # exp. date</label>
 								<div class="col-sm-9">
-									{{ Form::text('laxid_exp',$player->laxid_exp, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
+									{{ Form::text('laxid_exp','', array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Prefer Uniform #</label>
 								<div class="col-sm-9">
-									{{ Form::text('uniform',$player->uniform, array('class' => 'form-control', 'placeholder'=>'Uniform #')) }}
+									{{ Form::text('uniform','', array('class' => 'form-control', 'placeholder'=>'Uniform #')) }}
 									<span id="helpBlock" class="help-block"># is not guaranteed </span>
 								</div>
 							</div>
