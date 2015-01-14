@@ -518,7 +518,7 @@
                          <tr>
                           <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
                            Thank you, <br><br> 
-                           <b>{{$user->profile->firstname}} {{$user->profile->lastname}}</b> accepted joining the team {{$member->team->name}}</b> for the follwoing player <b> {{$player->firstname}} {{$player->lastname}}</b>
+                           <b>{{$user->profile->firstname}} {{$user->profile->lastname}}</b> accepted joining the team {{$member->team->name}}</b> for the player <b> {{$player->firstname}} {{$player->lastname}}</b>
                           </td>
                          </tr>
                         </tbody>
