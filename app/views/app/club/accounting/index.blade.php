@@ -60,6 +60,16 @@
                   </div>
                 </div>
               </div>
+              <div class="col-sm-7">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="tile purple">
+                      <h3 class="title" id="result_sales"></h3>
+                      <p>Total Sales</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
           <hr>
@@ -107,14 +117,12 @@ $(function () {
   $('#load').click(function(e){
     e.preventDefault();
     if (validator.validate()) {
-      loadData(function(){
-        newTable();
-      });
+      loadData();
     } else {
       alert('Please make sure you entered valid dates');
     }
 
-    
+
   });
   function newTable(){
     $('#grid').DataTable({
@@ -145,16 +153,23 @@ $(function () {
     });
 
     request.done(function( data ) {
+      $('#grid').dataTable().fnDestroy();
+      $("#targetData").html("");
+      var totalsum =0;
+      $.each(data, function(item, dt) {
+       $("#targetData").append('<tr data-id="'+ dt.transaction +'"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.subtotal +'</td></tr>');
 
-     $.each(data, function(item, dt) {
-
-       $("#targetData").append('<tr data-id="'+ dt.transaction +'"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.total +'</td></tr>');
-       $('#grid').dataTable().fnDestroy();
-       
+        totalsum += parseFloat(dt.subtotal.replace(/[^\d\.]/g, ''));
      });
+      kendo.culture("en-US");
+      var sumtotal =  kendo.toString(totalsum, "n");
+      $("#result_sales").html("");
+      $("#result_sales").html("$" +  sumtotal);
+
+      newTable();
 
 
-   });
+    });
 
     request.fail(function( jqXHR, textStatus ) {
       alert( "Request failed: " + textStatus );

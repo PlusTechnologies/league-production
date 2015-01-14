@@ -66,8 +66,8 @@ class PlanController extends BaseController {
 			$amount = Input::get('total') - Input::get('initial');
 			$recurring = Input::get('recurring');
 			$recurrences = $amount / $recurring;
-			$recidual = $amount % $recurring;
-
+			$recidual = fmod($amount, $recurring);
+			
 			if($recidual > 0){
 				return Redirect::action('PlanController@create')
 				->withInput()
