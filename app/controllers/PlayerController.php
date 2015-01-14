@@ -40,9 +40,13 @@ class PlayerController extends \BaseController {
 	public function create()
 	{
 		$user =Auth::user();
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+		$club = Club::find($follow->club_id);
+
 		$title = 'League Together - Player';
 		return View::make('app.account.player.create')
 		->with('page_title', $title)
+		->with('club', $club)
 		->withUser($user);
 	}
 
@@ -76,7 +80,7 @@ class PlayerController extends \BaseController {
 			$player->laxid 			= Input::get('laxid');
 			$player->laxid_exp	= Input::get('laxid_exp');
 			$player->uniform 		= Input::get('uniform');
-			
+
 			$player->user_id   	= $user->id;
 			$status = $player->save();
 
