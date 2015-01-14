@@ -62,7 +62,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Relatioship</label>
+								<label class="col-sm-3 control-label">Relationship</label>
 								<div class="col-sm-9">
 									{{ Form::text('relation',null, array('class' => 'form-control', 'placeholder'=>'Ex. father, mother, legal guardian, etc.')) }}
 								</div>
@@ -80,7 +80,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Gradutation year</label>
+								<label class="col-sm-3 control-label">Graduation year</label>
 								<div class="col-sm-9">
 									{{ Form::selectRange('year', 2015, 2035, null, array('class'=>'form-control'));}}
 									<span id="helpBlock" class="help-block"><small>High School Graduation Year</small></span>
