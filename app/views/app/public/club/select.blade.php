@@ -37,6 +37,20 @@
 							
 						</div>
 					</div>
+					<br>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Team's Term of services & Liability waiver </h4>
+							<hr />
+							<div class="form-group">
+								<div class="col-sm-12 club-terms">
+									<small>
+										{{htmlspecialchars_decode($club->waiver)}}
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>
 					<hr>
 					<button type="submit" class="btn btn-default btn-outline pull-right" href=""> <i class="fa fa-shop fa-lg"></i> Complete Registration</button>
 					{{ Form::close() }}

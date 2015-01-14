@@ -36,7 +36,21 @@
             </tbody>
           </table>
         </div>
-        <hr><br>
+        <br>
+          <div class="row">
+            <div class="col-xs-12">
+              <h4>Team's Term of services & Liability waiver </h4>
+              <hr />
+              <div class="form-group">
+                <div class="col-sm-12 club-terms">
+                  <small>
+                    {{htmlspecialchars_decode($club->waiver)}}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr><br>
         <p class="text-right">
           <a href="{{URL::action('MemberController@paymentSelect',$member->id)}}"class="btn btn-success btn-outline">Join Team</a>
           <a href="{{URL::action('PlayerController@index')}}" class="btn btn-primary btn-outline">Cancel</a>

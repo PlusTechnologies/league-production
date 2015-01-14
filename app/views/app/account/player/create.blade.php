@@ -14,7 +14,7 @@
 						<b class="text-danger">Important:</b> This page is intended for parents or legal guardian only. <br><br>
 						<b>Instructions:</b> <br>
 						Step 1 - Add new player information. <br>
-						Step 2 - Proceed to register to an event.
+						Step 2 - Click save.
 					</p>
 					<p>Privacy questions?</p>
 						<p>Click here for the <a href="">Privacy Policy</a></p>
