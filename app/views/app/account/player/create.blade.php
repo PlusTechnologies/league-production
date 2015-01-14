@@ -17,7 +17,7 @@
 						Step 2 - Click save.
 					</p>
 					<p>Privacy questions?</p>
-						<p>Click here for the <a href="">Privacy Policy</a></p>
+					<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
 					<h3>New Player</h3>
@@ -97,6 +97,78 @@
 						</div>
 					</div>
 
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Player Preference</h4>
+							<p>All fields required</p>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Email </label>
+								<div class="col-sm-9">
+									{{ Form::text('email',$player->email, array('class' => 'form-control', 'placeholder'=>'Email')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Mobile</label>
+								<div class="col-sm-9">
+									{{ Form::text('mobile',$player->mobile, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">School </label>
+								<div class="col-sm-9">
+									{{ Form::text('school',$player->school, array('class' => 'form-control', 'placeholder'=>'School Name')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">US Lacrosse #</label>
+								<div class="col-sm-9">
+									{{ Form::text('laxid',$player->laxid, array('class' => 'form-control', 'placeholder'=>'US Lax ID')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">USL # exp. date</label>
+								<div class="col-sm-9">
+									{{ Form::text('laxid_exp',$player->laxid_exp, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Prefer Uniform #</label>
+								<div class="col-sm-9">
+									{{ Form::text('uniform',$player->uniform, array('class' => 'form-control', 'placeholder'=>'Uniform #')) }}
+									<span id="helpBlock" class="help-block"># is not guaranteed </span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<br>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Team's Term of services & Liability waiver </h4>
+							<hr />
+							<div class="form-group">
+								<div class="col-sm-12 club-terms">
+									<small>
+										{{htmlspecialchars_decode($club->waiver)}}
+									</small>
+								</div>
+							</div>
+							<br>
+							<div class="radio">
+								<label>
+									<input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>
+									I Agree
+								</label>
+							</div>
+							<div class="radio">
+								<label>
+									<input type="radio" name="optionsRadios" id="optionsRadios2" value="0">
+									I Disagree
+								</label>
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="col-xs-12">
@@ -104,7 +176,7 @@
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
 									<a href="/" class="btn btn-default">Cancel</a>
-									<button type="submit" class="btn btn-primary btn-outline">Create Account</button>
+									<button type="submit" class="btn btn-primary btn-outline">Save</button>
 								</div>
 							</div>
 						</div>
@@ -126,7 +198,7 @@ $(document).ready(function() {
 	});
 
 	$(".mobile").kendoMaskedTextBox({
-	    mask: "(999) 000-0000"
+		mask: "(999) 000-0000"
 	});
 
 });
