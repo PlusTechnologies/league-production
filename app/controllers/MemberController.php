@@ -250,12 +250,14 @@ class MemberController extends BaseController {
 	{
 		$user= Auth::user();
 		$member = Member::find($id);
+		$club = $member->team->club;
 		
 		$title = 'League Together - '.$member->team->club->name.' Teams';
 
 		return View::make('app.club.member.accept')
 		->with('page_title', $title)
 		->with('member',$member)
+		->with('club', $club)
 		->withUser($user);
 
 	}
