@@ -822,7 +822,7 @@ class ClubPublicController extends \BaseController {
 				$member->due  						= $due;
 				$member->early_due 				= $early_due;
 				$member->early_due_deadline 	= $early_due_deadline;
-				$member->plan_id 					= $team->plan->id;
+				$member->plan_id 					= $team->plan_id;
 				$member->player_id 				= $player->id;
 				$member->team_id					= $team->id;
 				$member->accepted_on = Carbon::Now();
