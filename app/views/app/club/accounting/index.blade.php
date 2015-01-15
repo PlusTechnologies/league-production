@@ -157,7 +157,7 @@ $(function () {
       $("#targetData").html("");
       var totalsum =0;
       $.each(data, function(item, dt) {
-       $("#targetData").append('<tr data-id="'+ dt.transaction +'"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.subtotal +'</td></tr>');
+       $("#targetData").append('<tr data-id="'+ dt.transaction +'" class="clickable"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.subtotal +'</td></tr>');
 
         totalsum += parseFloat(dt.subtotal.replace(/[^\d\.]/g, ''));
      });

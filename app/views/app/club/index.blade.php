@@ -49,7 +49,7 @@
             </thead>
             <tbody>
               @foreach($payments as $payment)
-              <tr data-id="{{$payment->transaction}}">
+              <tr data-id="{{$payment->transaction}}" class="clickable">
                 <td>{{$payment->created_at}}</td>
                 <td>{{$payment->transaction}}</td>
                 <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
