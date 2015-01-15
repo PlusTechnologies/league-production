@@ -89,8 +89,16 @@ class MemberController extends BaseController {
 		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
 		{
     	return $input->due <> '';
-		
 		});
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		{
+    	return $input->early_due <> '';
+		});
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		{
+    	return $input->early_due_deadline <> '';
+		});
+
 
 
 		if(empty(Input::get('due'))){ $due = $team->getOriginal('due'); }else{$due = Input::get('due'); }
@@ -98,7 +106,8 @@ class MemberController extends BaseController {
 		if(empty(Input::get('early_due_deadline'))){ $early_due_deadline = $team->early_due_deadline; }else{ $early_due_deadline =  Input::get('early_due_deadline');};
 		if(empty(Input::get('plan_id'))){ $plan_id = $team->plan_id;}else{ $plan_id = Input::get('plan_id'); };
 
-		
+		if(Input::get('due') == '0' ){ $due = 0; $plan_id = $team->plan_id = null; }
+
 		
 		if($validator->passes()){
 

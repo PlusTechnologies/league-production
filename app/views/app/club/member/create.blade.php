@@ -185,8 +185,8 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  $("#early_deadline").kendoDatePicker();
-  $("#early_deadline").bind("focus", function () {
+  $("#deadline").kendoDatePicker();
+  $("#deadline").bind("focus", function () {
     $(this).data("kendoDatePicker").open();
   });
   $(".dollar").kendoNumericTextBox({
