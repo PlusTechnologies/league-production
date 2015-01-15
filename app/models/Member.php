@@ -5,12 +5,7 @@ class Member extends Eloquent {
 	protected $table = 'members';
 
 	public static $rules = array(
-		"player"	=>"required",
-		"second"	=>"sometime",
-		"early_due"=>"sometime",
-		"early_due_deadline"=>"sometime",
-		"due"			=>"sometime",
-		"plan_id"	=>"sometime"
+		"player"	=>"required"
 		);
 
 

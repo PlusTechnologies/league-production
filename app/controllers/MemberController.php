@@ -80,14 +80,25 @@ class MemberController extends BaseController {
 		$player = Player::Find(Input::get('player'));
 		$uuid = Uuid::generate();
 
+		$input = Input::all();
+
 		$messages = array('player.required' => 'Please select at least one player');
 		$validator= Validator::make(Input::all(),Member::$rules, $messages);
 		
 		
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		{
+    	return $input->due <> '';
+		
+		});
+
+
 		if(empty(Input::get('due'))){ $due = $team->getOriginal('due'); }else{$due = Input::get('due'); }
 		if(empty(Input::get('early_due'))){ $early_due = $team->getOriginal('early_due'); }else{ $early_due =  Input::get('early_due');};
 		if(empty(Input::get('early_due_deadline'))){ $early_due_deadline = $team->early_due_deadline; }else{ $early_due_deadline =  Input::get('early_due_deadline');};
 		if(empty(Input::get('plan_id'))){ $plan_id = $team->plan_id;}else{ $plan_id = Input::get('plan_id'); };
+
+		
 		
 		if($validator->passes()){
 
