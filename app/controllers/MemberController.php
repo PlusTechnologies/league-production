@@ -124,6 +124,15 @@ class MemberController extends BaseController {
 			$status = $member->save();
 
 			if ($status) {
+			$member = Member::find($uuid);
+				//send email notification of acceptance
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
+			$mail = Mail::send('emails.notification.invite', $data, function($message) use ($user, $club, $member){
+				$message->to($member->player->user->email, $member->accepted_by)
+				->subject("You're Invited to join our team | ".$club->name);
+			});
+
+
 				return Redirect::action('TeamController@show', $team->id)
 				->with( 'notice', 'Player added successfully');  
 
