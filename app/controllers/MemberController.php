@@ -28,12 +28,12 @@ class MemberController extends BaseController {
 		$players = [];
 		//get player from follower
 		foreach ($followers as $follower) {
-			$user = User::find($follower->user_id);
-			if($user->players){
+			$fuser = User::find($follower->user_id);
+			if($fuser->players){
 				foreach (User::find($follower->user_id)->players as $data) {
 					$data['fullname'] = "$data->firstname $data->lastname";
-					$data['username'] = "$user->profile->firstname $user->profile->lastname"; 
-					$data['useremail']= "$user->email"; 
+					$data['username'] = "$fuser->profile->firstname $fuser->profile->lastname"; 
+					$data['useremail']= "$fuser->email"; 
 					$players[] = $data;
 				}
 			}
