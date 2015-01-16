@@ -197,6 +197,7 @@ $(document).ready(function () {
   var dataSource = {{$players}};
 
   $("#player_auto").kendoAutoComplete({
+    filter: "contains",
     dataTextField:"fullname",
     dataSource: dataSource,
     minLength: 1,
