@@ -117,23 +117,21 @@
         <table class="table table-striped" id="grid">
           <thead>
             <tr>
-              <th class="col-sm-2">Created</th>
-              <th class="col-sm-2">Transaction ID</th>
-              <th class="col-sm-3">Player</th>
-              <th class="col-sm-2">Position</th>
-              <th class="col-sm-2">Amount</th>
-              <th class="col-sm-1">Remove</th>
-            </tr>
+                <th class="col-sm-2">Added on</th>
+                <th class="col-sm-2">Player</th>
+                <th class="col-sm-2">Position</th>
+                <th class="col-sm-2">Amount</th>
+                <th class="col-sm-2 text-right">Remove</th>
+              </tr>
           </thead>
           <tbody>
             @foreach($event->participants as $item)
-            <tr class="clickable" data-id="{{$item->playerid}}">
+            <tr class="clickable" data-id="{{$item->player_id}}">
               <td>{{$item->created_at}}</td>
-              <td>{{$item->transaction}}</td>
-              <td>{{$item->pfirstname}} {{$item->plastname}}</td>
-              <td>{{$item->position}}</td>
-              <td>${{number_format($item->total, 2) }}</td>
-              <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($event->id, $item->paymentid))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
+              <td>{{$item->player->firstname}} {{$item->player->lastname}}</td>
+              <td>{{$item->player->position}}</td>
+              <td>{{$item->due}}</td>
+              <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($item->id))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
             </tr>
             @endforeach
           </tbody>

@@ -235,6 +235,7 @@ class ClubPublicController extends \BaseController {
 		$club = Club::find($club);
 		$event = Evento::find($id);
 		$cart = Cart::contents(true);
+		$uuid = Uuid::generate();
 		
 		foreach (Cart::contents() as $item) {
 			$player = Player::Find($item->player_id);
@@ -255,8 +256,36 @@ class ClubPublicController extends \BaseController {
 
 		if(!$total){
 			//add participant for free !idea
-			return Redirect::action('HomeController@getIndex');
+
+			$participant = new Participant;
+			$participant->id 					= $uuid;
+			$participant->firstname 	= $player->firstname;
+			$participant->lastname 		= $player->lastname;
+			$participant->due 				= $event->getOriginal('fee');
+			$participant->early_due 	= $event->getOriginal('early_fee');
+			$participant->early_due_deadline 	= $event->early_deadline;
+			$participant->event_id 		= $event->id;
+			$participant->player_id 	= $player->id;
+			$participant->accepted_on = Carbon::Now();
+			$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
+			$participant->accepted_user = $user->id;
+			$participant->save();
+
+			$participant = Participant::find($uuid);
+
+			//send email notification of acceptance
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'event'=>$event, 'participant'=>$participant );
+			$mail = Mail::send('emails.notification.event.accept', $data, function($message) use ($user, $club, $participant){
+				$message->to($user->email, $participant->accepted_by)
+				->subject("Thank you for joining our event | ".$club->name);
+				foreach ($club->users()->get() as $value) {
+					$message->bcc($value->email, $club->name);
+				}
+			});
+
+			return Redirect::action('AccountController@index');
 		}
+
 		if($user->profile->customer_vault){
 			$param = array(
 				'report_type'	=> 'customer_vault',
@@ -354,11 +383,11 @@ class ClubPublicController extends \BaseController {
 	public function PaymentStore($club, $id)
 	{
 		$uuid = Uuid::generate();
+		$uuid2 = Uuid::generate();
 		$user =Auth::user();
 		$club = Club::find($club);
 		$event = Evento::find($id);
 		
-
 		$param = array(
 			'customer_vault_id'	=> $user->profile->customer_vault,
 			'discount'					=> Input::get('discount'),
@@ -374,6 +403,9 @@ class ClubPublicController extends \BaseController {
 		}else{
 
 			foreach( Cart::contents() as $item){
+
+				$player = Player::find($item->player_id);
+
 				$payment->id						= $uuid;
 				$payment->customer     	= $user->profile->customer_vault;
 				$payment->transaction   = $transaction->transactionid;	
@@ -385,10 +417,26 @@ class ClubPublicController extends \BaseController {
 				$payment->discount   		= $transaction->discount;
 				$payment->club_id				= $club->id;
 				$payment->user_id				= $user->id;
-				$payment->player_id 		= $item->player_id;
+				$payment->player_id 		= $player->id;
 				$payment->event_type		= $event->type_id;
 				$payment->type					= $transaction->type;
 				$payment->save();
+
+
+
+				$participant = new Participant;
+				$participant->id 					= $uuid2;
+				$participant->firstname 	= $player->firstname;
+				$participant->lastname 		= $player->lastname;
+				$participant->due 				= $event->getOriginal('fee');
+				$participant->early_due 	= $event->getOriginal('early_fee');
+				$participant->early_due_deadline 	= $event->early_deadline;
+				$participant->event_id 		= $event->id;
+				$participant->player_id 	= $player->id;
+				$participant->accepted_on = Carbon::Now();
+				$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
+				$participant->accepted_user = $user->id;
+				$participant->save();
 
 
 				$salesfee = ($item->price / getenv("SV_FEE")) - $item->price; 
@@ -398,16 +446,10 @@ class ClubPublicController extends \BaseController {
 				$sale->price 				= $item->price;
 				$sale->fee 					= $salesfee;
 				$sale->payment_id   = $uuid;
-				$sale->event_id   	= $event->id;
+				$sale->participant_id = $uuid2;
 				$sale->save();
 
-				$participant = new Participant;
-				$participant->user_id 		= $user->id;
-				$participant->event_id 		= $event->id;
-				$participant->payment_id 	= $uuid;
-				$participant->player_id 	= $item->player_id;
-				$participant->club_id 		= $club->id;
-				$participant->save();
+				
 			}	
 
 			//email receipt 

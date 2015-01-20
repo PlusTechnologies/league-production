@@ -100,14 +100,13 @@
 								<label class="col-sm-3 control-label">Early Bird Fee</label>
 								<div class="col-sm-9">
 									{{ Form::text('early_fee',null, array('class' => 'dollar')) }}
-									<span id="helpBlock" class="help-block">Optional - Leave blank and no discount will be provided.</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Dealine</label>
 								<div class="col-sm-9">
 									{{ Form::text('early_deadline',null, array('class' => 'form-control datepicker','placeholder'=>'MM/DD/YYYY')) }}
-									<span id="helpBlock" class="help-block">Last day of early bird. Required when early bird fee present.</span>
+									<span id="helpBlock" class="help-block">Last day of early bird. Required even when earlybird is 0.</span>
 								</div>
 							</div>
 						</div>

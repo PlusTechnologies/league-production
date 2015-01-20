@@ -22,8 +22,8 @@ class CreatePaymentItemTable extends Migration {
 			$table->double('discount',15, 2);
 			$table->string('payment_id', 36)->index();
 			$table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
-			$table->integer('event_id')->unsigned()->index()->nullable();
-			$table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+			$table->string('participant_id', 36)->index()->nullable();
+			$table->foreign('participant_id')->references('id')->on('participants')->onDelete('cascade');
 			$table->string('member_id', 36)->index()->nullable();
 			$table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
 			$table->timestamps();

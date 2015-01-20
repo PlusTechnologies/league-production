@@ -15,6 +15,15 @@
           </p>
           <br>
           {{Form::open(array('action' => array('ParticipantController@destroy', $participant->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
+          <!-- <h4>Refund</h4>
+          <p>Eligible amount: {{$payment->subtotal}}</p>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Amount:</label>
+            <div class="col-sm-9">
+              {{ Form::text('amount',null, array('class' => 'dollar', 'placeholder'=>'Refund amount')) }}
+              <span id="helpBlock" class="help-block">Enter 0 (zero) to skip refund</span>
+            </div>
+          </div> -->
           <div class="row">
             <div class="col-xs-12">
               <hr />

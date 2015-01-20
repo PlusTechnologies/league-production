@@ -13,8 +13,8 @@ class Evento extends Eloquent {
 
         'max'           =>'required|integer',
 
-        'fee'			=>'required|numeric|min:1',
-        'early_fee'     =>'numeric|min:1',
+        'fee'			=>'required|numeric|min:0',
+        'early_fee'     =>'required|numeric|min:0',
         'early_deadline'=>'date|before:date',
 
         'open'			=>'required|date',
@@ -35,23 +35,7 @@ class Evento extends Eloquent {
     }
 
     public function participants() {
-        return $this->hasMany('Participant', 'event_id', 'id')
-        ->join('players', 'event_participant.player_id', '=', 'players.id')
-        ->join('profile', 'event_participant.user_id', '=', 'profile.user_id')
-        ->join('payments', 'event_participant.payment_id', '=', 'payments.id')
-        ->join('users', 'event_participant.user_id', '=', 'users.id')
-        ->select('players.firstname as pfirstname', 
-            'players.id as playerid', 
-            'players.lastname as plastname', 
-            'players.position', 
-            'profile.firstname as ufirstname', 
-            'profile.lastname as ulastname',
-            'payments.id as paymentid',
-            'payments.subtotal as total',
-            'payments.transaction',
-            'event_participant.created_at',
-            'users.email as email'
-            );
+        return $this->hasMany('Participant', 'event_id', 'id');
     }
 
 //Accessors & Mutators
@@ -59,7 +43,6 @@ class Evento extends Eloquent {
         if($value){
             $this->attributes['early_deadline'] =   date('Y-m-d', strtotime($value));
         }
-
     }
 
     public function getEarlyDeadlineAttribute($value){

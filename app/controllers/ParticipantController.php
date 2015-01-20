@@ -78,16 +78,15 @@ class ParticipantController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($event, $payment)
+	public function destroy($participant)
 	{
 
 		$user = 				Auth::user();
 		$club = 				$user->clubs()->FirstOrFail();
-		$participant = 	Participant::where('event_id', '=', $event)->where('payment_id', '=', $payment)->FirstOrFail();	
-		$player = 			Player::Find($participant->player_id);
-		$user_parent = 	User::find($participant->user_id);
-		$event =	 			Evento::find($event);
-		$payment = 			Payment::find($payment);
+		$participant = 	Participant::Find($participant);
+		$player = 			Player::Find($participant->player->id);
+		$user_parent = 	User::find($participant->accepted_user);
+		$event =	 			Evento::find($participant->event->id);
 		$uuid = 				Uuid::generate();
 
 		//$amount = $payment->getOriginal('subtotal');
@@ -141,14 +140,14 @@ class ParticipantController extends BaseController {
 
 	}
 
-	public function delete($event, $payment)
+	public function delete($participant)
 	{
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();
-		$participant = Participant::where('event_id', '=', $event)->where('payment_id', '=', $payment)->FirstOrFail();	
+		$participant = 	Participant::Find($participant);
 		$player = Player::Find($participant->player_id);
-		$event = Evento::find($event);
-		$payment = Payment::find($payment);
+		$event = Evento::find($participant->event->id);
+		// $payment = Payment::find($payment);
 		
 		$title = 'League Together - '.$event->name.' Event';
 
@@ -157,7 +156,8 @@ class ParticipantController extends BaseController {
 		->withEvent($event)
 		->withClub($club)
 		->withPlayer($player)
-		->withPayment($payment)
+		->with('participant', $participant)
+		// ->withPayment($payment)
 		->withUser($user);
 	}
 

@@ -26,7 +26,7 @@ class CreateTeamsTable extends Migration {
 			$table->boolean('allow_plan');
 			$table->boolean('status');
 			$table->string('plan_id', 36)->index()->nullable();
-			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
+			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('set null');
 			$table->string('club_id', 36)->index();
 			$table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');
 			$table->integer('season_id')->unsigned();
