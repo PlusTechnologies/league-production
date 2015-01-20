@@ -1,7 +1,7 @@
 <?php
 
 class Participant extends Eloquent {
-	protected $fillable = array('firstname','lastname','due','early_due','early_due_deadline','method','plan_id','event_id','player_id','accepted_user');
+	protected $fillable = array('firstname','lastname','due','early_due','early_due_deadline','method','plan_id','event_id','player_id','accepted_user', 'accepted_by', 'accepted_on');
 	protected $table = 'participants';
 
     public function player() {

@@ -265,6 +265,7 @@ class ClubPublicController extends \BaseController {
 			$participant->early_due 	= $event->getOriginal('early_fee');
 			$participant->early_due_deadline 	= $event->early_deadline;
 			$participant->event_id 		= $event->id;
+			$participant->method 			= 'full';
 			$participant->player_id 	= $player->id;
 			$participant->accepted_on = Carbon::Now();
 			$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
