@@ -103,9 +103,6 @@ class EventoController extends BaseController {
 	 */
 	public function show($id)
 	{
-		$participants = DB::table('event_participant')->get();
-
-		return $participants;
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();	
 		$event = Evento::find($id);
