@@ -24,4 +24,11 @@ class Participant extends Eloquent {
         $this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
     }
 
+    public function setEarlyDueAttribute($value){
+        if($value){
+            $this->attributes['early_due'] =  $value ;
+        }
+        $this->attributes['early_due'] =  0;
+    }
+
 }
