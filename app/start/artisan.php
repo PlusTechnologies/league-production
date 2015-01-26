@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new PlanSchedule);
+Artisan::add(new DailySummary);
