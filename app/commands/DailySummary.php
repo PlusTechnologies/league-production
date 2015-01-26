@@ -40,7 +40,10 @@ class DailySummary extends ScheduledCommand {
 	 */
 	public function schedule(Schedulable $scheduler)
 	{
-		return $scheduler->everyMinutes(5);
+		return $scheduler
+						->daily()
+            ->hours(6)
+            ->minutes(30);
 	}
 
 	/**
@@ -61,7 +64,8 @@ class DailySummary extends ScheduledCommand {
 		$data = array('payments'=>$payments, 'fees'=>$payments2, 'subtotal'=>$payments3);
 			$mail = Mail::send('emails.notification.report.daily', $data, function($message){
 				$message->to('jd.hernandez@me.com', 'David Hernandez')
-				->subject("Daily Volume Summary ");
+				->cc('brooks@csquaredcompanies.com', 'Brooks Carter')
+				->subject("Daily Volume Summary");
 			});
 
 	}
