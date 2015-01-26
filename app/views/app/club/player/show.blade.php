@@ -66,36 +66,57 @@
 							<table class="table table-user-information">
 								<tbody>
 									<tr>
-										<td><b>Name:</b></td>
+										<td class="col-sm-4"><b>Name:</b></td>
 										<td>{{$player->user->profile->firstname}} {{$player->user->profile->lastname}}</td>
 									</tr>
 									<tr>
-										<td><b>Relationship:</b></td>
+										<td class="col-sm-4"><b>Relationship:</b></td>
 										<td>{{$player->relation}}</td>
 									</tr>
 									<tr>
-										<td><b>Email:</b></td>
+										<td class="col-sm-4"><b>Email:</b></td>
 										<td><a href="mailto:{{$player->user->email}}">{{$player->user->email}}</a></td>
 									</tr>
 									<tr>
-										<td><b>Mobile:</b></td>
+										<td class="col-sm-4"><b>Mobile:</b></td>
 										<td>{{$player->user->profile->mobile}}</td>
 									</tr>
 									<tr>
-										<td><b>Member since:</b></td>
+										<td class="col-sm-4"><b>Member since:</b></td>
 										<td>{{$player->user->created_at}}</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
-					<h3>Player Statistics</h3>
+					<h3>Contacts</h3>
 					<br>
+					@foreach($player->contacts as $contact)
 					<div class="row">
-						<div class="col-md-12">
-							<p class="muted"> Coming soon!</p>
+						<div class="col-xs-12">
+							<table class="table table-user-information">
+								<tbody>
+									<tr>
+										<td class="col-sm-4"><b>Name:</b></td>
+										<td>{{$contact->firstname}} {{$contact->lastname}}</td>
+									</tr>
+									<tr>
+										<td class="col-sm-4"><b>Relationship:</b></td>
+										<td>{{$contact->relation}}</td>
+									</tr>
+									<tr>
+										<td class="col-sm-4"><b>Email:</b></td>
+										<td><a href="mailto:{{$contact->email}}">{{$contact->email}}</a></td>
+									</tr>
+									<tr>
+										<td class="col-sm-4"><b>Mobile:</b></td>
+										<td>{{$contact->mobile}}</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>

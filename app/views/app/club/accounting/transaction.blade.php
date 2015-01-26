@@ -120,14 +120,16 @@
                   <div class="col-xs-12">
                      <h4>History</h4>
                      <br>
+                  
                      <div class="table-responsive">
-                        <table class="table table-user-information" id="grid">
+                        <table class="table table-user-information table-striped" id="grid">
                            <thead>
                               <tr>
-                                 <td></td>
-                                 <td></td>
-                                 <td></td>
-                                 <td></td>
+                                 <td>Date</td>
+                                 <td>ID</td>
+                                 <td>Player</td>
+                                 <td>Type</td>
+                                 <td>Total</td>
                               </tr>
                            </thead>
                            <tbody>
@@ -171,7 +173,14 @@ $(function () {
   });
    $('#grid').DataTable({
       "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
-      "iDisplayLength": 10
+      "iDisplayLength": 10,
+      "aoColumns": [
+      null,
+      { "bSortable": false },
+      { "bSortable": false },
+      { "bSortable": false },
+      { "bSortable": false }
+    ]
   });
 
 });
