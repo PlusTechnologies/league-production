@@ -50,9 +50,20 @@ class DailySummary extends ScheduledCommand {
 	 */
 	public function fire()
 	{
-		$yesterday = Carbon::now()->subDay();
-		$payments = Payment::where('created_at','=', $yesterday);
-		return Log::info($payments->sum('total'));
+		$from = Carbon::now()->subDay()->hour(0)->minute(0)->second(0);
+		$to = Carbon::now()->subDay()->hour(23)->minute(59)->second(59);
+		$payments = Payment::whereBetween('created_at', array($from , $to))->sum('total');
+		$payments2 = Payment::whereBetween('created_at', array($from , $to))->sum('service_fee');
+		$payments3 = Payment::whereBetween('created_at', array($from , $to))->sum('subtotal');
+		//return Log::info($yesterday);
+		//return Log::info($payments);
+
+		$data = array('payments'=>$payments, 'fees'=>$payments2, 'subtotal'=>$payments3);
+			$mail = Mail::send('emails.notification.report.daily', $data, function($message){
+				$message->to('jd.hernandez@me.com', 'David Hernandez')
+				->subject("Daily Volume Summary ");
+			});
+
 	}
 
 
