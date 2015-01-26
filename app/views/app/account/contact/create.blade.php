@@ -8,21 +8,21 @@
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="col-md-4 signup-col same-height">
-					<h1>Add Player</h1>
+					<h1>Add Contact</h1>
 					<br><br>
 					<p>
 						<b class="text-danger">Important:</b> This page is intended for parents or legal guardian only. <br><br>
 						<b>Instructions:</b> <br>
-						Step 1 - Add new player information. <br>
+						Step 1 - Add new contact information. <br>
 						Step 2 - Click save.
 					</p>
 					<p>Privacy questions?</p>
 					<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h3>New Player</h3>
+					<h3>New Contact</h3>
 					<p></p>
-					{{Form::open(array('action' => array('PlayerController@store'), 'class'=>'form-horizontal', 'method' => 'post')) }}
+					{{Form::open(array('action' => array('ContactController@store'), 'class'=>'form-horizontal', 'method' => 'post')) }}
 					@if($errors->has())
 					<div class="row">
 						<div class="col-sm-12">
@@ -41,7 +41,7 @@
 					@endif					
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Player Information</h4>
+							<h4>Contact Information</h4>
 							<p>All fields required</p>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">First name</label>
@@ -62,15 +62,15 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Mobile</label>
+								<label class="col-sm-3 control-label">Secondary Email </label>
 								<div class="col-sm-9">
-									{{ Form::text('mobile',null, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
+									{{ Form::text('second_email',null, array('class' => 'form-control', 'placeholder'=>'Email')) }}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Player's position</label>
+								<label class="col-sm-3 control-label">Mobile</label>
 								<div class="col-sm-9">
-									{{ Form::select('position', ['attack' => 'Attack','midfield' => 'Midfield','defense' => 'Defense','LSM' => 'LSM','goalie' => 'Goalie'],null,array('class' => 'form-control', 'placeholder'=>'Position')) }}
+									{{ Form::text('mobile',null, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
 								</div>
 							</div>
 							<div class="form-group">
@@ -79,52 +79,19 @@
 									{{ Form::text('relation',null, array('class' => 'form-control', 'placeholder'=>'Ex. father, mother, legal guardian, etc.')) }}
 								</div>
 							</div>
+
 							<div class="form-group">
-								<label class="col-sm-3 control-label">DOB</label>
+								<label class="col-sm-3 control-label">Player</label>
 								<div class="col-sm-9">
-									{{ Form::text('dob',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
+									{{ Form::select('player_id',[null =>'Select Player'] + $players, Input::old('client_id'), array('class'=>'form-control')) }}
+									<span id="helpBlock" class="help-block">Leave blank if contact applies for all your players.</span>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Gender</label>
-								<div class="col-sm-9">
-									{{Form::select('gender', array('M' => 'Male', 'F' => 'Female'),null, array('class'=>'form-control'));}}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">School </label>
-								<div class="col-sm-9">
-									{{ Form::text('school',null, array('class' => 'form-control', 'placeholder'=>'School Name')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Graduation class</label>
-								<div class="col-sm-9">
-									{{ Form::selectRange('year', 2015, 2035, null, array('class'=>'form-control'));}}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">US Lacrosse #</label>
-								<div class="col-sm-9">
-									{{ Form::text('laxid',null, array('class' => 'form-control', 'placeholder'=>'US Lax ID')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">USL # exp. date</label>
-								<div class="col-sm-9">
-									{{ Form::text('laxid_exp',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Prefer uniform #</label>
-								<div class="col-sm-9">
-									{{ Form::text('uniform',null, array('class' => 'form-control', 'placeholder'=>'Uniform #')) }}
-									<span id="helpBlock" class="help-block"># is not guaranteed </span>
-								</div>
-							</div>
+
+
 							<br>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Roster picture</label>
+								<label class="col-sm-3 control-label">Contact picture</label>
 								<div class="col-sm-9">
 									<div id="upimageclub"></div>
 									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
@@ -133,33 +100,6 @@
 						</div>
 					</div>
 					<br>
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Team's Term of services & Liability waiver </h4>
-							<hr />
-							<div class="form-group">
-								<div class="col-sm-12 club-terms">
-									<small>
-										{{htmlspecialchars_decode($club->waiver)}}
-									</small>
-								</div>
-							</div>
-							<br>
-							<div class="radio">
-								<label>
-									<input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>
-									I Agree
-								</label>
-							</div>
-							<div class="radio">
-								<label>
-									<input type="radio" name="optionsRadios" id="optionsRadios2" value="0">
-									I Disagree
-								</label>
-							</div>
-						</div>
-					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<hr />

@@ -1,4 +1,4 @@
-@extends('layouts.account')
+@extends('layouts.public')
 @section('style')
 {{HTML::style('css/helpers/croppic.css')}}
 @stop
@@ -6,23 +6,23 @@
 <div class="container container-last">
 	<div id="same-height-wrapper">
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-12">
 				<div class="col-md-4 signup-col same-height">
-					<h1>Add Player</h1>
+					<h1>New Account</h1>
 					<br><br>
 					<p>
 						<b class="text-danger">Important:</b> This page is intended for parents or legal guardian only. <br><br>
 						<b>Instructions:</b> <br>
-						Step 1 - Add new player information. <br>
-						Step 2 - Click save.
+						Step 1 - Create your personal account. <br>
+						Step 2 - Active account using confirmation email. <br>
 					</p>
-					<p>Privacy questions?</p>
-					<p>Click here for the <a href="">Privacy Policy</a></p>
+					<p>Privacy questions? Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h3>New Player</h3>
-					<p></p>
-					{{Form::open(array('action' => array('PlayerController@store'), 'class'=>'form-horizontal', 'method' => 'post')) }}
+					<p class="logo text-center"> <img src="{{$club->logo}}" width="90"></p> 
+					<h3 class="text-center">{{$club->name}}</h3><br>
+					<h3>Create New Account</h3>
+					{{Form::open(array('action' => array('ClubPublicController@accountStore', $club->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
 					@if($errors->has())
 					<div class="row">
 						<div class="col-sm-12">
@@ -38,33 +38,92 @@
 							</div>
 						</div>
 					</div>
-					@endif					
+					@endif
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Player Information</h4>
+							<h4>Account ID and Password</h4>
+							<p>All fields required</p>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Email</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" name="email" placeholder="Email">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Password</label>
+								<div class="col-sm-9">
+									<input type="password" class="form-control" name="password" placeholder="Password">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Confirm password</label>
+								<div class="col-sm-9">
+									<input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Personal Information</h4>
 							<p>All fields required</p>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">First name</label>
 								<div class="col-sm-9">
-									{{ Form::text('firstname',null, array('class' => 'form-control', 'placeholder'=>'First name')) }}
+									<input type="Text" class="form-control" name="firstname" placeholder="First name">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Last name</label>
 								<div class="col-sm-9">
-									{{ Form::text('lastname',null, array('class' => 'form-control', 'placeholder'=>'Last name')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Email </label>
-								<div class="col-sm-9">
-									{{ Form::text('email',null, array('class' => 'form-control', 'placeholder'=>'Email')) }}
+									<input type="Text" class="form-control" name="lastname" placeholder="Last name">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Mobile</label>
 								<div class="col-sm-9">
-									{{ Form::text('mobile',null, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
+									<input class="form-control mobile" name="mobile" placeholder="Mobile">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">DOB</label>
+								<div class="col-sm-9">
+									{{ Form::text('dob',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
+									<span id="helpBlock" class="help-block"><small>This is required so that we can comply with the Children’s Online Privacy Protection Act and other age restrictions.</small></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Player Information</h4>
+							<p>You can link multiple players to your profiles, saving you time when you register for an event.
+								To add more players, login to your account and visit the "Players" section in the navigation bar.
+							</p>
+							<p>All fields required</p>
+							<br>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">First name</label>
+								<div class="col-sm-9">
+									{{ Form::text('firstname_p',null, array('class' => 'form-control', 'placeholder'=>'First name')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Last name</label>
+								<div class="col-sm-9">
+									{{ Form::text('lastname_p',null, array('class' => 'form-control', 'placeholder'=>'Last name')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Email </label>
+								<div class="col-sm-9">
+									{{ Form::text('email_p',null, array('class' => 'form-control', 'placeholder'=>'Email')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Mobile</label>
+								<div class="col-sm-9">
+									{{ Form::text('mobile_p',null, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
 								</div>
 							</div>
 							<div class="form-group">
@@ -82,7 +141,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">DOB</label>
 								<div class="col-sm-9">
-									{{ Form::text('dob',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
+									{{ Form::text('dob_p',null, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
 							<div class="form-group">
@@ -91,6 +150,7 @@
 									{{Form::select('gender', array('M' => 'Male', 'F' => 'Female'),null, array('class'=>'form-control'));}}
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<label class="col-sm-3 control-label">School </label>
 								<div class="col-sm-9">
@@ -159,14 +219,13 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<hr />
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
-									<a href="{{URL::action('PlayerController@index')}}" class="btn btn-default">Cancel</a>
-									<button type="submit" class="btn btn-primary btn-outline">Save</button>
+									<a href="/" class="btn btn-default">Cancel</a>
+									<button type="submit" class="btn btn-primary btn-outline">Create Account</button>
 								</div>
 							</div>
 						</div>
@@ -194,9 +253,9 @@ $(document).ready(function() {
 });
 
 var cropperOptions = {
-	modal:true,
 	doubleZoomControls:true,
 	imgEyecandy:true,
+	modal:true,
 	uploadUrl:'/api/image/upload',
 	cropUrl:'/api/image/crop',
 	outputUrlId:'croppic',

@@ -17,9 +17,20 @@ class ClubPublicController extends \BaseController {
 	{
 		$club = Club::find($id);
 		$title = 'League Together - Club | '. $club->name;
-		return View::make('app.public.account.create')
-		->with('page_title', $title)
-		->with('club', $club);
+
+		switch($club->sport) {
+			case 'lacrosse':
+				return View::make('app.public.account.lacrosse.create')
+				->with('page_title', $title)
+				->with('club', $club);
+			default:
+				return View::make('app.public.account.create')
+				->with('page_title', $title)
+				->with('club', $club);
+		}
+
+
+		
 	}
 
 	public function accountStore($id)
@@ -46,15 +57,23 @@ class ClubPublicController extends \BaseController {
 				$profile->avatar    = '/img/coach-avatar.jpg';
 				$profile->save();
 
+				//implement here method for save different sport players fields
+
 				$player = new Player;
 				$player->id = $uuid;
 				$player->firstname 	= Input::get('firstname_p');
 				$player->lastname 	= Input::get('lastname_p');
+				$player->email 			= Input::get('email_p');
+				$player->mobile 		= Input::get('mobile_p');
 				$player->position 	= Input::get('position');
 				$player->relation 	= Input::get('relation');
 				$player->dob 				= Input::get('dob_p');
 				$player->gender 		= Input::get('gender');
 				$player->year 			= Input::get('year');
+				$player->school 		= Input::get('school');
+				$player->laxid			= Input::get('laxid');
+				$player->laxid_exp	= Input::get('laxid_exp');
+				$player->uniform 		= Input::get('uniform');
 				$player->avatar 		= Input::get('avatar');
 				$player->user_id   	= $user->id;
 				$player->save();
@@ -437,6 +456,8 @@ class ClubPublicController extends \BaseController {
 				$participant->accepted_on = Carbon::Now();
 				$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
 				$participant->accepted_user = $user->id;
+				$participant->status 			= 1;
+				$participant->method 			= 'full';
 				$participant->save();
 
 

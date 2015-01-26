@@ -17,7 +17,7 @@
 						Step 2 - Save.
 					</p>
 					<p>Privacy questions?</p>
-						<p>Click here for the <a href="">Privacy Policy</a></p>
+					<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
 					<h3>Update Player</h3>
@@ -68,9 +68,22 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-sm-3 control-label">Email </label>
+								<div class="col-sm-9">
+									{{ Form::text('email',$player->email, array('class' => 'form-control', 'placeholder'=>'Email')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Mobile</label>
+								<div class="col-sm-9">
+									{{ Form::text('mobile',$player->mobile, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
+								</div>
+							</div>
+
+							<div class="form-group">
 								<label class="col-sm-3 control-label">Player's position</label>
 								<div class="col-sm-9">
-									{{ Form::text('position',$player->position, array('class' => 'form-control', 'placeholder'=>'Position')) }}
+									{{ Form::select('position', ['attack' => 'Attack','midfield' => 'Midfield','defense' => 'Defense','LSM' => 'LSM','goalie' => 'Goalie'],$player->position,array('class' => 'form-control', 'placeholder'=>'Position')) }}
 								</div>
 							</div>
 							<div class="form-group">
@@ -92,47 +105,19 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Graduation year</label>
-								<div class="col-sm-9">
-									{{ Form::selectRange('year', 2015, 2035, $player->year, array('class'=>'form-control'));}}
-									<span id="helpBlock" class="help-block"><small>High School Graduation Year</small></span>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Roster picture</label>
-								<div class="col-sm-9">
-									<div id="upimageclub">
-										<img class="edit-org-logo" src="{{$player->avatar}}">
-									</div>
-									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Player Preference</h4>
-							<p>All fields required</p>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Email </label>
-								<div class="col-sm-9">
-									{{ Form::text('email',$player->email, array('class' => 'form-control', 'placeholder'=>'Email')) }}
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Mobile</label>
-								<div class="col-sm-9">
-									{{ Form::text('mobile',$player->mobile, array('class' => 'form-control mobile', 'placeholder'=>'Mobile')) }}
-								</div>
-							</div>
-							<div class="form-group">
 								<label class="col-sm-3 control-label">School </label>
 								<div class="col-sm-9">
 									{{ Form::text('school',$player->school, array('class' => 'form-control', 'placeholder'=>'School Name')) }}
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Graduation class</label>
+								<div class="col-sm-9">
+									{{ Form::selectRange('year', 2015, 2035, $player->year, array('class'=>'form-control'));}}
+								</div>
+							</div>
+
 							<div class="form-group">
 								<label class="col-sm-3 control-label">US Lacrosse #</label>
 								<div class="col-sm-9">
@@ -153,10 +138,24 @@
 								</div>
 							</div>
 
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Roster picture</label>
+								<div class="col-sm-9">
+									<div id="upimageclub">
+										<img class="edit-org-logo" src="{{$player->avatar}}">
+									</div>
+									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
+								</div>
+							</div>
 						</div>
 					</div>
-
-
+					<div class="row">
+						<div class="col-xs-12">
+							<h4>Player Preferences</h4>
+							<p>All fields required</p>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<hr />
@@ -170,6 +169,44 @@
 						</div>
 					</div>
 					{{Form::close()}}
+
+					<div class="row">
+						<div class="col-xs-12">
+							<hr />
+							<h4>Contacts Information</h4>
+
+							<br>
+							<div class="table-responsive">
+								<table class="table table-striped" id="grid">
+									<thead>
+										<tr>
+											<td class="col-sm-4">Name</td>
+											<td class="col-sm-4">Relationship</td>
+											<td class="col-sm-4">Mobile</td>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach($player->contacts as $contact)
+										<tr class="clickable" data-id="{{$contact->id}}">
+											<td>{{$contact->firstname}} {{$contact->lastname}}</td>
+											<td>{{$contact->relation}}</td>
+											<td>{{$contact->mobile}}</td>
+										</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<hr />
+							<div class="form-group">
+									<a href="{{URL::action('ContactController@create')}}" class="btn btn-success btn-outline">Add New</a>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -179,14 +216,24 @@
 @section('script')
 {{ HTML::script('js/helpers/croppic.min.js')}}
 <script type="text/javascript">
+
 $(document).ready(function() {
+	$('#grid').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/contact/" + $(this).data("id") + /edit/);
+  });
+   $('#grid').DataTable({
+      "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
+      "iDisplayLength": 10,
+      "bSort": false
+  });
+
 	$(".datepicker").kendoDatePicker();
 	$(".datepicker").bind("focus", function () {
 		$(this).data("kendoDatePicker").open();
 	});
 
 	$(".mobile").kendoMaskedTextBox({
-	    mask: "(999) 000-0000"
+		mask: "(999) 000-0000"
 	});
 
 });

@@ -79,6 +79,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::post ('settings/user', 								array('uses' => 'UsersController@update'));
 	Route::post('settings/profile', 							array('uses' => 'ProfileController@update'));
 	Route::get ('player/delete/{id}', 						array('as' =>'account.player.delete', 		'uses' => 'PlayerController@delete'));
+	Route::get ('contact/delete/{id}', 						array('as' =>'account.contact.delete', 		'uses' => 'ContactController@delete'));
 	Route::get('member/{id}/accept', 							array('as' =>'account.member.accept',			'uses' => 'MemberController@accept'));
 	Route::get('member/{id}/decline',	 						array('as' =>'account.member.decline',		'uses' => 'MemberController@decline'));
 	Route::post('member/{id}/decline',	 					array('as' =>'account.member.doDecline',	'uses' => 'MemberController@doDecline'));
@@ -90,7 +91,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::post('member/{id}/checkout/validate',	array('as'=>'account.member.validate', 	'uses' => 'MemberController@paymentValidate'));
 	Route::post('member/{id}/checkout/clear',			array('as'=>'account.member.clear', 		'uses' => 'MemberController@paymentRemoveCartItem'));
 	Route::post('member/{id}/checkout/discount',	array('as'=>'account.member.discount', 	'uses' => 'DiscountController@validate'));
-	Route::resource('player', 'PlayerController');
+	Route::resource('player',		'PlayerController');
+	Route::resource('contact',	'ContactController');
 });
 
 Route::group(array('prefix' => 'club'), function() { 

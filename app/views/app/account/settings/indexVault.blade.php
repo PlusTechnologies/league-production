@@ -120,7 +120,7 @@
 									<div id="upimageclub">
 										<img class="edit-org-logo" src="{{$user->profile->avatar}}">
 									</div>
-									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
+									<input type="hidden" id="croppic" name="avatar" value="{{$user->profile->avatar}}">
 								</div>
 							</div>
 						</div>

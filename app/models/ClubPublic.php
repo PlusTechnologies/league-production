@@ -1,7 +1,8 @@
 <?php
 
 class ClubPublic extends \Eloquent {
-	
+	protected $fillable = array('email','password','password_confirmation','firstname','lastname','mobile','dob','firstname_p','lastname_p','position','dob_p','relation','gender','year','laxid','laxid_exp');
+
 	public static $rules = array(
 		'email'					=>'required|email|unique:users,email',
 		'password' 			=>'required|min:3|confirmed',
@@ -17,6 +18,8 @@ class ClubPublic extends \Eloquent {
 		'relation' 			=>'required',
 		'gender' 				=>'required',
 		'year' 					=>'required',
+		'laxid'     		=>'required',
+    'laxid_exp' 		=>'required',
 		);
 
 	public static $messages = array(
@@ -30,8 +33,10 @@ class ClubPublic extends \Eloquent {
 		'position.required' 		=>'Player position required',
 		'dob_p.required' 				=>'Player DOB required',
 		'relation.required' 		=>'Player relationship required',
-		'gender.required' 			=>'Gender is required',
-		'year.required' 				=>'School graduation year is required',
+		'gender.required' 			=>'Player gender is required',
+		'year.required' 				=>'Player graduation class is required',
+		'laxid.required'     		=>'Player US Lacrosse ID required',
+    'laxid_exp.required' 		=>'Player US Lacrosse ID expiration date required',
 	);
 
 	

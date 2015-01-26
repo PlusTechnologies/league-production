@@ -122,14 +122,14 @@
                      <br>
                      <div class="table-responsive">
                         <table class="table table-user-information" id="grid">
-                           <tbody>
+                           <thead>
                               <tr>
                                  <td></td>
                                  <td></td>
                                  <td></td>
                                  <td></td>
                               </tr>
-                           </tbody>
+                           </thead>
                            <tbody>
                               @foreach($history as $item)
                               <tr data-id="{{$item->transaction}}">

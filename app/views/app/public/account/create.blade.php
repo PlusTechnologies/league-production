@@ -15,7 +15,6 @@
 						<b>Instructions:</b> <br>
 						Step 1 - Create your personal account. <br>
 						Step 2 - Active account using confirmation email. <br>
-						Step 3 - Proceed to register to an event.
 					</p>
 					<p>Privacy questions? Click here for the <a href="">Privacy Policy</a></p>
 				</div>
@@ -99,8 +98,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Player Information</h4>
-							<p>You can link multiple players to your profiles, saving you time when you like to register for an event.
-								To add more players, login to your account a visit the "Players" link in the navigation bar.</p>
+							<p>You can link multiple players to your profiles, saving you time when you register for an event.
+								To add more players, login to your account and visit the "Players" section in the navigation bar.</p>
 								<p>All fields required</p>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">First name</label>

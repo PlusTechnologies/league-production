@@ -11,6 +11,8 @@ class Player extends \Eloquent {
     'dob'       =>'required|date',
     'gender'    =>'required',
     'year'      =>'required',
+    'laxid'     =>'required',
+    'laxid_exp' =>'required',
   );
 
 	public function user()
@@ -27,8 +29,13 @@ class Player extends \Eloquent {
   }
 
   public function getTenantFullNameAttribute()
-{
+  {
     return $this->attributes['firstname'] .' '.$this->attributes['lastname'];
-}
+  }
+  
+  public function contacts() {
+    return $this->belongsToMany('Contact','players_contacts', 'player_id', 'contact_id')->withTimestamps();    
+  }
+
 
 }
