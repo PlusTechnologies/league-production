@@ -231,6 +231,7 @@ public function addplayer($id)
 	$followers = new Follower;
 	$title = 'League Together - '.$club->name.' Teams';
 	$team = Team::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+	$plan = $club->plans()->lists('name','id');
 	return View::make('pages.user.club.team.addplayer')
 	->with('page_title', $title)
 	->with('team',$team)
