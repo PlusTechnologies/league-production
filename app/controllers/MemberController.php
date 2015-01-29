@@ -41,8 +41,8 @@ class MemberController extends BaseController {
 
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::find($id);
-		$plan = $club->plans()->lists('name','id');
-		//$plan = $team->plan()->lists('name','id');
+		$allplans = $club->plans()->lists('name','id');
+		$plan = $team->plan()->lists('name','id');
 
 		if(!$plan){
 
