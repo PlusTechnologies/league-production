@@ -95,20 +95,20 @@
                   <div class="form-group">
                     <label class="col-sm-3 control-label">First name</label>
                     <div class="col-sm-9">
-                      {{ Form::text('firstname',null, array('class' => 'form-control', 'placeholder'=>'First name', 'disabled'=>'disabled')) }}
+                      {{ Form::text('firstname',null, array('class' => 'form-control', 'placeholder'=>'First name', 'readonly')) }}
                       {{ Form::hidden('player',null) }}
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-sm-3 control-label">Last name</label>
                     <div class="col-sm-9">
-                      {{ Form::text('lastname',null, array('class' => 'form-control', 'placeholder'=>'Last name','disabled'=>'disabled')) }}
+                      {{ Form::text('lastname',null, array('class' => 'form-control', 'placeholder'=>'Last name','readonly')) }}
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-sm-3 control-label">Player's position</label>
                     <div class="col-sm-9">
-                      {{ Form::text('position',null, array('class' => 'form-control', 'placeholder'=>'Position','disabled'=>'disabled')) }}
+                      {{ Form::text('position',null, array('class' => 'form-control', 'placeholder'=>'Position','readonly')) }}
                     </div>
                   </div>
                 </div>
@@ -121,13 +121,7 @@
                   <div class="form-group">
                     <label class="col-sm-3 control-label">Email</label>
                     <div class="col-sm-9">
-                      {{ Form::text('email',null, array('class' => 'form-control', 'placeholder'=>'Primary Email', 'disabled'=>'disabled')) }}
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">Secondary email</label>
-                    <div class="col-sm-9">
-                      {{ Form::text('second_email',null, array('class' => 'form-control', 'placeholder'=>'Secondary Email')) }}
+                      {{ Form::text('email',null, array('class' => 'form-control', 'placeholder'=>'Primary Email', 'readonly')) }}
                     </div>
                   </div>
                 </div>

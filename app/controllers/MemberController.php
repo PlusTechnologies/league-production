@@ -152,8 +152,9 @@ class MemberController extends BaseController {
 		}
 		$error = $validator->errors()->all(':message');
 		return Redirect::back()
-		->withErrors($error)
-		->withInput();
+		->withInput()
+		->withErrors($error);
+		
 
 
 
