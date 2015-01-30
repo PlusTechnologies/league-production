@@ -41,20 +41,20 @@ class MemberController extends BaseController {
 
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::find($id);
-		$allplans = $club->plans()->lists('name','id');
-		$plan = $team->plan()->lists('name','id');
+		$plan = $club->plans()->lists('name','id');
+		//$plan = $team->plan()->lists('name','id');
 
-		if(!$plan){
+		// if(!$plan){
 
-			return View::make('app.club.member.createNoPlan')
-			->with('page_title', $title)
-			->with('team',$team)
-			->with('club', $club)
-			->with('followers', $followers)
-			->with('players', json_encode($players) )
-			->withUser($user);
+		// 	return View::make('app.club.member.createNoPlan')
+		// 	->with('page_title', $title)
+		// 	->with('team',$team)
+		// 	->with('club', $club)
+		// 	->with('followers', $followers)
+		// 	->with('players', json_encode($players) )
+		// 	->withUser($user);
 
-		}		
+		// }		
 		
 		return View::make('app.club.member.create')
 		->with('page_title', $title)
@@ -86,18 +86,24 @@ class MemberController extends BaseController {
 		$validator= Validator::make(Input::all(),Member::$rules, $messages);
 		
 		
-		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
 		{
     	return $input->due <> '';
 		});
-		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
 		{
     	return $input->early_due <> '';
 		});
-		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
 		{
     	return $input->early_due_deadline <> '';
 		});
+
+		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
+		{
+    	return $input->plan_id <> '';
+		});
+
 
 
 

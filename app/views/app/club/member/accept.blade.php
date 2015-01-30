@@ -52,7 +52,7 @@
           </div>
           <hr><br>
         <p class="text-right">
-          <a href="{{URL::action('MemberController@paymentSelect',$member->id)}}"class="btn btn-success btn-outline">Join Team</a>
+          <a href="{{URL::action('MemberController@paymentSelect',$member->id)}}"class="btn btn-success btn-outline">I Agree</a>
           <a href="{{URL::action('PlayerController@index')}}" class="btn btn-primary btn-outline">Cancel</a>
         </p>
           

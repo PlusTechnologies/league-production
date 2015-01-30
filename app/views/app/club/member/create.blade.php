@@ -60,11 +60,15 @@
                       </tr>
                       <tr>
                         <td class="text-right col-xs-3">Plan:</td>
+                        @if($team->plan)
                         <td>{{$team->plan->name}}</td>
+                        @else
+                        <td>No plan</td>
+                        @endif
                       </tr>
                       <tr>
                         <td class="text-right col-xs-3">Roster count:</td>
-                        <td>{{count($team->players)}}</td>
+                        <td>{{count($team->members)}}</td>
                       </tr>
                     </tbody>
                   </table>

@@ -26,7 +26,3 @@
 #map_canvas {
 min-height: 250px;
 }
-.club-terms{
-    max-height: 250px;
-    overflow: scroll;
-}

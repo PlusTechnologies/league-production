@@ -120,3 +120,8 @@ body > .container-last{
 .signup-col:after{
     background-color:#fbfbfb;
 }
+/** Terms **/
+.club-terms{
+    max-height: 250px;
+    overflow: scroll;
+}
