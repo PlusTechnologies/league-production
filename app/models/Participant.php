@@ -17,9 +17,9 @@ class Participant extends Eloquent {
         return $this->belongsTo('Evento', 'events');
     }
 
-    public function getDueAttribute($value) {
-        return "$".number_format($value, 2);
-    }
+    // public function getDueAttribute($value) {
+    //     return "$".number_format($value, 2);
+    // }
     public function setEarlyDueDeadlineAttribute($value){
         $this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
     }

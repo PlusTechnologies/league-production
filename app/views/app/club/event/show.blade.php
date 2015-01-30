@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="tile blue">
-                <h3 class="title">${{number_format($event->participants->sum('total'), 2)}}</h3>
+                <h3 class="title">${{number_format($event->participants->sum('due'), 2)}}</h3>
                 <p>Sales</p>
               </div>
             </div>
@@ -130,7 +130,7 @@
               <td>{{$item->created_at}}</td>
               <td>{{$item->player->firstname}} {{$item->player->lastname}}</td>
               <td>{{$item->player->position}}</td>
-              <td>{{$item->due}}</td>
+              <td>${{number_format($item->due, 2) }}</td>
               <td class="text-right"><a href="{{URL::action('ParticipantController@delete', array($item->id))}}" class="btn btn-sm btn-danger btn-delete pop-up"><i class="fa fa-trash-o"></i> <small>Remove</small></a></td>
             </tr>
             @endforeach
