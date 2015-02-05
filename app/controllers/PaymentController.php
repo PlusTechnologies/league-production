@@ -441,4 +441,7 @@ public function removeplayertocart($id){
 	return Redirect::back();
 }
 
+
+
+
 }

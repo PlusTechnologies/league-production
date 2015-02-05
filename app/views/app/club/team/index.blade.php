@@ -35,14 +35,11 @@
           </div>
         </div><!-- end of col-sm-7 row -->
       </div><!-- end of first row -->
-      <div class="row ">
-        <div class="col-sm-12">
-          <h3>Teams</h3>
-        </div>
-      </div>
       <br>
       <div class="row">
         <div class="col-md-12">
+          <h3>Teams</h3>
+          <hr />
           <table class="table table-condensed table-striped" id="grid">
             <thead>
               <tr>
@@ -80,8 +77,9 @@ $(function () {
     window.location = ("/account/club/team/" + $(this).data("id"));
   });
   $('#grid').DataTable({
-      "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-      "iDisplayLength": 5,
+    "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
+    "iDisplayLength": 5,
+    "order": [[ 0, "desc" ]]
   });
 });
 </script>

@@ -72,8 +72,22 @@
               </div>
             </div>
           </form>
-          <hr>
           <br>
+          <h3>
+            Details
+            <span>
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i> Excel</a></li>
+                  <li><a href="javascript:;"onclick="alert('Coming soon..')" > <i class="fa fa-print"> </i> Print</a></li>
+                </ul>
+              </div> 
+            </span>
+          </h3>
+          <hr />
           <table class="table table-striped" id="grid">
             <thead>
               <tr>
@@ -128,8 +142,9 @@ $(function () {
     $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
       "iDisplayLength": 5,
-      "tableTools": {
-        "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
+      dom: 'T<"clear">lfrtip',
+      tableTools: {
+        "aButtons": ["print" ]
       }
     });
   }

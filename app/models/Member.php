@@ -48,10 +48,10 @@ class Member extends Eloquent {
 	public function getEarlyDueDeadlineAttribute($value){
 		return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
 	}
-	public function getDueAttribute($value) 
-	{
-		return "$".number_format($value, 2);
-	}
+	// public function getDueAttribute($value) 
+	// {
+	// 	return "$".number_format($value, 2);
+	// }
 	public function getEarlyDueAttribute($value) 
 	{
 		return "$".number_format($value, 2);

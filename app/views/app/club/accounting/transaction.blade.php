@@ -60,28 +60,28 @@
                                  <td><b>Amount</b></td>
                                  @if(count($action) > 1)
 
-                                    @foreach($action as $item)
-                                       @if($item->action_type == 'sale' || $item->action_type == 'refund' )
-                                       <td>${{$item->amount}}</td>
-                                       @endif
-                                    @endforeach
+                                 @foreach($action as $item)
+                                 @if($item->action_type == 'sale' || $item->action_type == 'refund' )
+                                 <td>${{$item->amount}}</td>
+                                 @endif
+                                 @endforeach
 
                                  @else
-                                    <td>${{$action->amount}}</td>
+                                 <td>${{$action->amount}}</td>
                                  @endif
                               </tr>
                               <tr>
                                  <td><b>Type</b></td>
                                  @if(count($action) > 1)
 
-                                    @foreach($action as $item)
-                                       @if($item->action_type == 'sale' || $item->action_type == 'refund' )
-                                       <td>{{$item->action_type}}</td>
-                                       @endif
-                                    @endforeach
+                                 @foreach($action as $item)
+                                 @if($item->action_type == 'sale' || $item->action_type == 'refund' )
+                                 <td>{{$item->action_type}}</td>
+                                 @endif
+                                 @endforeach
 
                                  @else
-                                    <td>{{$action->action_type}}</td>
+                                 <td>{{$action->action_type}}</td>
                                  @endif
                               </tr>
 
@@ -120,7 +120,7 @@
                   <div class="col-xs-12">
                      <h4>History</h4>
                      <br>
-                  
+                     
                      <div class="table-responsive">
                         <table class="table table-user-information table-striped" id="grid">
                            <thead>
@@ -153,6 +153,19 @@
                      <div class="form-group">
                         <div class="col-sm-12 text-right">
                            <a href="{{URL::action('ClubController@index')}}" class="btn btn-default">Cancel</a>
+                           @if(count($action) > 1)
+
+                           @foreach($action as $item)
+                           @if($item->action_type == 'sale')
+                           <a href="{{URL::action('AccountingController@refund', $payment->transaction)}}" class="btn btn-danger btn-outline">Refund</a>
+                           @endif
+                           @endforeach
+
+                           @else
+
+                           @endif
+
+                           
                         </div>
                      </div>
                   </div>
@@ -169,7 +182,7 @@
 
 $(function () {
    $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
+     window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
   });
    $('#grid').DataTable({
       "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
@@ -180,8 +193,8 @@ $(function () {
       { "bSortable": false },
       { "bSortable": false },
       { "bSortable": false }
-    ]
-  });
+      ]
+   });
 
 });
 </script>

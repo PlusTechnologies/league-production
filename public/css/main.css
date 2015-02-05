@@ -83,3 +83,9 @@ table.dataTable thead > tr > th {
 .DTTT_container{
   margin-bottom: 0 !important;
 }
+
+/*twitter bootstra overwrite*/
+.dropdown-menu {
+  min-width:auto;
+  width:100%;
+}

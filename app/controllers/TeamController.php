@@ -222,6 +222,20 @@ public function destroy($id)
 	return Redirect::action('TeamController@index');
 }
 
+public function delete($id)
+{
+	$user = Auth::user();
+	$club = $user->Clubs()->FirstOrFail();
+	$team = Team::find($id);
+	$title = 'League Together - '.$club->name.' Team';
+	return View::make('app.club.team.delete')
+	->with('page_title', $title)
+	->with('club', $club)
+	->with('team', $team)
+	->withUser($user);
+}
+
+
 public function addplayer($id)
 {
 	setlocale(LC_MONETARY,"en_US");

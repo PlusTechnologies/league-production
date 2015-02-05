@@ -82,6 +82,109 @@ class AccountingController extends \BaseController {
 		->withUser($user);
 	}
 
+	public function refund($id)
+	{
+		$user= Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+		//get transaction data from CF
+		$param = array(
+				'transaction_id'	=> $payment->transaction,
+				'club'						=> $club->id,
+				'action_type' => $payment->type
+				);
+
+		$transaction = $payment->ask($param);
+		$values = $transaction->transaction;
+		$title = 'League Together - '.$club->name.' Transaction';
+		if(count($transaction->transaction) > 1){
+			foreach ($transaction->transaction as $value) {
+				if($value->transaction_id == $payment->transaction)
+				$values = $value;
+			}
+		}
+
+		//return Response::json($values);
+		$actions = $values->action;
+
+		return View::make('app.club.accounting.refund')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('payment', $payment)
+		->with('transaction',$values)
+		->with('action', $actions)
+		->withUser($user);
+	}
+
+public function doRefund($id)
+	{
+
+		$user = 				Auth::user();
+		$club = 				$user->clubs()->FirstOrFail();
+		$uuid = 				Uuid::generate();
+		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+
+		//$amount = $payment->getOriginal('subtotal');
+		$amount = Input::get('amount');
+
+		if ($amount > $payment->getOriginal('subtotal') ) {
+
+			return Redirect::action('AccountingController@refund', $payment->transaction )->with('error',"You cannot refund more than ". $payment->getOriginal('subtotal') );
+
+		}
+
+		if ($amount <= 0 || $amount =='' ) {
+
+			return Redirect::action('AccountingController@refund', $payment->transaction )->with('error',"Amount must be more than 0" );
+
+		}
+
+		if ($amount > 0 ) {
+
+			$param = array(
+				'transactionid'	=> $payment->transaction,
+				'club' 					=> $club->id,
+				'amount' 				=> number_format($amount,2,".","")
+			);
+
+			$transaction = $payment->refund($param);
+			
+			if($transaction->response == 3 || $transaction->response == 2 ){
+				return Response::json($transaction);
+				return Redirect::action('AccountingController@transaction', $payment->transaction )->with('error',$transaction->responsetext);
+			
+			}else{
+				
+				$payment1 = new Payment;
+				$payment1->id						= $uuid;
+				$payment1->customer     = $user_parent->profile->customer_vault;
+				$payment1->transaction  = $transaction->transactionid;	
+				$payment1->subtotal 		= -$transaction->total;
+				$payment1->total   			= -$transaction->total;
+				$payment1->club_id			= $club->id;
+				$payment1->user_id			= $user_parent->id;
+				$payment1->player_id 		= $player->id;
+				$payment1->event_type		= $event->type_id;
+				$payment1->type					= $transaction->type;
+				$payment1->save();
+
+				$sale = new Item;
+				$sale->description 	= $event->name . " ($transaction->type)" ;
+				$sale->quantity 		= 1;
+				$sale->price 				= -$transaction->total;
+				$sale->payment_id   = $uuid;
+				$sale->event_id   	= $event->id;
+				$sale->save();
+				
+
+			}//end of transaction result
+
+		} //end of amount test 
+		
+		return Redirect::action('AccountingController@transaction', $payment->transaction);
+
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 * POST /accounting

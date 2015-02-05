@@ -37,7 +37,7 @@
         <div class="col-md-12">
           <h3>Recent Payments</h3>
           <hr />
-          <table class="table table-striped" id="grid">
+          <table class="table table-striped table-condensed" id="grid">
             <thead>
               <tr>
                 <th class="col-md-2">Date</th>
@@ -73,7 +73,8 @@ $(function () {
   });
   $('#grid').DataTable({
       "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
-      "iDisplayLength": 10
+      "iDisplayLength": 10,
+      "order": [[ 0, "desc" ]]
   });
 });
 </script>

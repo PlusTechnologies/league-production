@@ -34,7 +34,7 @@
         <div class="col-md-12">
           <h3>Event History</h3>
           <hr />
-          <table class="table table-striped" id="grid">
+          <table class="table table-striped table-condensed" id="grid">
             <thead>
               <tr>
                 <th class="col-sm-2" data-field="date">Created</th>
@@ -77,7 +77,8 @@ $(function () {
       "iDisplayLength": 5,
       "tableTools": {
             "sSwfPath": "/swf/copy_csv_xls_pdf.swf"
-        }
+        },
+      "order": [[ 0, "desc" ]]
   });
 });
 </script>
