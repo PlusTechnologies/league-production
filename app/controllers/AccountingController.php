@@ -87,6 +87,7 @@ class AccountingController extends \BaseController {
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
 		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+
 		//get transaction data from CF
 		$param = array(
 				'transaction_id'	=> $payment->transaction,
@@ -128,12 +129,14 @@ public function doRefund($id)
 		$uuid = 				Uuid::generate();
 
 		if($payment->event_type){
-			$participant = 	Participant::Find($payment->items->participant_id->FirstOrFail());
+			$participant = 	Participant::Find($payment->items->first()->participant_id);
 			$event =	 			Evento::find($participant->event->id);
 		}else{
-			$participant = 	Member::Find($payment->items->member_id->FirstOrFail());
+			$participant = 	Member::Find($payment->items->first()->member_id);
 			$event =	 			Team::find($participant->team->id);
 		}
+
+		$player = 			Player::Find($participant->player->id);
 
 		//$amount = $payment->getOriginal('subtotal');
 		$amount = Input::get('amount');
