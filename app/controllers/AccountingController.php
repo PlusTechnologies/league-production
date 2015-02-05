@@ -123,6 +123,17 @@ public function doRefund($id)
 		$club = 				$user->clubs()->FirstOrFail();
 		$uuid = 				Uuid::generate();
 		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+		$user_parent = 	User::find($payment->user_id);
+
+		$uuid = 				Uuid::generate();
+
+		if($payment->event_type){
+			$participant = 	Participant::Find($payment->items->participant_id->FirstOrFail());
+			$event =	 			Evento::find($participant->event->id);
+		}else{
+			$participant = 	Member::Find($payment->items->participant_id->FirstOrFail());
+			$event =	 			Team::find($participant->team->id);
+		}
 
 		//$amount = $payment->getOriginal('subtotal');
 		$amount = Input::get('amount');
@@ -164,16 +175,24 @@ public function doRefund($id)
 				$payment1->club_id			= $club->id;
 				$payment1->user_id			= $user_parent->id;
 				$payment1->player_id 		= $player->id;
-				$payment1->event_type		= $event->type_id;
+				
 				$payment1->type					= $transaction->type;
-				$payment1->save();
+				
 
 				$sale = new Item;
 				$sale->description 	= $event->name . " ($transaction->type)" ;
 				$sale->quantity 		= 1;
 				$sale->price 				= -$transaction->total;
 				$sale->payment_id   = $uuid;
-				$sale->event_id   	= $event->id;
+
+				if($payment->event_type){
+					$payment1->event_type		= $event->type_id;
+				}else{
+					$payment1->event_type		= NULL;
+				}
+
+
+				$payment1->save();
 				$sale->save();
 				
 
