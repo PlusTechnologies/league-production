@@ -131,7 +131,7 @@ public function doRefund($id)
 			$participant = 	Participant::Find($payment->items->participant_id->FirstOrFail());
 			$event =	 			Evento::find($participant->event->id);
 		}else{
-			$participant = 	Member::Find($payment->items->participant_id->FirstOrFail());
+			$participant = 	Member::Find($payment->items->member_id->FirstOrFail());
 			$event =	 			Team::find($participant->team->id);
 		}
 
