@@ -302,7 +302,7 @@ class ClubPublicController extends \BaseController {
 					$message->bcc($value->email, $club->name);
 				}
 			});
-
+			return "Congratulation! your player has been added, please close this window.";
 			return Redirect::action('AccountController@index');
 		}
 
@@ -746,7 +746,7 @@ class ClubPublicController extends \BaseController {
 					$message->bcc($value->email, $club->name);
 				}
 			});
-
+			return "Congratulation! your player has been added, please close this window.";
 			return Redirect::action('AccountController@index');
 			//return "You've been added to the team for free, please close this window to complete transaction";
 			//return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));

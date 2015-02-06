@@ -39,10 +39,10 @@
               <tr>
                 <th class="col-sm-2" data-field="date">Created</th>
                 <th class="col-sm-1" data-field="id">Type</th>
-                <th class="col-sm-3" data-field="name">Name</th>
-                <th class="col-sm-2" data-field="e_date">Date</th>
+                <th class="col-sm-6" data-field="name">Name</th>
+                <th class="col-sm-1" data-field="e_date">Date</th>
                 <th class="col-sm-1" data-field="fee">Fee</th>
-                <th class="col-sm-1" data-field="status">Status</th>
+                <!-- <th class="col-sm-1" data-field="status">Status</th> -->
                 <th class="col-sm-1" data-field="fee">Capacity</th>
               </tr>
             </thead>
@@ -54,7 +54,7 @@
                 <td>{{$event->name}}</td>
                 <td>{{$event->date}}</td>
                 <td>{{$event->fee}}</td>
-                <td>{{$event->status['name']}}</td>
+                <!-- <td>{{$event->status['name']}}</td> -->
                 <td>{{$event->participants->count()}} of {{$event->max}}</td>
               </tr>
               @endforeach

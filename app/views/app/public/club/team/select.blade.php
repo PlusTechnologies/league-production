@@ -18,7 +18,7 @@
 				<div class="col-md-6 col-md-offset-1 same-height">
 					<h1>Select player participate</h1>
 					<br>
-					{{ Form::open(array('action' => array('ClubPublicController@doSelectTeamPlayer', $club->id, $team->id),'method' => 'post')) }}
+					{{ Form::open(array('action' => array('ClubPublicController@doSelectTeamPlayer', $club->id, $team->id),'method' => 'post', 'class'=>'form-horizontal p')) }}
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="form-group">
@@ -47,7 +47,7 @@
 						</div>
 					</div>
 					<hr>
-					<button type="submit" class="btn btn-default btn-outline pull-right" href=""> <i class="fa fa-shop fa-lg"></i> Complete Registration</button>
+					<button type="submit" class="btn btn-default process btn-outline pull-right" href=""> <i class="fa fa-shop fa-lg"></i> Complete Registration</button>
 					{{ Form::close() }}
 					<br>
 					<br><br>
@@ -60,5 +60,10 @@
 @stop
 @section("script")
 <script type="text/javascript">
+$( "form.p" ).submit(function( event ) {
+			$('.process').prop('disabled', true);
+			$('.process').text('');
+			$('.process').html('<i class="fa fa-refresh fa-spin"></i>');
+		});
 </script>
 @stop

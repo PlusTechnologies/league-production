@@ -13,7 +13,9 @@
 		"nesbot/carbon": "*",
 		"webpatser/laravel-uuid": "1.*",
 		"moltin/laravel-cart": "dev-master",
-		"indatus/dispatcher":"~1.4"
+		"indatus/dispatcher":"~1.4",
+		"aloha/twilio":"1.*",
+		"maatwebsite/excel": "1.*"
 	},
 	"autoload": {
 		"classmap": [
