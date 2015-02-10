@@ -186,6 +186,7 @@ $(function () {
   $('#messageModal').on('hidden.bs.modal', function (e) {
     $('.modelForm').show();
     $('.modelSuccess').hide();
+    location.reload();
   })
 
   $('#messageModal').on('show.bs.modal', function (e) {
@@ -244,7 +245,7 @@ $(function () {
 
 
     if(subject =="" || message==""){
-      alert("Please enter all required fields");
+      alert(" Please enter all required fields");
       $('.process').prop('disabled', false);
       $('.process').html('');
       $('.process').text('Send message');

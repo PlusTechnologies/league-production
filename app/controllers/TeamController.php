@@ -309,10 +309,10 @@ public function doAnnouncement($id)
 		foreach ($destination as $recipient) {
 			//send email notification of acceptance queue
 			$data = array('club'=>$club, 'messageOriginal'=>$messageData, 'subject'=>$messageSubject, 'team'=>$team);
-			// Mail::later(3,'emails.announcement.default', $data, function($message) use ($recipient, $club, $messageSubject){
-			// 	$message->to($recipient['email'], $recipient['name'])
-			// 	->subject("$messageSubject | ".$club->name);
-			// });
+			Mail::later(3,'emails.announcement.default', $data, function($message) use ($recipient, $club, $messageSubject){
+				$message->to($recipient['email'], $recipient['name'])
+				->subject("$messageSubject | ".$club->name);
+			});
 
 			$recipientEmail[] = array(
 				'name'=>$recipient['name'],
@@ -326,15 +326,12 @@ public function doAnnouncement($id)
 				'name'=>$recipient['name'],
 				'mobile'=>$recipient['mobile'],
 				);
-				
+
 				//queue sms
-				Queue::push(function($job) use ($recipient, $sms)
-				{
+				Queue::push(function($job) use ($recipient, $sms){
 					Twilio::message($recipient['mobile'], $sms);
 					$job->delete();
 				});
-
-				
 
 			}
 		}
