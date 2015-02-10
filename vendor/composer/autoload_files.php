@@ -9,6 +9,7 @@ return array(
     $vendorDir . '/ircmaxell/password-compat/lib/password.php',
     $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
     $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
+    $vendorDir . '/iron-io/iron_mq/IronMQ.class.php',
     $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
     $vendorDir . '/wp-cli/php-cli-tools/lib/cli/cli.php',
 );

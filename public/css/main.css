@@ -67,6 +67,9 @@ table.dataTable thead > tr > th {
   padding-left: 8px;
   
 }
+.roster-img{
+  padding-right: 10px;
+}
 .table-user-information>thead>tr>th{
   border-bottom: 0 ;
 }

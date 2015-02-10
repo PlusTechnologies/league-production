@@ -16,7 +16,6 @@ public static $rules = array(
 		'password_confirmation' => 'required|same:password'
 	);
 
-
 public function profile() {
 	return $this->hasOne('Profile'); // this matches the Eloquent model
 }

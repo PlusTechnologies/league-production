@@ -26,6 +26,9 @@ class Member extends Eloquent {
 	public function schedule() {
     return $this->hasMany('SchedulePayment');
   }
+  public function user(){
+    return $this->hasOne('User', 'id','accepted_user');
+  }
 
 	public function getStatusAttribute($value){
 		switch ($value) {

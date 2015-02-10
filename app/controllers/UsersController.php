@@ -109,7 +109,11 @@ class UsersController extends Controller
         $input = Input::all();
 
         if ($repo->login($input)) {
-            return Redirect::intended('/');
+            $user =Auth::user();
+            if($user->HasRole('club owner')){
+               return Redirect::intended('account/club/'); 
+            };
+            return Redirect::intended('account/');
         } else {
             if ($repo->isThrottled($input)) {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');

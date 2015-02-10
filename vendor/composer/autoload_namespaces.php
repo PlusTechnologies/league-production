@@ -34,7 +34,7 @@ return array(
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Normalizer' => array($vendorDir . '/patchwork/utf8/class'),
     'Net' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
-    'Moltin' => array($vendorDir . '/moltin/currency/src', $vendorDir . '/moltin/tax/src', $vendorDir . '/moltin/cart/src', $vendorDir . '/moltin/laravel-cart/src'),
+    'Moltin' => array($vendorDir . '/moltin/currency/src', $vendorDir . '/moltin/cart/src', $vendorDir . '/moltin/laravel-cart/src', $vendorDir . '/moltin/tax/src'),
     'Math' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
     'LaravelBook\\Ardent' => array($vendorDir . '/laravelbook/ardent/src'),

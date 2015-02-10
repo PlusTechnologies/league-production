@@ -27,5 +27,17 @@ return array(
 		'model'  => 'User',
 		'secret' => '',
 	),
+	'twilio' => array(
+        'default' => 'twilio',
+        'connections' => array(
+            'twilio' => array(
+                'sid' => 'ACacbe6304c2950978167b82501cf19512',
+                'token' => '0d8689550b4c6e9d259e57e76bf72a6d',
+                'from' => '972-992-1982',
+                'ssl_verify' => true,
+            ),
+        ),
+    ),
+
 
 );

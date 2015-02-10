@@ -128,6 +128,7 @@ return array(
 		'Moltin\Cart\CartServiceProvider',
 		'leaguetogether\Paymentgateway\CardFlexServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
+		'Aloha\Twilio\TwilioServiceProvider',
 
 	),
 
@@ -202,6 +203,7 @@ return array(
 		'Uuid' 							=> 'Webpatser\Uuid\Uuid',
 		'Cart' 							=> 'Moltin\Cart\Facade',
 		'CardFlex'		  		=> 'leaguetogether\Facades\CardFlex',
+		'Twilio' 						=> 'Aloha\Twilio\Facades\Twilio',
 
 	),
 

@@ -9,12 +9,13 @@
             <span>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  <span class="caret"></span>
+                  Options &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i> Invite</a></li>
                   <li><a href="{{URL::action('TeamController@edit', $team->id)}}" > <i class="fa fa-pencil fa-fw"></i> Edit</a></li>
                   <li><a href="{{URL::action('TeamController@delete', $team->id)}}"> <i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                  <li><a href='{{Request::root()."/club/$club->id/team/$team->id"}}' target="_blank"> <i class="fa fa-share-square-o fa-fw"> </i> Share</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
                 </ul>
@@ -23,8 +24,6 @@
           </h2>
           <p>{{$team->program->name}} | {{$team->season->name}}</p>
           <hr> 
-          <a href='{{Request::root()."/club/$club->id/team/$team->id"}}' target="_blank">Share <i class="fa fa-share-square-o fa-fw"> </i></a>
-          
           <!-- <div class="row">
             <div class="col-md-12">
               <div class="row">
@@ -39,7 +38,6 @@
           </div> -->
         </div>
       </div><!-- end of first row -->
-      <br>
       <br>
       <div class="row">
         <div class="col-sm-12">
@@ -72,7 +70,7 @@
             <span>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  <span class="caret"></span>
+                  Options &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i> Excel</a></li>
@@ -85,7 +83,6 @@
           <table class="table table-condensed table-striped" id="grid">
             <thead>
               <tr>
-                <th>Added on</th>
                 <th>Player</th>
                 <th>Method</th>
                 <th>Amount</th>
@@ -96,8 +93,8 @@
             <tbody>
               @foreach ($members as $member)
               <tr class="clickable" data-id="{{$member->player->id}}">
-                <td>{{$member->created_at}}</td>
-                <td>{{$member->firstname}} {{$member->lastname}}</td>
+                <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->lastname}}, {{$member->firstname}}
+                </td>
                 <td>{{$member->method}}</td>
                 <td>${{number_format($member->due, 2)}}</td>
                 <td>{{$member->status}}</td>
@@ -117,7 +114,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -125,36 +122,57 @@
         <h3 class="modal-title" id="exampleModalLabel">Team Announcement</h3>
       </div>
       <div class="modal-body">
-        <form>
+        <div class="modelSuccess">Message Sent!</div>
+        <div class="modelForm">
+          {{ Form::open(array('action' => array('TeamController@doAnnouncement',$team->id ),'id'=>'message','method' => 'post')) }}
           <div class="form-group">
             <label for="recipient-name" class="control-label">Subject (Required)</label>
-            <input type="text" class="form-control" id="recipient-name">
+            {{Form::text('subject', '', array('class'=>'form-control','placeholder'=>'Subject', 'tabindex'=>'1')) }}
           </div>
           <div class="form-group">
-            <label for="message-text" class="control-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <label for="message-text" class="control-label">Message (Required)</label>
+            {{ Form::textarea('message', null, array('class' => 'form-control','size' => '20x5')) }}
           </div>
           <div class="form-group">
-            <label for="message-text" class="control-label">Share with (Required)</label>
+            <label for="message-text" class="control-label">Share with (Optional)</label>
             <div class="checkbox">
               <label>
-                <input type="checkbox" value="">
+                {{ Form::checkbox('players') }}
                 Players 
               </label>
             </div>
             <div class="checkbox">
               <label>
-                <input type="checkbox" value="">
+                {{ Form::checkbox('family') }}
                 Family
               </label>
             </div>
           </div>
-        </form>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Send Text Message (Optional)</label>
+            <div class="checkbox">
+              <label>
+                {{ Form::checkbox('sms') }}
+                SMS 
+              </label>
+              <span id="helpBlock" class="help-block">The first 140 character will be sent as sms to your receiptians. Standard sms rates will apply.</span>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary process" >Send message</button>
+          </div>
+
+          <div class="form-group">
+            <div id='result'></div>
+          </div>
+          {{Form::close()}}
+        </div>
+        
       </div>
-      <div class="modal-footer">
+      <!-- <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <a class="btn btn-primary" href="javascript:;" onclick="alert('Coming soon..')">Send message</a>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -162,40 +180,107 @@
 @stop
 @section("script")
 <script type="text/javascript">
+
 $(function () {
-  $(function () {
 
-    $('#grid').delegate('tbody > tr', 'click', function (e) {
-      var data = $(this).data("id");
-      if(data){
-        window.location = ("/account/club/player/" + data );
-      }
+  $('#messageModal').on('hidden.bs.modal', function (e) {
+    $('.modelForm').show();
+    $('.modelSuccess').hide();
+  })
+
+  $('#messageModal').on('show.bs.modal', function (e) {
+    $('.modelForm').show();
+    $('.modelSuccess').hide();
+  })
+
+  function resetForm(formid) {
+   $('#' + formid + ' :input').each(function(){  
+     $(this).val('').attr('checked',false).attr('selected',false);
+   });
+ }
+
+ $('#grid').delegate('tbody > tr', 'click', function (e) {
+  var data = $(this).data("id");
+  if(data){
+    window.location = ("/account/club/player/" + data );
+  }
+  return false;
+});
+
+ $('#grid tbody > tr').find('td:last').on('click', function(e) {
+  e.stopPropagation();
+});
+
+ $('#grid').DataTable({
+  "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
+  "iDisplayLength": 5,
+  "order": [[ 0, "desc" ]],
+  dom: 'T<"clear">lfrtip',
+  tableTools: {
+    "aButtons": ["print" ]
+  },"aoColumns": [
+  null,
+  null,
+  null,
+  null,
+  { "bSortable": false }]
+});
+
+
+ $("#message").submit(function( event ) {
+  event.preventDefault();
+    //disabled button
+    $('.process').prop('disabled', true);
+    $('.process').text('');
+    $('.process').html('<i class="fa fa-refresh fa-spin"></i>');
+
+    var $form = $( this ),
+    terms = $form.serializeArray(),
+    subject = $('input[name="subject"]').val();
+    message = $('input[name="message"]').val();
+    player = $('input[players]').prop('checked'),
+    family = $('input[family]').prop('checked'),
+    url = $form.attr( "action" );
+
+
+    if(subject =="" || message==""){
+      alert("Please enter all required fields");
+      $('.process').prop('disabled', false);
+      $('.process').html('');
+      $('.process').text('Send message');
+
       return false;
+    }
 
+    var request = $.ajax({
+      url:url,
+      type: "POST",
+      data: terms,
+      dataType: "json"
     });
 
-    $('#grid tbody > tr').find('td:last').on('click', function(e) {
-      e.stopPropagation();
+    request.done(function( data ) {
+      $('.modelForm').hide();
+      $('.modelSuccess').show();
+      $('.process').prop('disabled', false);
+      $('.process').html('');
+      $('.process').text('Send message');
+      resetForm("message");
     });
-    $('#grid').DataTable({
-      "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-      "iDisplayLength": 5,
-      "order": [[ 0, "desc" ]],
-      "order": [[ 5, null ]],
-      dom: 'T<"clear">lfrtip',
-      tableTools: {
-        "aButtons": ["print" ]
-      },"aoColumns": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      { "bSortable": false }]
 
+    request.fail(function( jqXHR, textStatus ) {
+      alert( "Request failed: " + textStatus );
+      $('.process').prop('disabled', false);
+      $('.process').html('');
+      $('.process').text('Send message');
+      
     });
+
+    return;
 
   });
+
 });
+
 </script>
 @stop
