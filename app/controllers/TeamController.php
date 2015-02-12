@@ -120,9 +120,10 @@ public function show($id)
 	$user= Auth::user();
 	$club = $user->Clubs()->FirstOrFail();
 	$team = Team::find($id);
-	$members = Member::where('team_id','=',$team->id)->get();
+	$members = Member::where('team_id','=',$team->id)->with('team')->get();
 	$title = 'League Together - '.$club->name.' Teams';
-
+	$pay = Payment::with(array('items'=>function($query){}))->get();
+	//return $pay;
 	return View::make('app.club.team.show')
 	->with('page_title', $title)
 	->with('team',$team)
@@ -272,29 +273,35 @@ public function doAnnouncement($id)
 	$recipientMobile = array();
 
 	foreach($members as $member){
-		$user = User::find($member->accepted_user);
-		$recipientUser[] = array(
-			'name'=>$user->profile->firstname." ".$user->profile->lastname,
-			'email'=>$user->email,
-			'mobile'=>$user->profile->mobile
-			);
+		//only members that accepted joined
+		if($member->accepted_user){
+			$user = User::find($member->accepted_user);
+			$recipientUser[] = array(
+				'name'=>$user->profile->firstname." ".$user->profile->lastname,
+				'email'=>$user->email,
+				'mobile'=>$user->profile->mobile
+				);
+		}
+		
 	}
 	foreach($members as $member){
-		$player = Player::find($member->player_id);
-		foreach($player->contacts as $contact)
-			$recipientContact[] = array(
-				'name'=>$contact->firstname." ".$contact->lastname,
-				'email'=>$contact->email,
-				'mobile'=>$contact->mobile
-				);
+		//only members that accepted joined
+		if($member->accepted_user){
+			$player = Player::find($member->player_id);
+			foreach($player->contacts as $contact)
+				$recipientContact[] = array(
+					'name'=>$contact->firstname." ".$contact->lastname,
+					'email'=>$contact->email,
+					'mobile'=>$contact->mobile
+					);
 		//allow players with email and mobile
-		if($player->mobile && $player->email ){
-
-			$recipientPlayer[] = array(
-				'name'=>$player->firstname." ".$player->lastname,
-				'email'=>$player->email,
-				'mobile'=>$player->mobile
-				);
+			if($player->mobile && $player->email ){
+				$recipientPlayer[] = array(
+					'name'=>$player->firstname." ".$player->lastname,
+					'email'=>$player->email,
+					'mobile'=>$player->mobile
+					);
+			}
 
 		}
 		
@@ -302,10 +309,6 @@ public function doAnnouncement($id)
 	//send default function
 	function sendmessage($destination){
 		global $club, $messageData, $messageSubject, $team, $sms, $user, $recipientMobile, $recipientEmail;
-
-		
-
-
 		foreach ($destination as $recipient) {
 			//send email notification of acceptance queue
 			$data = array('club'=>$club, 'messageOriginal'=>$messageData, 'subject'=>$messageSubject, 'team'=>$team);
@@ -313,26 +316,20 @@ public function doAnnouncement($id)
 				$message->to($recipient['email'], $recipient['name'])
 				->subject("$messageSubject | ".$club->name);
 			});
-
 			$recipientEmail[] = array(
 				'name'=>$recipient['name'],
 				'email'=>$recipient['email'],
-			);
-
-
-			if(Input::get('sms')){
-
-				$recipientMobile[] = array(
-				'name'=>$recipient['name'],
-				'mobile'=>$recipient['mobile'],
 				);
-
+			if(Input::get('sms')){
+				$recipientMobile[] = array(
+					'name'=>$recipient['name'],
+					'mobile'=>$recipient['mobile'],
+					);
 				//queue sms
 				Queue::push(function($job) use ($recipient, $sms){
 					Twilio::message($recipient['mobile'], $sms);
 					$job->delete();
 				});
-
 			}
 		}
 	}
@@ -347,19 +344,18 @@ public function doAnnouncement($id)
 	if(Input::get('family')){
 		sendmessage($recipientContact);
 	}
-
 	//save message to database
-		$announcement = new Announcement;
-		$announcement->id					= $uuid;
-		$announcement->subject		= $messageSubject;
-		$announcement->message		= $messageData;
-		$announcement->sms				= $sms;
-		$announcement->to_email		= serialize($recipientEmail);
-		$announcement->to_sms			= serialize($recipientMobile);
-		$announcement->team_id		= $team->id;
-		$announcement->club_id		= $club->id;
-		$announcement->user_id		= $user->id;
-		$status = $announcement->save();
+	$announcement = new Announcement;
+	$announcement->id					= $uuid;
+	$announcement->subject		= $messageSubject;
+	$announcement->message		= $messageData;
+	$announcement->sms				= $sms;
+	$announcement->to_email		= serialize($recipientEmail);
+	$announcement->to_sms			= serialize($recipientMobile);
+	$announcement->team_id		= $team->id;
+	$announcement->club_id		= $club->id;
+	$announcement->user_id		= $user->id;
+	$status = $announcement->save();
 
 	return array('success'=>true, 'email'=>$recipientEmail, 'mobile'=> $recipientMobile);
 
