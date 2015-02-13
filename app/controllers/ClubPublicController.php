@@ -468,6 +468,7 @@ class ClubPublicController extends \BaseController {
 				$sale->price 				= $item->price;
 				$sale->fee 					= $salesfee;
 				$sale->payment_id   = $uuid;
+				$sale->event_id 		= $event->id;
 				$sale->participant_id = $uuid2;
 				$sale->save();
 
@@ -921,6 +922,7 @@ class ClubPublicController extends \BaseController {
 				$sale->price 				= $item->price;
 				$sale->fee 					= $salesfee;
 				$sale->member_id 		= $uuidMember;
+				$sale->team_id			= $team->id;
 				$sale->payment_id   = $uuid;
 				$sale->save();
 

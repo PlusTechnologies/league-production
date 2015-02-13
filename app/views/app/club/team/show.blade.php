@@ -12,10 +12,11 @@
                   Options &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i> Invite</a></li>
-                  <li><a href="{{URL::action('TeamController@edit', $team->id)}}" > <i class="fa fa-pencil fa-fw"></i> Edit</a></li>
-                  <li><a href="{{URL::action('TeamController@delete', $team->id)}}"> <i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
-                  <li><a href='{{Request::root()."/club/$club->id/team/$team->id"}}' target="_blank"> <i class="fa fa-share-square-o fa-fw"> </i> Share</a></li>
+                  <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i>&nbsp;Invite</a></li>
+                  <li><a href="{{URL::action('TeamController@edit', $team->id)}}" > <i class="fa fa-pencil fa-fw"></i>&nbsp;Edit</a></li>
+                  <li><a href="{{URL::action('TeamController@delete', $team->id)}}"> <i class="fa fa-trash-o fa-fw"></i>&nbsp;Delete</a></li>
+                  <li><a href='{{Request::root()."/club/$club->id/team/$team->id"}}' target="_blank"> <i class="fa fa-share-square-o fa-fw"> </i>&nbsp;Share</a></li>
+                  <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i>&nbsp;Export</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
                 </ul>
@@ -44,13 +45,13 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="tile blue">
-                <h3 class="title">${{number_format($members->sum('due'), 2)}}</h3>
+                <h3 class="title">${{number_format($sales->sum('price'), 2)}}</h3>
                 <p>Sales</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile red">
-                <h3 class="title">{{$members->count()}}</h3>
+                <h3 class="title">${{number_format($receivable->sum('subtotal'), 2)}}</h3>
                 <p>Receivable</p>
               </div>
             </div>
@@ -65,48 +66,88 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <h3>
-            Roster
-            <span>
-              <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  Options &nbsp; <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i> Excel</a></li>
-                  <li><a href="javascript:;"onclick="alert('Coming soon..')" > <i class="fa fa-print"> </i> Print</a></li>
-                </ul>
-              </div> 
-            </span>
-          </h3>
-          <hr>
-          <table class="table table-condensed table-striped" id="grid">
-            <thead>
-              <tr>
-                <th>Player</th>
-                <th>Method</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($members as $member)
-              <tr class="clickable" data-id="{{$member->player->id}}">
-                <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->lastname}}, {{$member->firstname}}
-                </td>
-                <td>{{$member->method}}</td>
-                <td>${{number_format($member->due, 2)}}</td>
-                <td>{{$member->status}}</td>
-                <td class="text-center">
-                  <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up">
-                    <i class="fa fa-trash"></i>
-                  </a>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+
+        </div>
+        <div class="col-md-12">
+          <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#roster" aria-controls="home" role="tab" data-toggle="tab">Roster</a></li>
+              <li role="presentation"><a href="#announcements" aria-controls="profile" role="tab" data-toggle="tab">Announcements</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="roster">
+                
+                <div class="clearfix"></div>
+                <br><br> 
+                <table class="table table-condensed table-striped" id="grid">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Position</th>
+                      <th>Method</th>
+                      <th>Amount</th>
+                      <th class="col-sm-2">Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($members as $member)
+                    <tr class="clickable" data-id="{{$member->player->id}}">
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->lastname}}, {{$member->firstname}}
+                      </td>
+                      <td>{{$member->player->position}}</td>
+                      <td>{{$member->method}}</td>
+                      <td>${{number_format($member->due, 2)}}</td>
+                      <td>{{$member->status}}</td>
+                      <td class="text-center">
+                        <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="announcements">
+                <div class="clearfix"></div>
+                <br><br>
+                <table class="table table-condensed table-striped" id="grid2">
+                  <thead>
+                    <tr>
+                      <th class="col-md-2">Sent</th>
+                      <th class="col-md-2">Subject</th>
+                      <th class="col-md-3">Message</th>
+                      <th class="col-md-2">To</th>
+                      <th class="col-md-3">Mobiles</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($announcements as $announcement)
+                    <tr data-id="{{$member->player->id}}">
+                      <td class="col-md-2">{{$announcement->created_at}}</td>
+                      <td class="col-md-2">{{$announcement->subject}}</td>
+                      <td class="col-md-3">{{$announcement->message}}</td>
+                      <td class="col-md-2">
+                        @foreach (unserialize($announcement->to_email) as $email)
+                          <a href="mailto:{{$email['email']}}">{{ ucwords(strtolower ($email['name']))}}</a><br>
+                        @endforeach
+                      </td>
+                      <td class="col-md-3">
+                        @foreach (unserialize($announcement->to_sms) as $sms)
+                          {{$sms['mobile']}} - {{ ucwords(strtolower ($sms['name']))}}<br>
+                        @endforeach
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -214,16 +255,32 @@ $(function () {
 
  $('#grid').DataTable({
   "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
-  "iDisplayLength": 5,
+  "iDisplayLength": 10,
   "order": [[ 0, "desc" ]],
-  dom: 'T<"clear">lfrtip',
-  tableTools: {
-    "aButtons": ["print" ]
-  },"aoColumns": [
+  // dom: 'T<"clear">lfrtip',
+  // tableTools: {
+  //   "aButtons": ["print" ]},
+  "aoColumns": [
   null,
   null,
   null,
   null,
+  null,
+  { "bSortable": false }]
+});
+
+ $('#grid2').DataTable({
+  "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
+  "iDisplayLength": 10,
+  "order": [[ 0, "desc" ]],
+  // dom: 'T<"clear">lfrtip',
+  // tableTools: {
+  //   "aButtons": ["print" ]},
+  "aoColumns": [
+  { "bSortable": false },
+  { "bSortable": false },
+  { "bSortable": false },
+  { "bSortable": false },
   { "bSortable": false }]
 });
 

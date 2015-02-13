@@ -11,12 +11,12 @@ class SchedulePayment extends Eloquent {
 
 	public function plan()
 	{
-		return $this->belongsTo('Plan', 'id', 'plan_id');
+		return $this->belongsTo('Plan', 'plan_id', 'id');
 	}
 
 	public function member()
 	{
-		return $this->belongsTo('Member', 'id', 'member_id');
+		return $this->belongsTo('Member', 'member_id', 'id');
 	}
 
 	public function getStatusAttribute($value) 

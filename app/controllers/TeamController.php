@@ -123,12 +123,18 @@ public function show($id)
 	$members = Member::where('team_id','=',$team->id)->with('team')->get();
 	$title = 'League Together - '.$club->name.' Teams';
 	$pay = Payment::with(array('items'=>function($query){}))->get();
-	//return $pay;
+	$sales = Item::where('team_id',$team->id);
+	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
+	$announcements = Announcement::where('team_id', $team->id )->get();
+
 	return View::make('app.club.team.show')
 	->with('page_title', $title)
 	->with('team',$team)
 	->with('club', $club)
 	->with('members', $members)
+	->with('sales', $sales)
+	->with('receivable', $receivable)
+	->with('announcements', $announcements)
 	->withUser($user);
 }
 
@@ -312,10 +318,10 @@ public function doAnnouncement($id)
 		foreach ($destination as $recipient) {
 			//send email notification of acceptance queue
 			$data = array('club'=>$club, 'messageOriginal'=>$messageData, 'subject'=>$messageSubject, 'team'=>$team);
-			Mail::later(3,'emails.announcement.default', $data, function($message) use ($recipient, $club, $messageSubject){
-				$message->to($recipient['email'], $recipient['name'])
-				->subject("$messageSubject | ".$club->name);
-			});
+			// Mail::later(3,'emails.announcement.default', $data, function($message) use ($recipient, $club, $messageSubject){
+			// 	$message->to($recipient['email'], $recipient['name'])
+			// 	->subject("$messageSubject | ".$club->name);
+			// });
 			$recipientEmail[] = array(
 				'name'=>$recipient['name'],
 				'email'=>$recipient['email'],
@@ -326,10 +332,10 @@ public function doAnnouncement($id)
 					'mobile'=>$recipient['mobile'],
 					);
 				//queue sms
-				Queue::push(function($job) use ($recipient, $sms){
-					Twilio::message($recipient['mobile'], $sms);
-					$job->delete();
-				});
+				// Queue::push(function($job) use ($recipient, $sms){
+				// 	Twilio::message($recipient['mobile'], $sms);
+				// 	$job->delete();
+				// });
 			}
 		}
 	}
