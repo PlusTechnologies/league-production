@@ -517,7 +517,7 @@
                         <tbody>
                          <tr>
                           <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Team: {{$team['name']}} | {{$club['name']}}, <br><br> 
+                           {{$team['name']}} | {{$club['name']}}, <br><br> 
                            {{$messageOriginal}}
                           </td>
                          </tr>

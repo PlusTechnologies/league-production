@@ -1,13 +1,13 @@
 <?php
 class EventoController extends BaseController {
 
-	 public function __construct()
-    {
-        $this->beforeFilter('club', ['except'=>'publico']);
-        $this->beforeFilter('csrf', ['on' => array('create','edit')]);
-    }
+	public function __construct()
+	{
+		$this->beforeFilter('club', ['except'=>'publico']);
+		$this->beforeFilter('csrf', ['on' => array('create','edit')]);
+	}
 
-   
+
 
 	/**
 	 * Display a listing of the resource.
@@ -114,14 +114,16 @@ class EventoController extends BaseController {
 		}
 		$title = 'League Together - '.$event->name.' Event';
 
+		$announcements = Announcement::where('event_id', $event->id )->get();
+
 		return View::make('app.club.event.show')
 		->with('page_title', $title)
 		->withEvent($event)
 		->withClub($club)
 		->withUser($user)
 		->with('schedule', $schedule)
-		->withParticipants($participants)
-		->with('emailList', $emaillist);
+		->with('announcements', $announcements)
+		->withParticipants($participants);
 	}
 
 	/**
@@ -137,10 +139,10 @@ class EventoController extends BaseController {
 		$event = Evento::find($id);
 		$title = 'League Together - '.$e->name.' Event';
 		return View::make('pages.public.event')
-					->with('page_title', $title)
-					->withEvent($e)
-					->with('valid',$eval)
-					->with('message', 'message flash here');
+		->with('page_title', $title)
+		->withEvent($e)
+		->with('valid',$eval)
+		->with('message', 'message flash here');
 	}
 
 
@@ -228,7 +230,7 @@ class EventoController extends BaseController {
 	{
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();
-	
+
 		$validator= Validator::make(Input::all(), Evento::$rules);
 
 		if($validator->passes()){
@@ -281,6 +283,113 @@ class EventoController extends BaseController {
 			return Redirect::action('EventoController@index');
 		}
 		return Redirect::action('EventoController@index')->withErrors($status);
+	}
+	public function doAnnouncement($id)
+	{
+		global $club, $messageData, $messageSubject, $team, $sms, $user, $recipientMobile, $recipientEmail;
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$event = Evento::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+		$participants = Participant::where('event_id','=',$event->id)->get();
+		$messageData = Input::get('message');
+		$messageSubject = Input::get('subject');
+		$sms = substr($messageData, 0, 140)."... $club->name - Do not replay";
+		$uuid = Uuid::generate();
+
+	//get list of recepients
+		$recipientUser= array();
+		$recipientPlayer = array();
+		$recipientContact = array();
+		$recipientEmail = array();
+		$recipientMobile = array();
+
+		foreach($participants as $member){
+		//only members that accepted joined
+			if($member->accepted_user){
+				$user = User::find($member->accepted_user);
+				$recipientUser[] = array(
+					'name'=>$user->profile->firstname." ".$user->profile->lastname,
+					'email'=>$user->email,
+					'mobile'=>$user->profile->mobile
+					);
+			}
+
+		}
+		foreach($participants as $member){
+		//only members that accepted joined
+			if($member->accepted_user){
+				$player = Player::find($member->player_id);
+				foreach($player->contacts as $contact)
+					$recipientContact[] = array(
+						'name'=>$contact->firstname." ".$contact->lastname,
+						'email'=>$contact->email,
+						'mobile'=>$contact->mobile
+						);
+		//allow players with email and mobile
+				if($player->mobile && $player->email ){
+					$recipientPlayer[] = array(
+						'name'=>$player->firstname." ".$player->lastname,
+						'email'=>$player->email,
+						'mobile'=>$player->mobile
+						);
+				}
+
+			}
+
+		}
+	//send default function
+		function sendmessage($destination){
+			global $club, $messageData, $messageSubject, $event, $sms, $user, $recipientMobile, $recipientEmail;
+			foreach ($destination as $recipient) {
+			//send email notification of acceptance queue
+				$data = array('club'=>$club, 'messageOriginal'=>$messageData, 'subject'=>$messageSubject, 'team'=>$event);
+				// Mail::later(3,'emails.announcement.default', $data, function($message) use ($recipient, $club, $messageSubject){
+				// 	$message->to($recipient['email'], $recipient['name'])
+				// 	->subject("$messageSubject | ".$club->name);
+				// });
+				$recipientEmail[] = array(
+					'name'=>$recipient['name'],
+					'email'=>$recipient['email'],
+					);
+				if(Input::get('sms')){
+					$recipientMobile[] = array(
+						'name'=>$recipient['name'],
+						'mobile'=>$recipient['mobile'],
+						);
+				//queue sms
+					// Queue::push(function($job) use ($recipient, $sms){
+					// 	Twilio::message($recipient['mobile'], $sms);
+					// 	$job->delete();
+					// });
+				}
+			}
+		}
+
+	// send to user
+		sendmessage($recipientUser);
+	//send to player
+		if(Input::get('players')){
+			sendmessage($recipientPlayer);
+		}
+	//send to contacts
+		if(Input::get('family')){
+			sendmessage($recipientContact);
+		}
+	//save message to database
+		$announcement = new Announcement;
+		$announcement->id					= $uuid;
+		$announcement->subject		= $messageSubject;
+		$announcement->message		= $messageData;
+		$announcement->sms				= $sms;
+		$announcement->to_email		= serialize($recipientEmail);
+		$announcement->to_sms			= serialize($recipientMobile);
+		$announcement->event_id		= $event->id;
+		$announcement->club_id		= $club->id;
+		$announcement->user_id		= $user->id;
+		$status = $announcement->save();
+
+		return array('success'=>true, 'email'=>$recipientEmail, 'mobile'=> $recipientMobile);
+
 	}
 
 }

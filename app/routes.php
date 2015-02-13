@@ -51,6 +51,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('event/{id}/delete/', 		array('as' =>'event.delete', 			'uses' => 'EventoController@delete'));
 		Route::post('event/{id}/invite', 		array('as' =>'event.doInvite', 		'uses' => 'EventoController@doInvite'));
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
+		Route::post('event/{id}/announcement/',	array('as' =>'event.announcement', 'uses' => 'EventoController@doAnnouncement'));
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
 		Route::get('team/{id}/delete/', 				array('as' =>'team.delete', 			'uses' => 'TeamController@delete'));
 		Route::post('team/{id}/announcement/',	array('as' =>'team.announcement', 'uses' => 'TeamController@doAnnouncement'));
