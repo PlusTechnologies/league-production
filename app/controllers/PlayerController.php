@@ -140,10 +140,10 @@ class PlayerController extends \BaseController {
 	public function update($id)
 	{
 		$validator= Validator::make(Input::all(), Player::$rules);
+		$player = Player::find($id);
 
 		if($validator->passes()){
 
-			$player = Player::find($id);
 			$player->firstname 	= Input::get('firstname');
 			$player->lastname 	= Input::get('lastname');
 			$player->position 	= Input::get('position');
