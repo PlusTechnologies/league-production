@@ -268,7 +268,7 @@ public function doAnnouncement($id)
 	$members = Member::where('team_id','=',$team->id)->get();
 	$messageData = Input::get('message');
 	$messageSubject = Input::get('subject');
-	$sms = substr($messageData, 0, 140)."... $club->name - Do not replay";
+	$sms = substr($messageData, 0, 140)." $club->name - Do not reply";
 	$uuid = Uuid::generate();
 	
 	//get list of recepients

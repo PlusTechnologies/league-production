@@ -36,7 +36,7 @@ class CardFlex{
 		//remove discount id from param
 		unset($param['discount']);
 
-		$user =Auth::user();
+		$user = Auth::user();
 
 		$now = new DateTime;
     	$now->setTimezone(new DateTimeZone('America/Chicago'));

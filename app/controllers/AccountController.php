@@ -9,7 +9,7 @@ class AccountController extends \BaseController {
 	 * @return Response
 	 */
 	public function index()
-	{
+	{	
 		$user =Auth::user();
 		$title = 'League Together - Club';
 		$payment = Payment::where('user_id', $user->id)->with('items')->get();
@@ -23,6 +23,7 @@ class AccountController extends \BaseController {
 
 	public function player()
 	{
+
 		$user =Auth::user();
 		$title = 'League Together - Club';
 		return View::make('app.account.player.index')
