@@ -43,7 +43,7 @@ class PlanSchedule extends ScheduledCommand {
 		return $scheduler
 						->daily()
             ->hours(20)
-            ->minutes(30);
+            ->minutes(40);
 	}
 
 	/**
@@ -60,8 +60,6 @@ class PlanSchedule extends ScheduledCommand {
 		$schedules = SchedulePayment::whereBetween('date', array($from , $to))->with('member.user.profile')->get();
 		$errors = array();
 		$totalAmount = array();
-
-		return  Log::info($schedules);
 
 		//save daylog
 		$dayLog = new ScheduleDailyLog;
