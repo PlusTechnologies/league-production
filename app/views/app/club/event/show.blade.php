@@ -17,7 +17,7 @@
                   <li><a href="{{URL::action('EventoController@delete', $event->id)}}"> <i class="fa fa-trash-o fa-fw"></i>&nbsp;Delete</a></li>
 
                   <li><a href='{{Request::root()."/club/$club->id/event/$event->id"}}' target="_blank"> <i class="fa fa-share-square-o fa-fw"> </i>&nbsp;Share</a></li>
-                  <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i>&nbsp;Export</a></li>
+                  <li><a href="{{URL::action('ExportController@event', $event->id)}}" > <i class="fa fa-download"> </i>&nbsp;Export Roster</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
                 </ul>
