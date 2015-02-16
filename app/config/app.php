@@ -129,6 +129,7 @@ return array(
 		'leaguetogether\Paymentgateway\CardFlexServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
 		'Aloha\Twilio\TwilioServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider',
 
 	),
 
@@ -204,6 +205,7 @@ return array(
 		'Cart' 							=> 'Moltin\Cart\Facade',
 		'CardFlex'		  		=> 'leaguetogether\Facades\CardFlex',
 		'Twilio' 						=> 'Aloha\Twilio\Facades\Twilio',
+		'Excel' 						=> 'Maatwebsite\Excel\Facades\Excel',
 
 	),
 

@@ -158,6 +158,7 @@ Route::post('checkout/discount',  array('before' => 'auth','as' => 'checkout.dis
 Route::post('api/image/upload', 		'ImageController@upload');
 Route::post('api/image/crop', 			'ImageController@crop');
 Route::get('api/ical/create/{id}', 'CalendarController@create');
+Route::get('api/export/team/{id}', array('before' => 'auth', 'uses' => 'ExportController@team'));
 
 Route::post('api/queue/push', function(){
 	return Queue::marshal();
