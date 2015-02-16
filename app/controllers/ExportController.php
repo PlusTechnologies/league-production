@@ -12,7 +12,6 @@ class ExportController extends BaseController {
 			$excel->sheet('Sheetname', function($sheet) use ($id){
 				$team = Member::where('team_id','=',$id)->with('team')->get();
 				$sheet->setOrientation('landscape');
-				$sheet->fromArray($team);
 				$sheet->loadView('export.lacrosse.team', ['members' => $team]);
 			});
 
