@@ -70,23 +70,29 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
+          
           <br>
+          {{Form::open(array('action' => array('ExportController@report' ),'id'=>'exportDates','method' => 'post')) }}
+          {{Form::hidden('expFrom')}}
+          {{Form::hidden('expTo')}}
+          {{Form::hidden('expType')}}
           <h3>
             Details
             <span>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  <span class="caret"></span>
+                  Export &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="javascript:;" onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i> Excel</a></li>
-                  <li><a href="javascript:;"onclick="alert('Coming soon..')" > <i class="fa fa-print"> </i> Print</a></li>
+                  <li><a href="#" id="export" > <i class="fa fa-file-excel-o"> </i>&nbsp; Excel</a></li>
+                  <li><a href="javascript:;"onclick="alert('Coming soon..')" > <i class="fa fa-download"> </i>&nbsp; QuickBooks</a></li>
                 </ul>
               </div> 
             </span>
           </h3>
+          {{Form::close()}}
           <hr />
           <table class="table table-striped" id="grid">
             <thead>
@@ -138,6 +144,16 @@ $(function () {
 
 
   });
+
+  $('#export').click(function(e){
+    e.preventDefault();
+    if (validator.validate()) {
+      exportData();
+    } else {
+      alert('Please make sure you entered valid dates');
+    }
+  });
+
   function newTable(){
     $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
@@ -149,6 +165,25 @@ $(function () {
     });
   }
 
+  function exportData(){
+
+    var from = $( "input[name=from]" ).val();
+    var to = $( "input[name=to]" ).val();
+    var type = $( "select[name=type]" ).val();
+
+    $( "input[name=expFrom]").val(from);
+    $( "input[name=expTo]").val(to);
+    $( "input[name=expType]").val(type);
+
+
+    if(from =="" || to==""){
+      alert("Please enter a date in the form fields");
+      return false;
+    }
+
+    $("#exportDates").submit();
+
+  }
   function loadData(){
 
     var from = $( "input[name=from]" ).val();
@@ -172,9 +207,9 @@ $(function () {
       $("#targetData").html("");
       var totalsum =0;
       $.each(data, function(item, dt) {
-       $("#targetData").append('<tr data-id="'+ dt.transaction +'" class="clickable"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>'+ dt.subtotal +'</td></tr>');
+       $("#targetData").append('<tr data-id="'+ dt.transaction +'" class="clickable"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>$'+ kendo.toString(dt.subtotal, "n") +'</td></tr>');
 
-        totalsum += parseFloat(dt.subtotal.replace(/[^\d\.]/g, ''));
+       totalsum += parseFloat(dt.subtotal);
      });
       kendo.culture("en-US");
       var sumtotal =  kendo.toString(totalsum, "n");

@@ -160,6 +160,7 @@ Route::post('api/image/crop', 			'ImageController@crop');
 Route::get('api/ical/create/{id}', 'CalendarController@create');
 Route::get('api/export/team/{id}', array('before' => 'auth', 'uses' => 'ExportController@team'));
 Route::get('api/export/event/{id}', array('before' => 'auth', 'uses' => 'ExportController@event'));
+Route::post('api/export/report/', array('before' => 'auth', 'uses' => 'ExportController@report'));
 
 Route::post('api/queue/push', function(){
 	return Queue::marshal();

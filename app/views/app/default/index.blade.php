@@ -78,6 +78,23 @@
 						<h4>Payment Processing</h4>
 					</div>
 				</div>
+				<div class="feature">
+					<div class="feature_icon">
+						<i class="fa fa-refresh"></i>
+					</div>
+					<div>
+						<h4>Recurring Payments</h4>
+					</div>
+				</div>
+
+				<div class="feature">
+					<div class="feature_icon">
+						<i class="fa fa-refresh"></i>
+					</div>
+					<div>
+						<h4>Refunds</h4>
+					</div>
+				</div>
 
 				<div class="feature">
 					<div class="feature_icon">
@@ -93,18 +110,31 @@
 						<i class="fa fa-weixin"></i>
 					</div>
 					<div>
-						<h4>Communication</h4>
+						<h4>Announcements (Email & SMS)</h4>
 					</div>
 				</div>
-				
+			
+
 				<div class="feature">
 					<div class="feature_icon">
 						<i class="fa fa-refresh"></i>
 					</div>
 					<div>
-						<h4>Recurring Payments</h4>
+						<h4>Event & Team Management</h4>
 					</div>
 				</div>
+
+				<div class="feature">
+					<div class="feature_icon">
+						<i class="fa fa-refresh"></i>
+					</div>
+					<div>
+						<h4>Calendar</h4>
+					</div>
+				</div>
+
+				
+
 
 				<br>
 				<br>

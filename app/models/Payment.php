@@ -57,6 +57,7 @@ class Payment extends Eloquent {
 
     public function ask($param){
         $cart = CardFlex::query($param);
+        //return $cart;
         $xml = simplexml_load_string($cart);
         $object = json_decode(json_encode($xml), FALSE);
         return $object;
@@ -117,9 +118,9 @@ class Payment extends Eloquent {
 
     public function getSubtotalAttribute($value) {
         if($value< 0){
-           return "($".number_format(abs($value), 2).")"; 
+           return $value; 
         }
-        return "$".number_format($value, 2);
+        return $value;
     }
 
     public function ytdSales($value){

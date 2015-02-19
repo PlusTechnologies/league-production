@@ -169,7 +169,9 @@ class CardFlex{
 		);
 
 		$merge = array_merge($credentials,$param);
-		$params = http_build_query($merge) . "\n";
+		$params = http_build_query($merge);
+
+		//return $params;
 
 		$uri = "https://secure.cardflexonline.com/api/query.php";
 		$ch = curl_init($uri);
