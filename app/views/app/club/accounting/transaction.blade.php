@@ -118,33 +118,31 @@
                </div>
                <div class="row">
                   <div class="col-xs-12">
-                     <h4>History</h4>
+                     <h4>History {{count($action)}}</h4>
                      <br>
                      
-                     <div class="table-responsive">
-                        <table class="table table-user-information table-striped" id="grid">
-                           <thead>
-                              <tr>
-                                 <td>Date</td>
-                                 <td>ID</td>
-                                 <td>Player</td>
-                                 <td>Type</td>
-                                 <td>Total</td>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              @foreach($history as $item)
-                              <tr data-id="{{$item->transaction}}">
-                                 <td>{{$item->created_at}}</td>
-                                 <td>{{$item->transaction}}</td>
-                                 <td>{{$item->player->firstname}} {{$item->player->lastname}}</td>
-                                 <td>{{$item->type}}</td>
-                                 <td>{{$item->subtotal}}</td>
-                              </tr>
-                              @endforeach
-                           </tbody>
-                        </table>
-                     </div>
+                     <table class="table table-user-information table-striped" id="grid">
+                        <thead>
+                           <tr>
+                              <td>Date</td>
+                              <td>ID</td>
+                              <td>Player</td>
+                              <td>Type</td>
+                              <td>Total</td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach($history as $item)
+                           <tr data-id="{{$item->transaction}}">
+                              <td>{{$item->created_at}}</td>
+                              <td>{{$item->transaction}}</td>
+                              <td>{{$item->player->firstname}} {{$item->player->lastname}}</td>
+                              <td>{{$item->type}}</td>
+                              <td>{{$item->subtotal}}</td>
+                           </tr>
+                           @endforeach
+                        </tbody>
+                     </table>
                   </div>
                </div>
                <div class="row">
@@ -153,13 +151,9 @@
                      <div class="form-group">
                         <div class="col-sm-12 text-right">
                            <a href="{{URL::action('ClubController@index')}}" class="btn btn-default">Cancel</a>
-                           @if(count($action) > 1)
-                              @foreach($action as $item)
-                                 @if($item->action_type == 'sale')
-                                 <a href="{{URL::action('AccountingController@refund', $payment->transaction)}}" class="btn btn-danger btn-outline">Refund</a>
-                                 @endif
-                              @endforeach
-                           @else
+
+                           @if($transaction->action->action_type == 'sale')
+                           <a href="{{URL::action('AccountingController@refund', $payment->transaction)}}" class="btn btn-danger btn-outline">Refund</a>
                            @endif
 
                            
@@ -179,8 +173,8 @@
 
 $(function () {
    $('#grid').delegate('tbody > tr', 'click', function (e) {
-     window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
-  });
+    window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
+ });
    $('#grid').DataTable({
       "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
       "iDisplayLength": 10,

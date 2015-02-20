@@ -61,6 +61,8 @@ class AccountingController extends \BaseController {
 
 		$transaction = $payment->ask($param);
 		$values = $transaction->transaction;
+
+		//return Response::json($values);
 		$title = 'League Together - '.$club->name.' Transaction';
 		if(count($transaction->transaction) > 1){
 			foreach ($transaction->transaction as $value) {

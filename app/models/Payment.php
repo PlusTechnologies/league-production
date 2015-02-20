@@ -82,7 +82,7 @@ class Payment extends Eloquent {
         //cart content
         $items = Cart::contents();
         $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items, 'club'=>$club, 'player'=>$player);
-        $mail = Mail::later(5,'emails.receipt.default', $data, function($message) use ($user, $club){
+        $mail = Mail::send('emails.receipt.default', $data, function($message) use ($user, $club){
             
             $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
             ->subject("Purchased Receipt | $club->name");
@@ -115,7 +115,7 @@ class Payment extends Eloquent {
         //cart content
         $items = Cart::contents();
         $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items, 'club'=>$club, 'player'=>$player);
-        $mail = Mail::later(5,'emails.receipt.error', $data, function($message) use ($user, $club){
+        $mail = Mail::send('emails.receipt.error', $data, function($message) use ($user, $club){
             
             $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
             ->subject("Payment Declined | $club->name");
