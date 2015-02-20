@@ -7,7 +7,7 @@
 				<div class="col-md-5 backsplash-text">
 					<br />
 					<h1> 
-						<span class="logo"> <img src="{{$club->logo}}" width="90"></span> 
+						<span class="logo"> <img src="{{$club->logo}}" width="130"></span> 
 					</h1>
 					<h1 class="club-title"> 
 						{{$club->name}}
