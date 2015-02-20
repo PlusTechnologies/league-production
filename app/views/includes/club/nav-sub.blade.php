@@ -23,8 +23,8 @@
           </li>
           <li class="{{ HTML::smart_link('account.club.announcement.index') }} col-xs-1">
             <a href="">
-              <span class="icon-am retinaicon-essentials-119"></span>
-              <span class="subnav-link-name ng-scope">Announcements</span>
+              <span class="icon-am retinaicon-social-brands-035"></span>
+              <span class="subnav-link-name ng-scope">Followers</span>
             </a>
           </li>
           <li class="{{ HTML::smart_link('account.club.accounting.index') }} col-xs-1">

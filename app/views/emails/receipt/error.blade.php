@@ -411,7 +411,7 @@
                     <tbody>
                      <tr>
                       <td valign="top" class="mcnTextContent" style="padding: 9px 18px;color: #F4F5F0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
-                       <h1 class="null" style="color: #F4F5F0 !important;text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 40px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -1px;">Receipt</h1>
+                       <h1 class="null" style="color: #F4F5F0 !important;text-align: center;margin: 0;padding: 0;display: block;font-family: Helvetica;font-size: 40px;font-style: normal;font-weight: bold;line-height: 125%;letter-spacing: -1px;">Payment Declined</h1>
                       </td>
                      </tr>
                     </tbody>
@@ -475,7 +475,7 @@
                        <tbody>
                         <tr>
                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                          Receipt {{$data->transactionid}}
+                          Transaction {{$data->transactionid}}
                          </td>
                         </tr>
                        </tbody>
@@ -514,128 +514,20 @@
                   <td valign="top" class="mcnTextBlockInner" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="564" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                     <tbody>
-                     @foreach($products as $item)
                      <tr>
                       <td valign="top" class="mcnTextContent" style="padding: 5px 50px 5px 50px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 12px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                       
-                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="text-align:left;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           {{$item->name}}
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-                       <table align="right" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           <span style="text-align=right">${{ number_format($item->price,2) }}</span>
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
+                       <p>
+                      @foreach($products as $item)
+                      {{$item->name}} <br>
+                      Amount Due : ${{ number_format($item->price,2) }}
+                      @endforeach
+                      </p> <br>
 
-                      </td>
-                     </tr>
-                     @endforeach
-                     @if($data->promo)
-                     <tr>
-                      <td valign="top" class="mcnTextContent" style="padding: 5px 50px 5px 50px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 12px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
+                      <p>We tried to process your scheduled payment, however something went wrong...</p>
+                      <p>Error {{$data->response_code}}: {{$data->responsetext}}</p>
+                      <p>We will try to process the payment again soon. In the meantime, please verify and update your credit card information in your account (visit settings from your account dashboard) or contact your club for more information</p>
                       
-                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Discount
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-                       <table align="right" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           <span style="text-align=right">${{number_format( - $data->discount,2)  }}</span>
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
 
-                      </td>
-                     </tr>
-                     @endif
-                     <tr>
-                      <td valign="top" class="mcnTextContent" style="padding:5px 50px 5px 50px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 12px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-
-                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Subtotal
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-                       <table align="right" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align: right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           <span style="text-align=right">${{number_format($data->subtotal,2)  }}</span>
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-
-                      </td>
-                     </tr>
-                     <tr>
-                      <td valign="top" class="mcnTextContent" style="padding: 5px 50px 5px 50px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 12px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-
-                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Processing Fee
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-                       <table align="right" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align: right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           <span style="text-align=right">${{number_format($data->fee,2)}}</span>
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-
-                      </td>
-                     </tr>
-
-                     <tr>
-
-                      <td valign="top" class="mcnTextContent" style="padding: 5px 50px 5px 50px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 30px;font-weight: bold;text-align:right;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                       <table align="left" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 30px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Total
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
-                       <table align="right" border="0" cellpadding="0" cellspacing="0" width="232" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                        <tbody>
-                         <tr>
-                          <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:right;font-size: 30px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           <span style="text-align=right">${{number_format($data->total,2) }}</span>
-                          </td>
-                         </tr>
-                        </tbody>
-                       </table>
 
                       </td>
                      </tr>

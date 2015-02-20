@@ -82,7 +82,7 @@ class Payment extends Eloquent {
         //cart content
         $items = Cart::contents();
         $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items, 'club'=>$club, 'player'=>$player);
-        $mail = Mail::send('emails.receipt.default', $data, function($message) use ($user, $club){
+        $mail = Mail::later(5,'emails.receipt.default', $data, function($message) use ($user, $club){
             
             $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
             ->subject("Purchased Receipt | $club->name");
@@ -95,6 +95,40 @@ class Payment extends Eloquent {
         });
         return ;
     }
+
+    public function error($param, $id, $playerid){
+        setlocale(LC_MONETARY,"en_US");
+        $club = Club::Find($id);
+        $user = Auth::user();
+        $player = Player::find($playerid);
+        $query = array(
+            'report_type'       => 'customer_vault',
+            'customer_vault_id' => $user->profile->customer_vault,
+            'club'              => $club->id
+            );
+        $payment = new Payment;
+        $vault =  json_decode(json_encode($payment->ask($query)),false);
+        //convert object to array
+        $dt = json_decode(json_encode($param),false);
+        //clean duplicates from array
+        //$club = array_unique($club);
+        //cart content
+        $items = Cart::contents();
+        $data = array('data'=>$dt,'vault'=>$vault,'products'=>$items, 'club'=>$club, 'player'=>$player);
+        $mail = Mail::later(5,'emails.receipt.error', $data, function($message) use ($user, $club){
+            
+            $message->to($user->email, $user->profile->firstname.' '.$user->profile->lastname)
+            ->subject("Payment Declined | $club->name");
+            
+            foreach ($club->users()->get() as $value) {
+               $message->bcc($value->email, $club->name)
+                ->subject("Payment Declined - $club->name");
+            }
+            
+        });
+        return $mail;
+    }
+
 
     public function history($param, $id){
         if($param){

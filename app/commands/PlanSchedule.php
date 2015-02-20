@@ -40,10 +40,10 @@ class PlanSchedule extends ScheduledCommand {
 	 */
 	public function schedule(Schedulable $scheduler)
 	{
-		return $scheduler
-						->daily()
-            ->hours(20)
-            ->minutes(40);
+		return $scheduler;
+						// ->daily()
+      //       ->hours(17)
+      //       ->minutes(05);
 	}
 
 	/**
@@ -60,6 +60,7 @@ class PlanSchedule extends ScheduledCommand {
 		$schedules = SchedulePayment::whereBetween('date', array($from , $to))->with('member.user.profile')->get();
 		$errors = array();
 		$totalAmount = array();
+		$errorAmount = array();
 
 		//save daylog
 		$dayLog = new ScheduleDailyLog;
@@ -111,10 +112,13 @@ class PlanSchedule extends ScheduledCommand {
 
 				if($transaction->response == 3 || $transaction->response == 2 ){
 					$errors[] = array(
-						'payment_schedule_id'=>$schedule->id,
-						'error_description' => $transaction->responsetext,
+						'payment_schedule_id'=> $schedule->id,
+						'error_description' => $transaction->transactionid.' : '.$transaction->responsetext,
 						'error_amount' => $schedule->total,
 						'daily_log_id' => $dayLog->id);
+					array_push($errorAmount, number_format($schedule->total,2));
+					$emailerrorstatus = $payment->error($transaction, $club->id, $player->id);
+
 				}else{
 
 					array_push($totalAmount, number_format($transaction->total,2));
@@ -157,10 +161,7 @@ class PlanSchedule extends ScheduledCommand {
 					'error_description' => 'Customer Vault not found',
 					'error_amount' => number_format ($schedule->total,2),
 					'daily_log_id' => $dayLog->id);
-
 			}
-			
-			
 			
 		}//end of foreach schedule
 
@@ -170,7 +171,20 @@ class PlanSchedule extends ScheduledCommand {
 		$dayLogEnd->successful_count = Count($totalAmount);
 		$dayLogEnd->error_count = Count($errors);
 		$dayLogEnd->total_amount = array_sum($totalAmount);
+		$dayLogEnd->total_amount_error = array_sum($errorAmount);
 		$dayLogEnd->save();
+
+		//save log for errors
+		if(Count($errors) > 0){
+			foreach($errors as $errorItem){
+					$scheduleError = new ScheduleDailyError;
+					$scheduleError->error_description 	= $errorItem['error_description'];
+					$scheduleError->error_amount 				= $errorItem['error_amount'];
+					$scheduleError->payment_schedule_id = $errorItem['payment_schedule_id'];
+					$scheduleError->daily_log_id 				= $dayLogEnd->id;
+					$scheduleError->save();
+			}
+		}
 
 		return  Log::info($errors);
 
