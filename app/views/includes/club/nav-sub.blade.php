@@ -21,8 +21,8 @@
               <span class="subnav-link-name ng-scope">Events</span>
             </a>
           </li>
-          <li class="{{ HTML::smart_link('account.club.announcement.index') }} col-xs-1">
-            <a href="">
+          <li class="{{ HTML::smart_link('account.club.follower.index') }} col-xs-1">
+            <a href="{{URL::action('FollowerController@index')}}">
               <span class="icon-am retinaicon-social-brands-035"></span>
               <span class="subnav-link-name ng-scope">Followers</span>
             </a>

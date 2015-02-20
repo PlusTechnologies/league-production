@@ -68,6 +68,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('team.member', 			'MemberController');
 		Route::resource('plan',							'PlanController');
 		Route::resource('accounting',				'AccountingController');
+		Route::resource('follower',					'FollowerController');
 
 	});
 

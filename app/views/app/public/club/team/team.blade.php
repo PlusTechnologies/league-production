@@ -6,19 +6,19 @@
 			<div class="col-md-12">
 				<div class="col-md-5 backsplash-text">
 					<br />
-					<h1 class="text-center"> 
+					<h1> 
 						<span class="logo"> <img src="{{$club->logo}}" width="90"></span> 
 					</h1>
 					<h1 class="club-title"> 
 						{{$club->name}}
 					</h1>
-					<h4 class="club-subtitle">Team {{$team->name}}</h4>
+					<b>Team {{$team->name}}</b>
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
 					<h1>About the Team </h1>
 					<p>{{$team->description}}</p>
 					<br>
-					<a  class="btn btn-default btn-outline" href="{{URL::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->id))}}"> Register Player</a>
+					<a  class="btn btn-success btn-outline" href="{{URL::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->id))}}"> <i class="fa fa-plus fa-lg"></i>&nbsp; Register Player</a>
 					<br><br>
 				</div>
 			</div>
@@ -59,10 +59,10 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<br>
+				{{-- <br>
 				<p>Shared registration link</p>
 				{{ Form::text('name',Request::root()."/club/$club->id/team/$team->id", array('class' => 'form-control block-input')) }}
-				<br>
+				<br> --}}
 			</div>
 		</div>
 	</div>

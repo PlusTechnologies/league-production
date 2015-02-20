@@ -6,17 +6,17 @@
 			<div class="col-md-12">
 				<div class="col-md-5 backsplash-text">
 					<br />
-					<h1 class="text-center"> 
+					<h1> 
 						<span class="logo"> <img src="{{$club->logo}}" width="90"></span> 
 					</h1>
 					<h1 class="club-title"> 
 						{{$club->name}}
 					</h1>
-					<h4 class="club-subtitle">{{$event->name}}</h4>
+					<b>{{$event->name}}</b>
 					@if($event->end == $event->date || !$event->end)
-					<h4 class="club-subtitle">{{$event->date}}</h4>
+					<p class="club-subtitle">{{$event->date}}</p>
 					@else
-					<h4 class="club-subtitle">{{$event->date}} to {{$event->end}}</h4>
+					<p class="club-subtitle">{{$event->date}} to {{$event->end}}</p>
 					@endif
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
@@ -24,11 +24,13 @@
 					<p>{{$event->description}}</p>
 					<br>
 					{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
-					<button type="submit" class="btn btn-default btn-outline" href=""> <i class="fa fa-plus fa-lg"></i> Register Player</button>
+					<button type="submit" class="btn btn-success btn-outline" href=""> <i class="fa fa-plus fa-lg"></i>&nbsp; Register Player</button>
+					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> &nbsp; Add to calendar</a>
+
 					{{ Form::close() }}
-					<br>
-					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> Add to calendar</a>
-					<br><br><br>
+					
+					
+					<br><br>
 				</div>
 			</div>
 		</div>
@@ -121,9 +123,9 @@
 				@if($event->location)
 				<div id="map_canvas"> </div>
 				@endif
-				<br>
+{{-- 				<br>
 				<p>Shared registration link</p>
-				{{ Form::text('name',Request::root()."/club/$club->id/event/$event->id", array('class' => 'form-control block-input')) }}
+				{{ Form::text('name',Request::root()."/club/$club->id/event/$event->id", array('class' => 'form-control block-input')) }} --}}
 				<br>
 			</div>
 		</div>
