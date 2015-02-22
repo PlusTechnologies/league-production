@@ -8,6 +8,8 @@ use Discount;
 use DateTime;
 use DateTimeZone;
 use User;
+use Member;
+use Participant;
 use Club;
 use Crypt;
 
@@ -16,12 +18,23 @@ class CardFlex{
 	
 	public function flex($param, $type){
 		$club = Club::Find($param['club']);
+		
+
 		unset($param['club']);
 		//add item name to description as string
 		$desc = "";
 		foreach (Cart::contents() as $item) {
     		$desc .= $item->name . " | " . $item->organization;
+
+    		//check if user's player is already a member or a participant of the event or team
+    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->first();
+    		$playerParticipant = Participant::where('player_id', $item->player_id)->where('event_id',$item->id)->get();
+
+    		if((!empty($playerMember->getOriginal('status')) || !empty($playerParticipant->status)) && !$item->autopay){
+    			return  array("response"=>2, "responsetext"=>"The selected player is already registered, $playerMember->status.");
+    		}
 		};
+
 		//get discount data
 		$discount = Discount::find($param['discount']);
 		//validate data and get discount value

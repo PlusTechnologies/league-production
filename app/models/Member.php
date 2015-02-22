@@ -1,7 +1,7 @@
 <?php
 
 class Member extends Eloquent {
-	protected $fillable = array('player','second_email','dues','early_dues','early_deadline','plan_id','accepted_on','accepted_by','accepted_user');
+	protected $fillable = array('player','second_email','dues','early_dues','early_deadline','plan_id','accepted_on','accepted_by','accepted_user','status');
 	protected $table = 'members';
 
 	public static $rules = array(

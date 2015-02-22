@@ -391,7 +391,7 @@ class MemberController extends BaseController {
 
 		//payment in full
 		$item = array(
-			'id' 							=> $member->id,
+			'id' 							=> $member->team->id,
 			'name'						=> "Membership Team ".$member->team->name,
 			'price'						=> $price,
 			'quantity'				=> 1,
@@ -400,7 +400,8 @@ class MemberController extends BaseController {
 			'member_id'				=> $member->id,
 			'player_id'				=> $member->player->id,
 			'user_id'					=> $user->id,
-			'type' 						=> "full"
+			'type' 						=> "full",
+			'autopay' 				=> false
 			);
 		Cart::insert($item);
 		foreach (Cart::contents() as $item) {
@@ -434,7 +435,7 @@ class MemberController extends BaseController {
 				}
 			}
 			$item = array(
-				'id' 							=> $member->id,
+				'id' 							=> $member->team->id,
 				'name'						=> "Membership Team ".$member->team->name,
 				'price'						=> $price,
 				'quantity'				=> 1,
@@ -443,7 +444,8 @@ class MemberController extends BaseController {
 				'member_id'				=> $member->id,
 				'player_id'				=> $member->player->id,
 				'user_id'					=> $user->id,
-				'type' 						=> $type
+				'type' 						=> $type,
+				'autopay' 				=> false
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {
@@ -455,7 +457,7 @@ class MemberController extends BaseController {
 			case 'plan':
 			$price = $member->plan->getOriginal('initial');
 			$item = array(
-				'id' 							=> $member->id,
+				'id' 							=> $member->team->id,
 				'name'						=> "Membership Team ".$member->team->name,
 				'price'						=> $price,
 				'quantity'				=> 1,
@@ -464,7 +466,8 @@ class MemberController extends BaseController {
 				'member_id'				=> $member->id,
 				'player_id'				=> $member->player->id,
 				'user_id'					=> $user->id,
-				'type' 						=> $type
+				'type' 						=> $type,
+				'autopay' 				=> false
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {

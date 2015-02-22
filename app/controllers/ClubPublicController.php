@@ -194,7 +194,8 @@ class ClubPublicController extends \BaseController {
 			'event'						=> $event->name,
 			'event_id'				=> $event->id,
 			'player_id'				=> '',
-			'user_id'					=> ''
+			'user_id'					=> '',
+			'autopay' 				=> false
 			);
 		Cart::insert($item);
 		//limit to one registration per session
@@ -442,8 +443,6 @@ class ClubPublicController extends \BaseController {
 				$payment->type					= $transaction->type;
 				$payment->save();
 
-
-
 				$participant = new Participant;
 				$participant->id 					= $uuid2;
 				$participant->firstname 	= $player->firstname;
@@ -459,7 +458,6 @@ class ClubPublicController extends \BaseController {
 				$participant->status 			= 1;
 				$participant->method 			= 'full';
 				$participant->save();
-
 
 				$salesfee = ($item->price / getenv("SV_FEE")) - $item->price; 
 				$sale = new Item;
@@ -583,7 +581,8 @@ class ClubPublicController extends \BaseController {
 			'organization_id'	=> $club->id,
 			'player_id'				=> '',
 			'user_id'					=> $user->id,
-			'type' 						=> 'full'
+			'type' 						=> 'full',
+			'autopay' 				=> false
 			);
 		Cart::insert($item);
 		foreach (Cart::contents() as $item) {
@@ -623,7 +622,8 @@ class ClubPublicController extends \BaseController {
 				'organization_id'	=> $club->id,
 				'player_id'				=> '',
 				'user_id'					=> $user->id,
-				'type' 						=> $type
+				'type' 						=> $type,
+				'autopay' 				=> false
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {
@@ -643,7 +643,8 @@ class ClubPublicController extends \BaseController {
 				'organization_id'	=> $club->id,
 				'player_id'				=> '',
 				'user_id'					=> $user->id,
-				'type' 						=> $type
+				'type' 						=> $type,
+				'autopay' 				=> false
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {
@@ -866,6 +867,8 @@ class ClubPublicController extends \BaseController {
 
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
+
+
 		
 		if($transaction->response == 3 || $transaction->response == 2 ){
 			return Redirect::action('ClubPublicController@PaymentCreateTeam', array($club->id, $team->id))->with('error',$transaction->responsetext);

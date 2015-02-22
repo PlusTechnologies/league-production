@@ -95,7 +95,8 @@ class PlanSchedule extends ScheduledCommand {
 				'organization_id'	=> $club->id,
 				'player_id'				=> $player->id,
 				'user_id'					=> $user->id,
-				'type' 						=> 'full'
+				'type' 						=> 'full',
+				'autopay' 				=> true
 				);
 			Cart::insert($itemCart);
 
