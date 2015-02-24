@@ -28,6 +28,18 @@
             </div>
           </div>
           @endif
+          @if(Session::has('warning'))
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <div class="alert alert-dismissable">
+                  <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+                  <p class="text-danger">{{Session::get('warning')}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          @endif
           @if(Session::has('notice'))
           <div class="row">
             <div class="col-sm-12">
