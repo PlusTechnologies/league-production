@@ -31,11 +31,11 @@ class Participant extends Eloquent {
         $this->attributes['early_due'] =  0;
     }
 
-    public function setStatusAttribute($value){
-        if($value){
-            $this->attributes['status'] =  $value ;
-        }
-        $this->attributes['status'] =  null;
-    }
+    // public function setStatusAttribute($value){
+    //     if($value){
+    //         $this->attributes['status'] =  $value ;
+    //     }
+    //     $this->attributes['status'] =  null;
+    // }
 
 }

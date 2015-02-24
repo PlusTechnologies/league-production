@@ -27,11 +27,11 @@ class CardFlex{
     		$desc .= $item->name . " | " . $item->organization;
 
     		//check if user's player is already a member or a participant of the event or team
-    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->first();
-    		$playerParticipant = Participant::where('player_id', $item->player_id)->where('event_id',$item->id)->get();
+    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->whereNull('status')->first();
+    		$playerParticipant = Participant::where('player_id', $item->player_id)->where('event_id',$item->id)->first();
 
-    		if((!empty($playerMember->getOriginal('status')) || !empty($playerParticipant->status)) && !$item->autopay){
-    			return  array("response"=>2, "responsetext"=>"The selected player is already registered, $playerMember->status.");
+    		if((!empty($playerMember) || !empty($playerParticipant->status)) && !$item->autopay){
+    			return  array("response"=>2, "responsetext"=>"The selected player is already registered");
     		}
 		};
 

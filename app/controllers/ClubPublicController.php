@@ -290,6 +290,7 @@ class ClubPublicController extends \BaseController {
 			$participant->accepted_on = Carbon::Now();
 			$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
 			$participant->accepted_user = $user->id;
+			$participant->status 			= 1;
 			$participant->save();
 
 			$participant = Participant::find($uuid);
