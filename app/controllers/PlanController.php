@@ -168,7 +168,7 @@ class PlanController extends BaseController {
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();	
 		$validator= Validator::make(Input::all(), Plan::$rules);
-
+		$plan = Plan::find($id);
 		//check if recurrences
 
 		if($validator->passes()){
@@ -185,7 +185,7 @@ class PlanController extends BaseController {
 				->with( 'warning', "Please check the recurring amount and initial amount.");
 			}
 
-			$plan = Plan::find($id);
+			
 			$plan->name 				= Input::get('name');
 			$plan->total 				= Input::get('total');
 			$plan->initial 			= Input::get('initial');
