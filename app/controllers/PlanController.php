@@ -180,7 +180,7 @@ class PlanController extends BaseController {
 			$recidual = $amount % $recurring;
 
 			if($recidual > 0){
-				return Redirect::action('PlanController@create')
+				return Redirect::action('PlanController@edit', $plan->id )
 				->withInput()
 				->with( 'warning', "Please check the recurring amount and initial amount.");
 			}
