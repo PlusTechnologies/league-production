@@ -81,6 +81,8 @@ class PlanSchedule extends ScheduledCommand {
 			$member = Member::find($schedule->member->id);
 			$history = SchedulePayment::find($schedule->id);
 
+			//manually login user out before login new user
+			Auth::logout();
 			//manually login user
 			Auth::login($user);
 			//clear cart content

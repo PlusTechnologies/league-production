@@ -517,10 +517,13 @@
                         <tbody>
                          <tr>
                           <td valign="top" class="mcnTextContent" style="padding: 5px 0 5px 18px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size: 11px;text-align:left;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #606060;line-height: 150%;">
-                           Volume transations from yesterday:<br><br>
+                           Volume transations from yesterday:<br>
                            <h3>${{number_format($payments, 2)}} </h3>Total Charged
                            <h3>${{number_format($subtotal, 2)}}</h3>Total Send to Clubs
-                           <h3>${{number_format($fees, 2)}}</h3>Total Services Fees:  
+                           <h3>${{number_format($fees, 2)}}</h3>Total Services Fees:
+                           <br><br> 
+                           Volume transations from current month:<br> 
+                           <h3>${{number_format($month, 2)}}</h3>Total Monthly Volume Transations:  
                           </td>
                          </tr>
                         </tbody>

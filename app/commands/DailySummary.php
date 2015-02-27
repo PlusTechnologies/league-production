@@ -58,13 +58,14 @@ class DailySummary extends ScheduledCommand {
 		$payments = Payment::whereBetween('created_at', array($from , $to))->sum('total');
 		$payments2 = Payment::whereBetween('created_at', array($from , $to))->sum('service_fee');
 		$payments3 = Payment::whereBetween('created_at', array($from , $to))->sum('subtotal');
+		$payments4 = Payment::where('created_at', '>=', Carbon::now()->startOfMonth())->sum('total');
 		//return Log::info($yesterday);
 		//return Log::info($payments);
 
-		$data = array('payments'=>$payments, 'fees'=>$payments2, 'subtotal'=>$payments3);
+		$data = array('payments'=>$payments, 'fees'=>$payments2, 'subtotal'=>$payments3, 'month'=>$payments4);
 			$mail = Mail::send('emails.notification.report.daily', $data, function($message){
 				$message->to('jd.hernandez@me.com', 'David Hernandez')
-				->cc('brooks@csquaredcompanies.com', 'Brooks Carter')
+				->cc('brooks.carter@leaguetogether.com', 'Brooks Carter')
 				->subject("Daily Volume Summary");
 			});
 
