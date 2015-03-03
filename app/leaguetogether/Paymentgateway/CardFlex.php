@@ -27,13 +27,15 @@ class CardFlex{
     		$desc .= $item->name . " | " . $item->organization;
 
     		//check if user's player is already a member or a participant of the event or team
-    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->whereNull('status')->first();
+    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->first();
     		$playerParticipant = Participant::where('player_id', $item->player_id)->where('event_id',$item->id)->first();
 
-    		if((!empty($playerMember) || !empty($playerParticipant->status)) && !$item->autopay){
-    			return  array("response"=>2, "responsetext"=>"The selected player is already registered");
+    		if((!empty($playerMember->status) || !empty($playerParticipant->status)) && !$item->autopay){
+    			return  array("response"=>2, "responsetext"=>"The selected player is already registered $item->autopay ");
     		}
 		};
+
+		//return  array("response"=>2, "responsetext"=>"True payment $playerMember->status");
 
 		//get discount data
 		$discount = Discount::find($param['discount']);

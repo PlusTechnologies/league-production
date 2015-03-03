@@ -30,17 +30,17 @@ class Member extends Eloquent {
     return $this->hasOne('User', 'id','accepted_user');
   }
 
-	public function getStatusAttribute($value){
-		switch ($value) {
-			case 1:
-			return "Accepted";
-			case 2:
-			return "Declined" ;
-			default:
-			return "Waiting for reponse" ;
-		}
+	// public function getStatusAttribute($value){
+	// 	switch ($value) {
+	// 		case 1:
+	// 		return "Accepted";
+	// 		case 2:
+	// 		return "Declined" ;
+	// 		default:
+	// 		return "Waiting for reponse" ;
+	// 	}
 		
-	}
+	// }
 
 	public function getAcceptedOnAttribute($value){
 		return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('m/d/Y');
