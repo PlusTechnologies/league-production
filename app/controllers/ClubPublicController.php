@@ -901,8 +901,6 @@ class ClubPublicController extends \BaseController {
 				$member->status = 1;
 				$member->save();
 
-
-
 				$payment->id						= $uuid;
 				$payment->customer     	= $user->profile->customer_vault;
 				$payment->transaction   = $transaction->transactionid;	

@@ -100,7 +100,15 @@
                       <td>{{$member->player->position}}</td>
                       <td>{{$member->method}}</td>
                       <td>${{number_format($member->due, 2)}}</td>
-                      <td>{{$member->status}}</td>
+                      @if($member->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($member->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$member->status)
+                      <td>Waiting for reponse</td>
+                      @endif
                       <td class="text-center">
                         <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up">
                           <i class="fa fa-trash"></i>

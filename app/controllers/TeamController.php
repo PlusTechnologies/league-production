@@ -123,7 +123,7 @@ public function show($id)
 	$members = Member::where('team_id','=',$team->id)->with('team')->get();
 	$title = 'League Together - '.$club->name.' Teams';
 	$pay = Payment::with(array('items'=>function($query){}))->get();
-	$sales = Item::where('team_id',$team->id);
+	$sales = Item::where('team_id',$team->id)->get();
 	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
 	$announcements = Announcement::where('team_id', $team->id )->get();
 

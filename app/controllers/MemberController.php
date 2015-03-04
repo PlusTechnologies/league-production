@@ -699,6 +699,7 @@ class MemberController extends BaseController {
 				$sale->fee 					= $salesfee;
 				$sale->member_id 		= $member->id;
 				$sale->payment_id   = $uuid;
+				$sale->team_id			= $member->team->id;
 				$sale->save();
 
 				$member->accepted_on = Carbon::Now();
