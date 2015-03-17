@@ -37,6 +37,54 @@ class ClubController extends \BaseController {
 
 	}
 
+	public function playerEdit($id)
+	{
+		$player = Player::find($id);
+		$user =Auth::user();
+		$club = $user->Clubs()->FirstOrFail(); 
+		$title = 'League Together - Player';
+		return View::make('app.club.player.edit')
+		->with('page_title', $title)
+		->withUser($user)
+		->with('club', $club)
+		->with('player',$player);
+	}
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 * DELETE /player/{id}
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function playerDestroy($id)
+	{
+		$player = Player::find($id);
+		$status= $player->delete();
+		if($status){
+			return Redirect::back();
+		}
+		return Redirect::back()->withErrors($status);
+	}
+
+	public function playerDelete($id)
+	{
+		$player = Player::find($id);
+		$user =Auth::user();
+		$club = $user->Clubs()->FirstOrFail(); 
+		$title = 'League Together - Player';
+
+		return View::make('app.account.player.delete')
+		->with('page_title', $title)
+		->with('player',$player)
+		->with('club', $club)
+		->withUser($user);
+
+	}
+
+
+
 	public function settings()
 	{
 		$user =Auth::user();

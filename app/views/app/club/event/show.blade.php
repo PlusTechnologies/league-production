@@ -160,7 +160,7 @@
                   <tbody>
                     @foreach ($event->participants as $member)
                     <tr class="clickable" data-id="{{$member->player->id}}">
-                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->lastname}}, {{$member->firstname}}
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->player->lastname}}, {{$member->player->firstname}}
                       </td>
                       <td>{{$member->player->position}}</td>
                       <td>${{number_format($member->due, 2)}}</td>

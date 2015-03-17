@@ -44,6 +44,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 
 		Route::get('user/{id}', 						array('as' =>'user.show', 				'uses' => 'ClubController@playerShow'));
 		Route::get('user/{id}/edit', 				array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
+
 		Route::get('event/{id}/participant/delete', array('as' 	=>'event.participant', 'uses' => 'ParticipantController@delete'));
 		Route::post('event/{id}/participant/delete', array('as'	=>'event.participant', 'uses' => 'ParticipantController@destroy'));
 		Route::get('event/{id}/invite', 		array('as' =>'event.invite', 			'uses' => 'EventoController@invite'));

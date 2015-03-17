@@ -56,8 +56,16 @@
 									</tr>
 								</tbody>
 							</table>
+							<hr>
+							<div class="form-group">
+								<div class="col-sm-12 text-right">
+									<a href="{{URL::action('ClubController@playerEdit', $player->id)}}" class="btn btn-default btn-outline">Edit Player</a>
+								</div>
+							</div>
 						</div>
 					</div>
+					
+
 					
 					<h3>Linked to user</h3>
 					<br>

@@ -165,7 +165,7 @@ class PlayerController extends \BaseController {
 
 			if ( $status )
 			{
-				return Redirect::action('PlayerController@edit', $player->id)
+				return Redirect::back()
 				->with( 'notice', 'Player updated successfully');
 			}
 		}
