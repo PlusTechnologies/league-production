@@ -26,6 +26,11 @@ class Team extends Eloquent {
     public function members() {
         return $this->belongsToMany('Player','members')->withPivot('accepted_on','created_at','id');    
     }
+
+    public function coaches() {
+        return $this->hasMany('Coach','team_id','id');    
+    }
+
     public function season() {
         return $this->hasOne('Seasons', "id", "season_id");    
     }

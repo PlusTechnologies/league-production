@@ -290,6 +290,7 @@ public function doAnnouncement($id)
 	$user = Auth::user();
 	$club = $user->Clubs()->FirstOrFail();
 	$event = Evento::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+
 	$participants = Participant::where('event_id','=',$event->id)->get();
 	$messageData = Input::get('message');
 	$messageSubject = Input::get('subject');

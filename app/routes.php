@@ -37,7 +37,7 @@ Route::group(array('prefix' => 'account/administrator'), function() {
 
 Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Club Routes
 
-	Route::group(array('prefix' => 'club'), function() {
+	Route::group(array('prefix' => 'club', 'before' => 'role'), function() {
 		Route::resource('event','EventoController');//Event Routes
 		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
 		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
@@ -54,6 +54,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
 		Route::post('event/{id}/announcement/',	array('as' =>'event.announcement', 'uses' => 'EventoController@doAnnouncement'));
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
+		Route::get('team/{id}/coach/{coach}/delete', array('as' =>'team.coach.delete', 'uses' => 'CoachController@delete'));
 		Route::get('team/{id}/delete/', 				array('as' =>'team.delete', 			'uses' => 'TeamController@delete'));
 		Route::post('team/{id}/announcement/',	array('as' =>'team.announcement', 'uses' => 'TeamController@doAnnouncement'));
 		Route::get('plan/{id}/delete/', 		array('as' =>'plan.delete', 			'uses' => 'PlanController@delete'));
@@ -67,6 +68,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('programs', 				'ProgramController');
 		Route::resource('announcement', 		'AnnouncementController');
 		Route::resource('team.member', 			'MemberController');
+		Route::resource('team.coach', 			'CoachController');
 		Route::resource('plan',							'PlanController');
 		Route::resource('accounting',				'AccountingController');
 		Route::resource('follower',					'FollowerController');
@@ -87,6 +89,9 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::post('settings/profile', 							array('uses' => 'ProfileController@update'));
 	Route::get ('player/delete/{id}', 						array('as' =>'account.player.delete', 		'uses' => 'PlayerController@delete'));
 	Route::get ('contact/delete/{id}', 						array('as' =>'account.contact.delete', 		'uses' => 'ContactController@delete'));
+	Route::get ('team', 													array('as' =>'account.team.index', 				'uses' => 'TeamController@indexCoach'));
+	Route::get ('team/{id}', 											array('as' =>'account.team.show', 				'uses' => 'TeamController@showCoach'));
+	Route::post('team/{id}/announcement/',				array('as' =>'account.team.announcement',	'uses' => 'TeamController@doAnnouncement'));
 	Route::get('member/{id}/accept', 							array('as' =>'account.member.accept',			'uses' => 'MemberController@accept'));
 	Route::get('member/{id}/decline',	 						array('as' =>'account.member.decline',		'uses' => 'MemberController@decline'));
 	Route::post('member/{id}/decline',	 					array('as' =>'account.member.doDecline',	'uses' => 'MemberController@doDecline'));

@@ -6,6 +6,7 @@ class TeamController extends BaseController {
 	{
 //$this->beforeFilter('club', ['except'=>'publico']);
 		$this->beforeFilter('csrf', ['on' => array('create','edit')]);
+    $this->beforeFilter('role', array('except' => array('indexCoach','showCoach','doAnnouncement')));
 	}
 
 
@@ -29,6 +30,21 @@ public function index()
 	->with('seasons', $seasons)
 	->with('team', $team)
 	->with('sales', $sales)
+	->withUser($user);
+}
+
+public function indexCoach()
+{
+	$user= Auth::user();
+	//$club = $user->Clubs()->FirstOrFail();
+	$team = $user->teams()->get();
+
+	$seasons = Seasons::all();
+	$title = 'League Together - Teams';
+	return View::make('app.account.team.index')
+	->with('page_title', $title)
+	->with('seasons', $seasons)
+	->with('team', $team)
 	->withUser($user);
 }
 
@@ -120,6 +136,7 @@ public function show($id)
 	$user= Auth::user();
 	$club = $user->Clubs()->FirstOrFail();
 	$team = Team::find($id);
+	$coaches = $team->coaches()->get();
 	$members = Member::where('team_id','=',$team->id)->with('team')->get();
 	$title = 'League Together - '.$club->name.' Teams';
 	$pay = Payment::with(array('items'=>function($query){}))->get();
@@ -127,10 +144,38 @@ public function show($id)
 	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
 	$announcements = Announcement::where('team_id', $team->id )->get();
 
+
 	return View::make('app.club.team.show')
 	->with('page_title', $title)
 	->with('team',$team)
 	->with('club', $club)
+	->with('coaches', $coaches)
+	->with('members', $members)
+	->with('sales', $sales)
+	->with('receivable', $receivable)
+	->with('announcements', $announcements)
+	->withUser($user);
+}
+
+public function showCoach($id)
+{
+	$user= Auth::user();
+	$team = Team::find($id);
+	$club = $team->club;
+	$coaches = $team->coaches()->get();
+	$members = Member::where('team_id','=',$team->id)->with('team')->get();
+	$title = 'League Together - '.$team->club->name.' Teams';
+	$pay = Payment::with(array('items'=>function($query){}))->get();
+	$sales = Item::where('team_id',$team->id)->get();
+	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
+	$announcements = Announcement::where('team_id', $team->id )->get();
+
+
+	return View::make('app.account.team.show')
+	->with('page_title', $title)
+	->with('team',$team)
+	->with('club', $club)
+	->with('coaches', $coaches)
 	->with('members', $members)
 	->with('sales', $sales)
 	->with('receivable', $receivable)
@@ -263,8 +308,12 @@ public function doAnnouncement($id)
 {
 	global $club, $messageData, $messageSubject, $team, $sms, $user, $recipientMobile, $recipientEmail;
 	$user = Auth::user();
-	$club = $user->Clubs()->FirstOrFail();
-	$team = Team::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+	// $club = $user->Clubs()->FirstOrFail();
+	// $team = Team::where("id", "=",$id)->where("club_id",'=',$club->id)->FirstOrFail();
+
+	$team = Team::find($id);
+	$club = $team->club;
+
 	$members = Member::where('team_id','=',$team->id)->get();
 	$messageData = Input::get('message');
 	$messageSubject = Input::get('subject');

@@ -14,10 +14,12 @@ class AccountController extends \BaseController {
 		$title = 'League Together - Club';
 		$payment = Payment::where('user_id', $user->id)->with('items')->get();
 
+		$coachCount = count($user->teams()->get());
 
 		return View::make('app.account.index')
 		->with('page_title', $title)
 		->with('payment', $payment)
+		->with('coachCount',$coachCount)
 		->withUser($user);
 	}
 

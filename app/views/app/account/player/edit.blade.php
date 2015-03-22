@@ -145,7 +145,7 @@
 									<div id="upimageclub">
 										<img class="edit-org-logo" src="{{$player->avatar}}">
 									</div>
-									<input type="hidden" id="croppic" name="avatar" value="/img/default-avatar.png">
+									<input type="hidden" id="croppic" name="avatar" value="{{$player->avatar}}">
 								</div>
 							</div>
 						</div>
@@ -163,7 +163,7 @@
 								<div class="col-sm-12 text-right">
 									<button type="submit" class="btn btn-primary btn-outline">Save</button>
 									<a href="{{URL::action('PlayerController@delete', $player->id)}}" class="btn btn-danger btn-outline">Delete</a>
-									<a href="{{URL::action('PlayerController@index')}}" class="btn btn-default">Cancel</a>
+									<a href="{{URL::previous())}}" class="btn btn-default">Cancel</a>
 								</div>
 							</div>
 						</div>

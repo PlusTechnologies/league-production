@@ -27,6 +27,10 @@ public function players(){
 	return $this->hasMany('Player');
 }
 
+public function teams(){
+	return $this->belongsToMany('Team');
+}
+
 }
 // <?php
 

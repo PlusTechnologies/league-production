@@ -9,6 +9,9 @@
               <span class="subnav-link-name ng-scope" translate="">Overview</span>
             </a>
           </li>
+
+
+
           <!-- <li>
             <a href="">
               <span class="icon-am retinaicon-finance-001"></span> 
@@ -21,6 +24,16 @@
               <span class="subnav-link-name ng-scope">Players</span>
             </a>
           </li>
+
+          @if($user->teams->count() > 0)
+          <li class="{{ HTML::smart_link('account.club.teams.index') }} col-xs-1">
+            <a href="{{URL::action('TeamController@indexCoach')}}">
+              <span class="icon-am retinaicon-business-012"></span> 
+              <span class="subnav-link-name ng-scope">Teams</span>
+            </a>
+          </li>
+          @endif
+
           <!-- <li >
             <a href="">
               <span class="icon-am retinaicon-business-042"></span>

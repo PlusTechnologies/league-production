@@ -70,6 +70,14 @@ Route::filter('auth.club', function()
 	}
 });
 
+Route::filter('role', function()
+{ 
+  if ( !Auth::user()->hasRole("club owner")) {
+     // do something
+     return Response::make('Unauthorized - Administrators only', 401); 
+   }
+}); 
+
 
 /*
 |--------------------------------------------------------------------------

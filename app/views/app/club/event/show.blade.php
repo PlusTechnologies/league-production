@@ -152,6 +152,7 @@
                   <thead>
                     <tr>
                       <th>Player</th>
+                      <th>Name </th>
                       <th>Position</th>
                       <th>Amount</th>
                       <th></th>
@@ -160,8 +161,8 @@
                   <tbody>
                     @foreach ($event->participants as $member)
                     <tr class="clickable" data-id="{{$member->player->id}}">
-                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"> {{$member->player->lastname}}, {{$member->player->firstname}}
-                      </td>
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
                       <td>{{$member->player->position}}</td>
                       <td>${{number_format($member->due, 2)}}</td>
                       <td class="text-center">
@@ -324,6 +325,7 @@ $(function () {
   // tableTools: {
   //   "aButtons": ["print" ]},
   "aoColumns": [
+  { "bSortable": false },
   null,
   null,
   null,

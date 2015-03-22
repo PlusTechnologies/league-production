@@ -7,11 +7,11 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="col-xs-4 signup-col same-height">
-              <h3>Add Player</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In odio tortor, hendrerit nec sapien at, sollicitudin accumsan lorem.</a>
+              <h3>Add Coach</h3>
+              <p>By adding a coach you will be allowing an existing user to have administrative rights over your team.</a>
               </div>
               <div class="col-xs-7 same-height col-xs-offset-1">
-                <h3 class="">Add new player</h3>
+                <h3 class="">Add new Coach</h3>
                 <p><b>Instructions:</b> Please read carefully all the instructions to succefully build your team roster. All fields are required</p>
                 <br>
                 @if($errors->has())
