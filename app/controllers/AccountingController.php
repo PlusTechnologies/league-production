@@ -32,11 +32,28 @@ class AccountingController extends \BaseController {
 		$from = date('Y-m-d', strtotime(Input::get('from')));
 		$to = date('Y-m-d', strtotime(Input::get('to')));
 
-		$payment = Payment::where('club_id', '=', $club->id)
-		->with('player')
-		->whereBetween('created_at', array($from , $to))->get();
+		switch($type) {
+			case 1:
+			$payment = Payment::where('club_id', '=', $club->id)
+			->with('player')
+			->whereBetween('created_at', array($from , $to))->get();
+			return $payment;
+			
+			case 2:
+			$payment = SchedulePayment::where('club_id', '=', $club->id)
+			->with('member')
+			->whereBetween('date', array($from , $to))->get();
+			return $payment;
 
-		return $payment;
+			default:
+
+		}
+
+		// $payment = Payment::where('club_id', '=', $club->id)
+		// ->with('player')
+		// ->whereBetween('created_at', array($from , $to))->get();
+
+		// return $payment;
 
 	}
 
@@ -54,10 +71,10 @@ class AccountingController extends \BaseController {
 		$history = Payment::where('user_id','=',$payment->user->id)->whereNotIn('transaction', array($payment->transaction))->get();
 		//get transaction data from CF
 		$param = array(
-				'transaction_id'	=> $payment->transaction,
-				'club'						=> $club->id,
-				'action_type' => $payment->type
-				);
+			'transaction_id'	=> $payment->transaction,
+			'club'						=> $club->id,
+			'action_type' => $payment->type
+			);
 
 		$transaction = $payment->ask($param);
 		$values = $transaction->transaction;
@@ -67,7 +84,7 @@ class AccountingController extends \BaseController {
 		if(count($transaction->transaction) > 1){
 			foreach ($transaction->transaction as $value) {
 				if($value->transaction_id == $payment->transaction)
-				$values = $value;
+					$values = $value;
 			}
 		}
 
@@ -92,10 +109,10 @@ class AccountingController extends \BaseController {
 
 		//get transaction data from CF
 		$param = array(
-				'transaction_id'	=> $payment->transaction,
-				'club'						=> $club->id,
-				'action_type' => $payment->type
-				);
+			'transaction_id'	=> $payment->transaction,
+			'club'						=> $club->id,
+			'action_type' => $payment->type
+			);
 
 		$transaction = $payment->ask($param);
 		$values = $transaction->transaction;
@@ -103,7 +120,7 @@ class AccountingController extends \BaseController {
 		if(count($transaction->transaction) > 1){
 			foreach ($transaction->transaction as $value) {
 				if($value->transaction_id == $payment->transaction)
-				$values = $value;
+					$values = $value;
 			}
 		}
 
@@ -119,7 +136,7 @@ class AccountingController extends \BaseController {
 		->withUser($user);
 	}
 
-public function doRefund($id)
+	public function doRefund($id)
 	{
 
 		$user = 				Auth::user();
@@ -161,14 +178,14 @@ public function doRefund($id)
 				'transactionid'	=> $payment->transaction,
 				'club' 					=> $club->id,
 				'amount' 				=> number_format($amount,2,".","")
-			);
+				);
 
 			$transaction = $payment->refund($param);
 			
 			if($transaction->response == 3 || $transaction->response == 2 ){
 				return Response::json($transaction);
 				return Redirect::action('AccountingController@transaction', $payment->transaction )->with('error',$transaction->responsetext);
-			
+
 			}else{
 				
 				$payment1 = new Payment;
