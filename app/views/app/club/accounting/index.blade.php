@@ -39,6 +39,7 @@
                   <div class="col-md-9">
                     <select class="form-control" name="type">
                       <option value="1">All activity</option>
+                      <option value="2">Scheduled Payments</option>
                     </select>
                   </div>
                 </div>
@@ -124,9 +125,7 @@ $(function () {
   $(".datepicker").bind("focus", function () {
     $(this).data("kendoDatePicker").open();
   });
-  $('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
-  });
+  
   $('#grid').DataTable({
     "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
     "iDisplayLength": 5,
@@ -158,10 +157,6 @@ $(function () {
     $('#grid').DataTable({
       "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
       "iDisplayLength": 5,
-      dom: 'T<"clear">lfrtip',
-      tableTools: {
-        "aButtons": ["print" ]
-      }
     });
   }
 
@@ -206,25 +201,60 @@ $(function () {
       $('#grid').dataTable().fnDestroy();
       $("#targetData").html("");
       var totalsum =0;
-      $.each(data, function(item, dt) {
-       $("#targetData").append('<tr data-id="'+ dt.transaction +'" class="clickable"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.firstname +'</td><td>'+ dt.type +'</td><td>$'+ kendo.toString(dt.subtotal, "n") +'</td></tr>');
+      console.log(type);
+      
+      switch(type) {
+        case "1":
+        $("#grid thead tr").html("");
+        $("#grid thead tr").html('<th class="col-md-2">Date</th><th class="col-md-2">Transaction</th><th>Player</th><th>Type</th><th>Total</th>');
+        $.each(data, function(item, dt) {
+          $("#targetData").append('<tr data-id="'+ dt.transaction +'" class="clickable"><td>'+ dt.created_at +'</td><td>'+ dt.transaction +'</td><td>'+ dt.player.lastname +", "+ dt.player.firstname+'</td><td>'+ dt.type +'</td><td>$'+ kendo.toString(dt.subtotal, "n") +'</td></tr>');
+          totalsum += parseFloat(dt.subtotal);
+        });
 
-       totalsum += parseFloat(dt.subtotal);
-     });
-      kendo.culture("en-US");
-      var sumtotal =  kendo.toString(totalsum, "n");
-      $("#result_sales").html("");
-      $("#result_sales").html("$" +  sumtotal);
+        kendo.culture("en-US");
+        var sumtotal =  kendo.toString(totalsum, "n");
+        $("#result_sales").html("");
+        $("#result_sales").html("$" +  sumtotal);
 
-      newTable();
+        $('#grid').delegate('tbody > tr', 'click', function (e) {
+          window.location = ("/account/club/accounting/transaction/" + $(this).data("id"));
+        });
 
+        newTable();
+
+        break;
+        case "2":
+        $("#grid thead tr").html("");
+        $("#grid thead tr").html('<th class="col-md-2">Date</th><th class="col-md-4">Description</th><th>Player</th><th>Amount</th><th>Total</th>');
+        $.each(data, function(item, dt) {
+          $("#targetData").append('<tr data-id="'+ dt.id +'" class="clickable"><td>'+ dt.date +'</td><td>'+ dt.description +'</td><td>'+ dt.member.lastname +", "+ dt.member.firstname+'</td><td>$'+ kendo.toString(dt.subtotal, "n") +'</td><td>$'+ kendo.toString(dt.total, "n") +'</td></tr>');
+          totalsum += parseFloat(dt.subtotal);
+        });
+
+        kendo.culture("en-US");
+        var sumtotal =  kendo.toString(totalsum, "n");
+        $("#result_sales").html("");
+        $("#result_sales").html("$" +  sumtotal);
+
+        $('#grid').delegate('tbody > tr', 'click', function (e) {
+          window.location = ("/account/club/plan/schedule/" + $(this).data("id") + "/edit");
+        });
+
+        newTable();
+
+        break;
+        
+        default:
+        break;
+      }
 
     });
 
-    request.fail(function( jqXHR, textStatus ) {
-      alert( "Request failed: " + textStatus );
-    });
-  }
+request.fail(function( jqXHR, textStatus ) {
+  alert( "Request failed: " + textStatus );
+});
+}
 
 
 });

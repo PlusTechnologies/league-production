@@ -4,10 +4,20 @@ class SchedulePayment extends Eloquent {
 	protected $fillable = [];
 	protected $table = 'payment_schedule';
 
+	public static $rules = array(
+		'date'			=> 'required|date',
+	);
+
 	public function setDateAttribute($value)
 	{
 		$this->attributes['date'] =   date('Y-m-d', strtotime($value));
 	}
+
+	public function getDateAttribute($value){
+        if($value){
+            return Carbon::createFromFormat('Y-m-d', $value)->format('m/d/Y');
+        }
+    }
 
 	public function plan()
 	{
