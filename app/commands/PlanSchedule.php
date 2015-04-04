@@ -43,7 +43,7 @@ class PlanSchedule extends ScheduledCommand {
 		return $scheduler
 						->daily()
             ->hours(16)
-            ->minutes(30);
+            ->minutes(40);
 	}
 
 	/**
