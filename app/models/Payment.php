@@ -63,7 +63,9 @@ class Payment extends Eloquent {
         $club = Club::Find($param['club']);
         $follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 
-        if($follow->club_id <> $club->id || $user->profile->customer_vault ){
+        //return dd($club->id);
+
+        if($follow->club_id <> $club->id){
             //remove current customer id
             $user->profile->customer_vault = "";
             $user->profile->save();
