@@ -762,7 +762,7 @@ class ClubPublicController extends \BaseController {
 				);
 			$payment = new Payment;
 			$vault = $payment->ask($param);
-			//return $vault->;
+
 			return View::make('app.public.club.team.checkoutVault')
 			->with('page_title', 'Checkout')
 			->withUser($user)
@@ -776,6 +776,7 @@ class ClubPublicController extends \BaseController {
 			->with('discount', $discount)
 			->with('vault', $vault)
 			->with('player', $player);
+
 
 		}else{
 			$vault = false;
