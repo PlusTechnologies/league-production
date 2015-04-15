@@ -1,4 +1,4 @@
-@extends('layouts.account')
+@extends('layouts.club')
 @section('style')
 {{HTML::style('css/helpers/croppic.css')}}
 @stop
@@ -8,12 +8,19 @@
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="col-md-4 signup-col same-height">
-					<h2>Account</h2>
+					<h2>Update User</h2>
 					<br>
-					<p>Update the general information about your account, including credentials and profile information.</p>
+					<p>
+						<b class="text-danger">Important:</b> This page is intended for administrator and club owners only. <br><br>
+						<b>Instructions:</b> <br>
+						Step 1 - Edit information. <br>
+						Step 2 - Save.
+					</p>
+					<p>Privacy questions?</p>
+					<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h2>Account Settings</h2>
+					<h2>User Account</h2>
 					<p></p>
 					@if($errors->has())
 					<div class="row">
@@ -43,7 +50,7 @@
 						</div>
 					</div>
 					@endif
-					{{Form::open(array('action' => array('UsersController@update', $user->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
+					{{Form::open(array('action' => array('UsersController@update', $editUser->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Account ID and Password</h4>
@@ -51,7 +58,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Email</label>
 								<div class="col-sm-9">
-									{{ Form::text('email', $user->email, array('class' => 'form-control', 'disabled'=>'disabled')) }}
+									{{ Form::text('email', $editUser->email, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="form-group">
@@ -66,6 +73,18 @@
 									{{ Form::password('password_confirmation', array('class' => 'form-control')) }}
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Role</label>
+								<div class="col-sm-9">
+									@foreach($editUser->roles as $role)
+									@if($role->id == 1 )
+										{{ Form::select('role', Role::lists('name','id'), $role->id, array('class' => 'form-control', 'disabled'=>'disabled')) }}
+									@else
+										{{ Form::select('role', array_diff(Role::lists('name','id'), array('name'=>'administrator')) , $role->id, array('class' => 'form-control')) }}
+									@endif
+									@endforeach
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="row">
@@ -74,13 +93,13 @@
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
 									<button type="submit" class="btn btn-primary btn-outline">Save</button>
-									<a href="/" class="btn btn-default">Cancel</a>
+									<a href="{{ URL::action('FollowerController@index') }}" class="btn btn-default btn-outline" >Cancel</a>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{Form::close()}}
-					{{Form::open(array('action' => array('ProfileController@update', $user->id), 'class'=>'form-horizontal', 'method' => 'post'))}}
+					{{Form::open(array('action' => array('ProfileController@update', $editUser->id), 'class'=>'form-horizontal', 'method' => 'post'))}}
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Personal Information</h4>
@@ -88,25 +107,25 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">First Name</label>
 								<div class="col-sm-9">
-									{{ Form::text('firstname', $user->profile->firstname, array('class' => 'form-control')) }}
+									{{ Form::text('firstname', $editUser->profile->firstname, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Last Name</label>
 								<div class="col-sm-9">
-									{{ Form::text('lastname', $user->profile->lastname, array('class' => 'form-control')) }}
+									{{ Form::text('lastname', $editUser->profile->lastname, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Mobile</label>
 								<div class="col-sm-9">
-									{{ Form::text('mobile', $user->profile->mobile, array('class' => 'form-control mobile')) }}
+									{{ Form::text('mobile', $editUser->profile->mobile, array('class' => 'form-control mobile')) }}
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">DOB</label>
 								<div class="col-sm-9">
-									{{ Form::text('dob', $user->profile->dob, array('class' => 'form-control datepicker')) }}
+									{{ Form::text('dob', $editUser->profile->dob, array('class' => 'form-control datepicker', 'placeholder'=>'MM/DD/YYYY')) }}
 								</div>
 							</div>
 						</div>
@@ -118,9 +137,9 @@
 								<label class="col-sm-3 control-label">Avatar</label>
 								<div class="col-sm-9">
 									<div id="upimageclub">
-										<img class="edit-org-logo" src="{{$user->profile->avatar}}">
+										<img class="edit-org-logo" src="{{$editUser->profile->avatar}}">
 									</div>
-									<input type="hidden" id="croppic" name="avatar" value="{{$user->profile->avatar}}">
+									<input type="hidden" id="croppic" name="avatar" value="{{$editUser->profile->avatar}}">
 								</div>
 							</div>
 						</div>
@@ -131,48 +150,13 @@
 							<div class="form-group">
 								<div class="col-sm-12 text-right">
 									<button type="submit" class="btn btn-primary btn-outline">Save</button>
-									<a href="/" class="btn btn-default">Cancel</a>
+									<a href="{{ URL::action('FollowerController@index') }}" class="btn btn-default btn-outline" >Cancel</a>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{Form::close()}}
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Payment Settings</h4>
-							<hr />
 
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th class="col-md-3"></th>
-										<th class="col-md-9"></th>
-									</tr>
-								</thead>
-								<tbody>
-
-									<tr>
-										<td class="text-right"><b>Credit Card:</b></td>
-										<td>{{$vault->customer_vault->customer->cc_number}}</td>
-									</tr>
-									<tr>
-										<td class="text-right"><b>Exp Date:</b></td>
-										<td> {{substr_replace($vault->customer_vault->customer->cc_exp, '/', -2, 0)}}</td>
-									</tr>
-									<tr>
-										<td class="text-right"><b>Billing Address:</b></td>
-										<td>
-											{{$vault->customer_vault->customer->address_1}}<br>
-											{{$vault->customer_vault->customer->city}}, 
-											{{$vault->customer_vault->customer->state}}
-											{{$vault->customer_vault->customer->postal_code}}<br>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<a href="{{URL::action('AccountController@vaultEdit', $vault->customer_vault->customer->customer_vault_id )}}" class="btn btn-primary btn-outline">Edit</a>
-						</div>
-					</div>
 
 				</div>
 			</div>
@@ -183,7 +167,17 @@
 @section('script')
 {{ HTML::script('js/helpers/croppic.min.js')}}
 <script type="text/javascript">
+
 $(document).ready(function() {
+	$('#grid').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/contact/" + $(this).data("id") + /edit/);
+  });
+   $('#grid').DataTable({
+      "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
+      "iDisplayLength": 10,
+      "bSort": false
+  });
+
 	$(".datepicker").kendoDatePicker();
 	$(".datepicker").bind("focus", function () {
 		$(this).data("kendoDatePicker").open();
@@ -192,6 +186,7 @@ $(document).ready(function() {
 	$(".mobile").kendoMaskedTextBox({
 		mask: "(999) 000-0000"
 	});
+
 });
 
 var cropperOptions = {
@@ -201,9 +196,7 @@ var cropperOptions = {
 	uploadUrl:'/api/image/upload',
 	cropUrl:'/api/image/crop',
 	outputUrlId:'croppic',
-	onAfterImgUpload:   function(){ 
-		$(".edit-org-logo").remove();
-	},
+	onAfterImgUpload:   function(){ console.log(cropperHeader) },
 	onAfterImgCrop:     function(){ 
 		console.log(cropperHeader['croppedImg']);
 		var cropurl = $("#croppic").val();

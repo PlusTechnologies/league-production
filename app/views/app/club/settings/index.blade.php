@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					@endif
-					{{Form::open(array('action' => array('UsersController@update'), 'class'=>'form-horizontal', 'method' => 'post')) }}
+					{{Form::open(array('action' => array('UsersController@update', $user->id), 'class'=>'form-horizontal', 'method' => 'post')) }}
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Account ID and Password</h4>
@@ -80,7 +80,7 @@
 						</div>
 					</div>
 					{{Form::close()}}
-					{{Form::open(array('action' => array('ProfileController@update'), 'class'=>'form-horizontal', 'method' => 'post'))}}
+					{{Form::open(array('action' => array('ProfileController@update', $user->id), 'class'=>'form-horizontal', 'method' => 'post'))}}
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Personal Information</h4>

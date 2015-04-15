@@ -180,6 +180,33 @@ class ClubController extends \BaseController {
 		//
 	}
 
+	public function userShow($id){
+		$user =Auth::user();
+		$club = $user->Clubs()->FirstOrFail(); 
+		$editUser = User::find($id);
+		//$userEdit->with(array('roles','profile'))->first(); 
+		$title = 'League Together - User Profile';
+		return View::make('app.club.user.show')
+			->with('page_title', $title)
+			->with('club', $club)
+			->with('editUser', $editUser)
+			->withUser($user);
+	}
+
+	public function userEdit($id)
+	{
+		$user =Auth::user();
+		$club = $user->Clubs()->FirstOrFail(); 
+		$editUser = User::find($id);
+		$title = 'League Together - User Profile';
+		return View::make('app.club.user.edit')
+			->with('page_title', $title)
+			->with('club', $club)
+			->with('editUser', $editUser)
+			->withUser($user);
+	}
+
+
 
 
 }

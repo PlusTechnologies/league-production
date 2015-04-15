@@ -19,16 +19,23 @@ class UsersController extends Controller
         return View::make(Config::get('confide::signup_form'));
     }
 
-    public function update()
+    public function update($id)
     {
-        $user= Auth::user();
+        $user= User::find($id);
         $validator= Validator::make(Input::all(), User::$rules);
 
         if($validator->passes()){
-            $user->password            = Input::get('password');
-            $user->password_confirmation  = Input::get('password_confirmation');
-            
+            $user->email                    = Input::get('email');
+            $user->username                 = Input::get('email');
+            $user->password                 = Input::get('password');
+            $user->password_confirmation    = Input::get('password_confirmation');
             $status = $user->save();
+
+            //update role
+            if(!empty(Input::get('role'))) {
+                $user->roles()->detach();
+                $user->attachRole( Input::get('role'));
+            }
 
             if ( $status )
             {
@@ -42,9 +49,6 @@ class UsersController extends Controller
         return Redirect::back()
         ->withErrors($validator)
         ->withInput();
-
-
-        
     }
 
     /**
