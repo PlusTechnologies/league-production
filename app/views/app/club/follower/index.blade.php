@@ -69,9 +69,9 @@
 @section("script")
 <script type="text/javascript">
 $(function () {
-  // $('#grid').delegate('tbody > tr', 'click', function (e) {
-  //   window.location = ("/account/club/event/" + $(this).data("id"));
-  // });
+  $('#grid').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/club/user/" + $(this).data("id"));
+  });
   $('#grid').DataTable({
     "aLengthMenu": [[5, 25, 75, -1], [5, 25, 75, "All"]],
     "iDisplayLength": 5,

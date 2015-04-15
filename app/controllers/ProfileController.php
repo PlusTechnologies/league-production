@@ -66,9 +66,9 @@ class ProfileController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update()
+	public function update($id)
 	{
-		$user= Auth::user();
+		$user= User::find($id);
 		$validator= Validator::make(Input::all(), Profile::$rules);
 
 		if($validator->passes()){

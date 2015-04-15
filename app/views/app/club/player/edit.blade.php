@@ -20,7 +20,7 @@
 					<p>Click here for the <a href="">Privacy Policy</a></p>
 				</div>
 				<div class="col-md-7 same-height col-md-offset-1">
-					<h3>Update Player</h3>
+					<h2>Update Player</h2>
 					<p></p>
 					{{Form::open(array('action' => array('PlayerController@update', $player->id), 'class'=>'form-horizontal', 'method' => 'Put')) }}
 					@if($errors->has())

@@ -12,6 +12,7 @@ protected $fillable = array('username','email','password','password_confirmation
 protected $hidden = array('password');
 
 public static $rules = array(
+		'email'         => 'required',
 		'password'         => 'required',
 		'password_confirmation' => 'required|same:password'
 	);

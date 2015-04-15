@@ -42,8 +42,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
 		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
 
-		Route::get('user/{id}', 						array('as' =>'user.show', 				'uses' => 'ClubController@playerShow'));
-		Route::get('user/{id}/edit', 				array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
+		Route::get('user/{id}', 						array('as' =>'user.show', 				'uses' => 'ClubController@userShow'));
+		Route::get('user/{id}/edit', 				array('as' =>'user.edit', 				'uses' => 'ClubController@userEdit'));
 
 		Route::get('event/{id}/participant/delete', array('as' 	=>'event.participant', 'uses' => 'ParticipantController@delete'));
 		Route::post('event/{id}/participant/delete', array('as'	=>'event.participant', 'uses' => 'ParticipantController@destroy'));
@@ -88,8 +88,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::get ('settings', 				array('as' =>'account.settings',	'uses' => 'AccountController@settings'));
 	Route::get ('settings/vault/{id}/edit',				array('as' =>'account.settings.vault.edit',		'uses' => 'AccountController@vaultEdit'));
 	Route::post ('settings/vault/{id}/update',		array('as' =>'account.settings.vault.update',	'uses' => 'AccountController@vaultUpdate'));
-	Route::post ('settings/user', 								array('uses' => 'UsersController@update'));
-	Route::post('settings/profile', 							array('uses' => 'ProfileController@update'));
+	Route::post ('settings/user/{id}', 								array('uses' => 'UsersController@update'));
+	Route::post('settings/profile/{id}', 							array('uses' => 'ProfileController@update'));
 	Route::get ('player/delete/{id}', 						array('as' =>'account.player.delete', 		'uses' => 'PlayerController@delete'));
 	Route::get ('contact/delete/{id}', 						array('as' =>'account.contact.delete', 		'uses' => 'ContactController@delete'));
 	Route::get ('team', 													array('as' =>'account.team.index', 				'uses' => 'TeamController@indexCoach'));
