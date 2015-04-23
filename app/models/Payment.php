@@ -56,23 +56,6 @@ class Payment extends Eloquent {
 
 
     public function ask($param){
-        /**********************/
-        //stub temporary fix for parent that like to sign up for an event team in a different club with a saved customer id
-        //check if user is follower of the club hosting the team.
-        $user = Auth::user();
-        $club = Club::Find($param['club']);
-        $follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
-
-        //return dd($club->id);
-
-        if($follow->club_id <> $club->id){
-            //remove current customer id
-            $user->profile->customer_vault = "";
-            $user->profile->save();
-            return dd(header('Location: ' . $_SERVER['HTTP_REFERER']));
-        };
-        /*******************************/
-
         $cart = CardFlex::query($param);
         //return $cart;
         $xml = simplexml_load_string($cart);
@@ -85,12 +68,21 @@ class Payment extends Eloquent {
         $club = Club::Find($id);
         $user = Auth::user();
         $player = Player::find($playerid);
+        /*
         $query = array(
             'report_type'       => 'customer_vault',
             'customer_vault_id' => $user->profile->customer_vault,
             'club'              => $club->id
             );
+        $payment = new Payment;*/
+
+        $query = array(
+            'transaction_id'    => $param->transactionid,
+            'club'              => $club->id,
+            'action_type'       => $param->type
+            );
         $payment = new Payment;
+
         $vault =  json_decode(json_encode($payment->ask($query)),false);
         //convert object to array
         $dt = json_decode(json_encode($param),false);
