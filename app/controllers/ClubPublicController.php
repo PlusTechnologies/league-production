@@ -20,13 +20,13 @@ class ClubPublicController extends \BaseController {
 
 		switch($club->sport) {
 			case 'lacrosse':
-				return View::make('app.public.account.lacrosse.create')
-				->with('page_title', $title)
-				->with('club', $club);
+			return View::make('app.public.account.lacrosse.create')
+			->with('page_title', $title)
+			->with('club', $club);
 			default:
-				return View::make('app.public.account.create')
-				->with('page_title', $title)
-				->with('club', $club);
+			return View::make('app.public.account.create')
+			->with('page_title', $title)
+			->with('club', $club);
 		}
 
 
@@ -256,6 +256,9 @@ class ClubPublicController extends \BaseController {
 		$event = Evento::find($id);
 		$cart = Cart::contents(true);
 		$uuid = Uuid::generate();
+
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 		
 		foreach (Cart::contents() as $item) {
 			$player = Player::Find($item->player_id);
@@ -307,6 +310,29 @@ class ClubPublicController extends \BaseController {
 			return "Congratulation! your player has been added, please close this window.";
 			return Redirect::action('AccountController@index');
 		}
+
+		/**********************/
+        //stub temporary fix for parent that like to sign up for an event team in a different club with a saved customer id
+        //check if user is follower of the club hosting the team.
+		if($follow->club_id <> $club->id){
+
+			$vault = false;
+			return View::make('app.public.club.checkoutWithoutVault')
+			->with('page_title', 'Checkout')
+			->withUser($user)
+			->with('club', $club)
+			->with('event', $event)
+			->with('products',Cart::contents())
+			->with('subtotal', $subtotal)
+			->with('service_fee',$fee)
+			->with('tax', $tax)
+			->with('cart_total',$total)
+			->with('discount', $discount)
+			->with('vault', $vault)
+			->with('player', $player);
+
+		};
+		/*******************************/
 
 		if($user->profile->customer_vault){
 			$param = array(
@@ -497,12 +523,13 @@ class ClubPublicController extends \BaseController {
 		$total = $fee + Cart::total();
 
 		$param = array(
-			'report_type'				=> 'customer_vault',
-			'customer_vault_id'	=> $user->profile->customer_vault,
-			'club' 							=> $club->id
+			'transaction_id'	=> $result->transactionid,
+			'club'						=> $club->id,
+			'action_type' => $result->type
 			);
 		$payment = new Payment;
-		$vault = $payment->ask($param);
+		$transaction = $payment->ask($param);
+
 		$items = Cart::contents();
 		// Clean the cart
 		Cart::destroy();
@@ -511,7 +538,7 @@ class ClubPublicController extends \BaseController {
 		->withUser($user)
 		->with('products', $items)
 		->with('result', $result)
-		->with('vault', $vault);
+		->with('transaction', $transaction->transaction);
 	}
 	public function PaymentRemoveCartItem($club, $id){
 		$club = Club::Find($club);
@@ -703,6 +730,9 @@ class ClubPublicController extends \BaseController {
 		$team = Team::find($id);
 		$cart = Cart::contents(true);
 		$uuid 	= Uuid::generate();
+
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 		
 		foreach (Cart::contents() as $item) {
 			$player = Player::Find($item->player_id);
@@ -754,6 +784,30 @@ class ClubPublicController extends \BaseController {
 			//return "You've been added to the team for free, please close this window to complete transaction";
 			//return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
 		}
+
+		/**********************/
+        //stub temporary fix for parent that like to sign up for an event team in a different club with a saved customer id
+        //check if user is follower of the club hosting the team.
+		if($follow->club_id <> $club->id){
+			
+			$vault = false;
+			return View::make('app.public.club.team.checkoutWithoutVault')
+			->with('page_title', 'Checkout')
+			->withUser($user)
+			->with('club', $club)
+			->with('team', $team)
+			->with('products',Cart::contents())
+			->with('subtotal', $subtotal)
+			->with('service_fee',$fee)
+			->with('tax', $tax)
+			->with('cart_total',$total)
+			->with('discount', $discount)
+			->with('vault', $vault)
+			->with('player', $player);
+
+		};
+		/*******************************/
+
 		if($user->profile->customer_vault){
 			$param = array(
 				'report_type'	=> 'customer_vault',
@@ -859,17 +913,43 @@ class ClubPublicController extends \BaseController {
 		$uuid 	= Uuid::generate();
 		$uuidMember = Uuid::generate();
 
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+
 		$title 	= 'League Together - '.$team->club->name.' Teams';
 
-		$param = array(
+		//check if follower equal club
+
+		if($follow->club_id <> $club->id){
+
+			$param = array(
+				'ccnumber'		=> str_replace('_', '', Input::get('card')),
+				'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
+				'cvv'      		=> Input::get('cvv'),
+				'address1'    => Input::get('address'),
+				'city'      	=> Input::get('city'),
+				'state'      	=> Input::get('state'),
+				'zip'					=> Input::get('zip'),
+				'discount'					=> Input::get('discount'),
+				'club' 				=> $club->id
+		);
+
+		}else{
+
+			$param = array(
 			'customer_vault_id'	=> $user->profile->customer_vault,
 			'discount'					=> Input::get('discount'),
 			'club'							=> $club->id,
 			);
 
+		}
+
+		
+
+		
+
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
-
 
 		
 		if($transaction->response == 3 || $transaction->response == 2 ){
@@ -987,14 +1067,26 @@ class ClubPublicController extends \BaseController {
 		if(!$result){
 			return Redirect::action('AccountController@index');
 		}
+		/*
 		$param = array(
 			'report_type'				=> 'customer_vault',
 			'customer_vault_id'	=> $user->profile->customer_vault,
 			'club' 							=> $club->id
 			);
 		$payment = new Payment;
-		$vault = $payment->ask($param);
+		$vault = $payment->ask($param);*/
+
+		//get transaction data from CF
+		$param = array(
+			'transaction_id'	=> $result->transactionid,
+			'club'						=> $club->id,
+			'action_type' => $result->type
+			);
+		$payment = new Payment;
+		$transaction = json_decode(json_encode($payment->ask($param)),false);
+
 		$items = Cart::contents();
+
 		// Clean the cart
 		Cart::destroy();
 		return View::make('app.public.club.team.success')
@@ -1002,7 +1094,7 @@ class ClubPublicController extends \BaseController {
 		->withUser($user)
 		->with('products', $items)
 		->with('result', $result)
-		->with('vault', $vault);
+		->with('transaction', $transaction->transaction);
 	}
 	public function PaymentRemoveCartItemTeam($club, $id){
 		$club = Club::find($club);
