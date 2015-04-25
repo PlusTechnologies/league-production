@@ -22,6 +22,10 @@ class CreateContactsTable extends Migration {
 			$table->string('second_email');
 			$table->string('relation');
 			$table->string('avatar')->nullable();
+			$table->string('address');
+			$table->string('city');
+			$table->string('state');
+			$table->string('zip');
 			$table->integer('user_id')->unsigned()->index();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->timestamps();

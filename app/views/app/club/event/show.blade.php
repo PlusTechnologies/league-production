@@ -154,6 +154,7 @@
                       <th>Player</th>
                       <th>Name </th>
                       <th>Position</th>
+                      <th>Uniform</th>
                       <th>Amount</th>
                       <th></th>
                     </tr>
@@ -164,6 +165,7 @@
                       <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
                       <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
                       <td>{{$member->player->position}}</td>
+                      <td>{{$member->player->uniform}}</td>
                       <td>${{number_format($member->due, 2)}}</td>
                       <td class="text-center">
                         <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">

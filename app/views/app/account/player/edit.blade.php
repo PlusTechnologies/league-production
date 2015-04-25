@@ -150,12 +150,47 @@
 							</div>
 						</div>
 					</div>
+					
+
+					<div class="row">
+						<div class="col-md-12">	
+							<h4>Address</h4>
+							<p>All fields required</p>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" >Street Address</label>
+								<div class="col-sm-9">
+									{{Form::text('address', $player->address, array('id'=>'address','class'=>'form-control','placeholder'=>'eg. 80 Dolphin St','tabindex'=>'2')) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">City</label>
+								<div class="col-sm-9">
+									{{Form::text('city',$player->city,array('id'=>'city','class'=>'form-control','placeholder'=>'eg. New York','tabindex'=>'2')) }}
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">State</label>
+								<div class="col-sm-9">
+									{{ Form::select('state', State::all()->lists('name','short'), $player->state, array('class'=>"form-control")) }} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Zip</label>
+								<div class="col-sm-9">
+									{{Form::text('zip', $player->zip, array('id'=>'zip','class'=>'form-control','placeholder'=>'eg. 83401','tabindex'=>'5')) }}
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<h4>Player Preferences</h4>
 							<p>All fields required</p>
 						</div>
 					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<hr />

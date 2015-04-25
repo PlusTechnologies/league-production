@@ -18,6 +18,10 @@ class CreatePlayersTable extends Migration {
       $table->string('lastname');
       $table->string('avatar');
 			$table->date('dob');
+			$table->string('address');
+			$table->string('city');
+			$table->string('state');
+			$table->string('zip');
 			$table->string('position');
 			$table->string('gender');
 			$table->string('year');

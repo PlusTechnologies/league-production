@@ -159,6 +159,7 @@
                       <th>Player</th>
                       <th>Name </th>
                       <th>Position</th>
+                      <th>Uniform</th>
                       <th>Method</th>
                       <th>Amount</th>
                       <th class="col-sm-2">Status</th>
@@ -171,6 +172,7 @@
                       <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
                       <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
                       <td>{{$member->player->position}}</td>
+                      <td>{{$member->player->uniform}}</td>
                       <td>{{$member->method}}</td>
                       <td>${{number_format($member->due, 2)}}</td>
                       @if($member->status == 1)

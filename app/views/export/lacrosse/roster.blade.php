@@ -17,6 +17,11 @@
       <th>Email</th>
       <th>Mobile</th>
 
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip</th>
+
       <th>Contact 1 First Name</th>
       <th>Contact 1 Last Name</th>
       <th>Contact 1 Relationship</th>
@@ -67,12 +72,18 @@
       <td>{{$member->player->relation}}</td>
       <td>{{$member->player->user->email}}</td>
       <td>{{$member->player->user->profile->mobile}}</td>
+      <td>{{$member->player->address}}</td>
+      <td>{{$member->player->city}}</td>
+      <td>{{$member->player->state}}</td>
+      <td>{{$member->player->zip}}</td>
 
       <td>{{$member->player->user->profile->firstname}}</td>
       <td>{{$member->player->user->profile->lastname}}</td>
       <td>{{$member->player->relation}}</td>
       <td>{{$member->player->user->email}}</td>
       <td>{{$member->player->user->profile->mobile}}</td>
+
+
 
 
       @foreach($member->player->contacts as $contact)
