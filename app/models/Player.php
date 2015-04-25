@@ -13,6 +13,10 @@ class Player extends \Eloquent {
     'year'      =>'required',
     'laxid'     =>'required',
     'laxid_exp' =>'required',
+    'address'   =>'required',
+    'city'      =>'required',
+    'state'     =>'required',
+    'zip'       =>'required',
   );
 
 	public function user()

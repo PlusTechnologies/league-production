@@ -81,6 +81,11 @@ class PlayerController extends \BaseController {
 			$player->laxid_exp	= Input::get('laxid_exp');
 			$player->uniform 		= Input::get('uniform');
 
+			$player->address	= Input::get('address');
+			$player->city 		= Input::get('city');
+			$player->state 		= Input::get('state');
+			$player->zip 			= Input::get('zip');
+
 			$player->user_id   	= $user->id;
 			$status = $player->save();
 
@@ -160,6 +165,10 @@ class PlayerController extends \BaseController {
 			$player->laxid_exp	= Input::get('laxid_exp');
 			$player->uniform 		= Input::get('uniform');
 			
+			$player->address	= Input::get('address');
+			$player->city 		= Input::get('city');
+			$player->state 		= Input::get('state');
+			$player->zip 			= Input::get('zip');
 
 			$status = $player->save();
 
@@ -171,7 +180,7 @@ class PlayerController extends \BaseController {
 		}
 
 		$error = $validator->errors()->all(':message');
-		return Redirect::action('PlayerController@edit', $player->id)
+		return Redirect::back()
 		->withErrors($validator)
 		->withInput();
 	}

@@ -24,6 +24,10 @@ class CreateProfileTable extends Migration {
 			$table->string('second_email');
 			$table->string('avatar');
 			$table->date('dob');
+			$table->string('address');
+			$table->string('city');
+			$table->string('state');
+			$table->string('zip');
 			$table->timestamps();
 		});
 	}
