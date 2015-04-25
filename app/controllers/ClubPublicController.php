@@ -435,12 +435,39 @@ class ClubPublicController extends \BaseController {
 		$user =Auth::user();
 		$club = Club::find($club);
 		$event = Evento::find($id);
-		
-		$param = array(
+
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+
+
+		//check if follower equal club
+
+		if($follow->club_id <> $club->id){
+
+			$param = array(
+				'ccnumber'		=> str_replace('_', '', Input::get('card')),
+				'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
+				'cvv'      		=> Input::get('cvv'),
+				'address1'    => Input::get('address'),
+				'city'      	=> Input::get('city'),
+				'state'      	=> Input::get('state'),
+				'zip'					=> Input::get('zip'),
+				'discount'		=> Input::get('discount'),
+				'club' 				=> $club->id,
+				'firstname' 	=> $user->profile->firstname,
+				'lastname' 		=> $user->profile->lastname,
+				'phone' 			=> $user->profile->mobile
+		);
+
+		}else{
+
+			$param = array(
 			'customer_vault_id'	=> $user->profile->customer_vault,
 			'discount'					=> Input::get('discount'),
 			'club'							=> $club->id,
 			);
+
+		}
 
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
@@ -528,7 +555,7 @@ class ClubPublicController extends \BaseController {
 			'action_type' => $result->type
 			);
 		$payment = new Payment;
-		$transaction = $payment->ask($param);
+		$transaction = json_decode(json_encode($payment->ask($param)),false);
 
 		$items = Cart::contents();
 		// Clean the cart
@@ -930,8 +957,11 @@ class ClubPublicController extends \BaseController {
 				'city'      	=> Input::get('city'),
 				'state'      	=> Input::get('state'),
 				'zip'					=> Input::get('zip'),
-				'discount'					=> Input::get('discount'),
-				'club' 				=> $club->id
+				'discount'		=> Input::get('discount'),
+				'club' 				=> $club->id,
+				'firstname' 	=> $user->profile->firstname,
+				'lastname' 		=> $user->profile->lastname,
+				'phone' 			=> $user->profile->mobile
 		);
 
 		}else{

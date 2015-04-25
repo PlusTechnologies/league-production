@@ -62,16 +62,16 @@
 
               <div class="card-details">
                 <p>
-                  Card: {{$vault->customer_vault->customer->cc_number}}<br>
-                  Exp: {{substr_replace($vault->customer_vault->customer->cc_exp, '/', -2, 0)}}<br>
+                  Card: {{$transaction->cc_number}}<br>
+                  Exp: {{substr_replace($transaction->cc_exp, '/', -2, 0)}}<br>
                 </p>
               </div>
               <p>{{$user->profile->firstname}} {{$user->profile->lastname}} <br>
                 {{$user->email}}<br>
-                {{$vault->customer_vault->customer->address_1}}<br>
-                {{$vault->customer_vault->customer->city}}, 
-                {{$vault->customer_vault->customer->state}}
-                {{$vault->customer_vault->customer->postal_code}}<br>
+                {{$transaction->address_1}}<br>
+                {{$transaction->city}}, 
+                {{$transaction->state}}
+                {{$transaction->postal_code}}<br>
                 {{$user->mobile}}
               </p>
             </div>
