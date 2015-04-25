@@ -94,7 +94,7 @@
 					</div>
 					@endif
 
-							{{ Form::open(array('action' => array('ClubPublicController@PaymentValidate', $club->id, $event->id), 'class'=>'form-horizontal','method' => 'post')) }}
+							{{ Form::open(array('action' => array('ClubPublicController@PaymentStore', $club->id, $event->id), 'class'=>'form-horizontal p','method' => 'post')) }}
 							<p>Credit Card</p>
 							<div class="row">
 								<div class="col-xs-12">
@@ -237,6 +237,13 @@ $(document).ready(function() {
 	$(".card-mask").kendoMaskedTextBox({
 		mask: "0000 0000 0000 0000"
 	});
+
+	$( "form.p" ).submit(function( event ) {
+			$('.process').prop('disabled', true);
+			$('.process').text('');
+			$('.process').html('<i class="fa fa-refresh fa-spin"></i>');
+		});
+
 });
 
 

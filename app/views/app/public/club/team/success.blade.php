@@ -66,6 +66,14 @@
                   Exp: {{substr_replace($transaction->cc_exp, '/', -2, 0)}}<br>
                 </p>
               </div>
+              <p>{{$user->profile->firstname}} {{$user->profile->lastname}} <br>
+                {{$user->email}}<br>
+                {{$transaction->address_1}}<br>
+                {{$transaction->city}}, 
+                {{$transaction->state}}
+                {{$transaction->postal_code}}<br>
+                {{$user->mobile}}
+              </p>
               
             </div>
           </div>
