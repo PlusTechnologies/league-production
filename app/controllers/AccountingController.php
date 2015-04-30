@@ -161,15 +161,11 @@ class AccountingController extends \BaseController {
 		$amount = Input::get('amount');
 
 		if ($amount > $payment->getOriginal('subtotal') ) {
-
 			return Redirect::action('AccountingController@refund', $payment->transaction )->with('error',"You cannot refund more than ". $payment->getOriginal('subtotal') );
-
 		}
 
 		if ($amount <= 0 || $amount =='' ) {
-
 			return Redirect::action('AccountingController@refund', $payment->transaction )->with('error',"Amount must be more than 0" );
-
 		}
 
 		if ($amount > 0 ) {
@@ -216,6 +212,17 @@ class AccountingController extends \BaseController {
 
 				$payment1->save();
 				$sale->save();
+
+				$data = array('club'=>$club, 'transaction'=>$transaction, 'user'=>$user, 'contact'=>$user_parent);
+				//send notification for refund confirmation
+				$mail = Mail::send('emails.receipt.refund', $data, function($message) use ($user, $club, $user_parent){
+					$message->to($user_parent->email)
+					->subject("Refund Confirmation | ".$club->name);
+					foreach ($club->users()->get() as $value) {
+						$message->bcc($value->email, $club->name);
+					}
+				});
+
 				
 
 			}//end of transaction result
