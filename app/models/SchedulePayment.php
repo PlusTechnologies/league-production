@@ -6,6 +6,7 @@ class SchedulePayment extends Eloquent {
 
 	public static $rules = array(
 		'date'			=> 'required|date',
+		'subtotal'	=> 'required|numeric|min:1',
 	);
 
 	public function setDateAttribute($value)

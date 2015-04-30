@@ -97,9 +97,21 @@ class PlanScheduleController extends BaseController {
 		//check if recurrences
 
 		if($validator->passes()){
-			
+
+			//calculate amounts
+			$subtotal = Input::get('subtotal');
+			$fee 		= ($subtotal / getenv("SV_FEE")) - $subtotal ;
+			$total 	= $fee + $subtotal;
+
 			$schedule->date 		= Input::get('date');
+
+			$schedule->subtotal = number_format($subtotal, 2);
+			$schedule->fee 			= number_format($fee, 2);
+			$schedule->total	 	= number_format($total, 2);
+
+
 			$status 						= $schedule->save();
+			$schedule->touch();
 			
 			if ( $status )
 			{
@@ -118,16 +130,41 @@ class PlanScheduleController extends BaseController {
 		->withInput();
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /planschedule/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
 	public function destroy($id)
 	{
-		//
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$schedule = SchedulePayment::where('id','=',$id)->where('club_id','=',$club->id)->first();
+		if(!$schedule){
+			return "Unauthorized";
+		}
+
+		$status= $schedule->delete();
+		if($status){
+			return Redirect::action('AccountingController@index');
+		}
+		return Redirect::action('PlanScheduleController@delete', $id)->withErrors($status);
 	}
+
+	public function delete($id)
+	{
+		$user = Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$schedule = SchedulePayment::where('id','=',$id)->where('club_id','=',$club->id)->first();
+		if(!$schedule){
+			return "Unauthorized";
+		}
+		$plan = Plan::find($schedule->plan_id);
+
+		$title = 'League Together - '.$club->name.' Schedule';
+		return View::make('app.club.plan.schedule.delete')
+		->with('page_title', $title)
+		->with('club', $club)
+		->with('plan', $plan)
+		->with('schedule',$schedule)
+		->withUser($user);
+
+	}
+
 
 }
