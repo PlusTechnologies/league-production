@@ -12,22 +12,16 @@
         </div>
         <div class="col-sm-7">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <div class="tile blue">
                 <h3 class="title">${{$sales->ytdSales($club->id)}}</h3>
                 <p>YTD Sales</p>
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <div class="tile red">
                 <h3 class="title">${{$sales->arSales($club->id)}}</h3>
                 <p>Receivables</p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="tile green">
-                <h3 class="title">{{$club->followers->count()}}</h3>
-                <p>Followers</p>
               </div>
             </div>
           </div>
@@ -54,7 +48,7 @@
                 <td>{{$payment->transaction}}</td>
                 <td>{{$payment->player->firstname}} {{$payment->player->lastname}}</td>
                 <td>{{$payment->type}}</td>
-                <td>{{$payment->subtotal}}</td>
+                <td>${{number_format($payment->subtotal, 2)}}</td>
               </tr>
               @endforeach
           </tbody>

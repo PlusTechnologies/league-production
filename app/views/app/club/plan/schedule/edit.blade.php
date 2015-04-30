@@ -6,11 +6,12 @@
       <div class="col-md-10 col-md-offset-1">
         <div class="col-md-4 signup-col same-height">
           <h3>Edit Schedule Payment</h3>
-          <p></p>
+          <p class="text-danger"><b>Important:</b> Removing/updating an schedule payment will not effect the roster status of the player inside your team/event.</p>
+          <p> If you like to remove a player from your team roster, please visit the team/event and click the delete option next to the player.</p>
         </div>
         <div class="col-md-7 same-height col-md-offset-1">
           <h3>Update Schedule</h3>
-          <p></p>
+          <p class="warning"></p>
           {{Form::open(array('action' => array('PlanScheduleController@update', $schedule->id), 'class'=>'form-horizontal', 'method' => 'put')) }}
           @if($errors->has())
           <div class="row">
@@ -66,11 +67,26 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-3 control-label">Amount</label>
+                <label class="col-sm-3 control-label">Subtotal</label>
                 <div class="col-sm-9">
-                  {{ Form::text('amount', $schedule->total, array('class' => 'disabled dollar', 'disabled'=>'disabled')) }}
+                  {{ Form::text('subtotal', $schedule->subtotal, array('class' => 'dollar')) }}
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Service Fee</label>
+                <div class="col-sm-9">
+                  {{ Form::text('fee', $schedule->fee, array('class' => 'dollar disabled', 'disabled'=>'disabled')) }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Total</label>
+                <div class="col-sm-9">
+                  {{ Form::text('total', $schedule->total, array('class' => 'dollar disabled', 'disabled'=>'disabled')) }}
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="col-sm-3 control-label">Description</label>
                 <div class="col-sm-9">
@@ -99,6 +115,7 @@
               <div class="form-group">
                 <div class="col-sm-12 text-right">
                   <button type="submit" class="btn btn-primary btn-outline">Update Payment</button>
+                  <a href="{{URL::action('PlanScheduleController@delete', $schedule->id)}}" class="btn btn-danger btn-outline">Delete</a>
                   <a href="{{URL::action('AccountingController@index')}}" class="btn btn-default">Cancel</a>
                 </div>
               </div>

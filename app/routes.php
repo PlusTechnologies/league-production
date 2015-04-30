@@ -73,7 +73,9 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('accounting',				'AccountingController');
 		Route::resource('follower',					'FollowerController');
 		Route::group(array('prefix' => 'plan'), function() {
+
 			Route::resource('schedule',					'PlanScheduleController');
+			Route::get('schedule/{id}/delete/', 	array('as' =>'schedule.delete', 		'uses' => 'PlanScheduleController@delete'));
 		});
 
 	});
