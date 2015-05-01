@@ -199,13 +199,13 @@
 					</div>
 					{{Form::close()}}
 
-					{{-- <div class="row">
+					<div class="row">
 						<div class="col-xs-12">
 							<hr />
 							<h4>Contacts Information</h4>
 
 							<br>
-							<div class="table-responsive">
+							<div>
 								<table class="table table-striped" id="grid">
 									<thead>
 										<tr>
@@ -216,7 +216,7 @@
 									</thead>
 									<tbody>
 										@foreach($player->contacts as $contact)
-										<tr class="clickable" data-id="{{$contact->id}}">
+										<tr class="clickable" data-id="{{$contact->id}}" data-player="{{$player->id}}" >
 											<td>{{$contact->firstname}} {{$contact->lastname}}</td>
 											<td>{{$contact->relation}}</td>
 											<td>{{$contact->mobile}}</td>
@@ -231,11 +231,10 @@
 						<div class="col-xs-12">
 							<hr />
 							<div class="form-group">
-									<a href="{{URL::action('ContactController@create')}}" class="btn btn-success btn-outline">Add New</a>
+									<a href="{{URL::action('ClubController@contactCreate', $player->id)}}" class="btn btn-success btn-outline">Add New</a>
 							</div>
 						</div>
-					</div> --}}
-
+					</div>
 				</div>
 			</div>
 		</div>
@@ -248,13 +247,13 @@
 
 $(document).ready(function() {
 	$('#grid').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/contact/" + $(this).data("id") + /edit/);
-  });
-   $('#grid').DataTable({
-      "aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
-      "iDisplayLength": 10,
-      "bSort": false
-  });
+		window.location = ("/account/club/player/"+ $(this).data("player")  +"/contact/" + $(this).data("id") + /edit/);
+	});
+	$('#grid').DataTable({
+		"aLengthMenu": [[10, 25, 75, -1], [10, 25, 75, "All"]],
+		"iDisplayLength": 10,
+		"bSort": false
+	});
 
 	$(".datepicker").kendoDatePicker();
 	$(".datepicker").bind("focus", function () {

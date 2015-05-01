@@ -41,6 +41,13 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('event','EventoController');//Event Routes
 		Route::get('player/{id}', 					array('as' =>'player.show', 			'uses' => 'ClubController@playerShow'));
 		Route::get('player/{id}/edit', 			array('as' =>'player.edit', 			'uses' => 'ClubController@playerEdit'));
+		
+		Route::post('player/{id}/contact/{contact}/', 'ClubController@contactUpdate');
+		Route::delete('player/{id}/contact/{contact}/destroy', 	'ClubController@contactDestroy');
+		Route::get('player/{id}/contact/create', 			array('as' =>'player.contact.create', 'uses' => 'ClubController@contactCreate'));
+		Route::get('player/{id}/contact/{contact}/delete', 			array('as' =>'player.contact.delete', 'uses' => 'ClubController@contactDelete'));
+		Route::get('player/{id}/contact/{contact}/edit', array('as' =>'player.contact.edit', 'uses' => 'ClubController@contactEdit'));
+
 
 		Route::get('user/{id}', 						array('as' =>'user.show', 				'uses' => 'ClubController@userShow'));
 		Route::get('user/{id}/edit', 				array('as' =>'user.edit', 				'uses' => 'ClubController@userEdit'));
@@ -73,11 +80,9 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('accounting',				'AccountingController');
 		Route::resource('follower',					'FollowerController');
 		Route::group(array('prefix' => 'plan'), function() {
-
 			Route::resource('schedule',					'PlanScheduleController');
 			Route::get('schedule/{id}/delete/', 	array('as' =>'schedule.delete', 		'uses' => 'PlanScheduleController@delete'));
 		});
-
 	});
 
 	Route::get ('club/settings', 					array('as' =>'account.club.settings', 'uses' => 'ClubController@settings'));

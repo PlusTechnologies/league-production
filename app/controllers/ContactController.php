@@ -73,6 +73,11 @@ class ContactController extends \BaseController {
 			}
 
 			if ( $status ){
+
+				if($user->roles[0]->name =='club owner'){
+					return Redirect::action('ClubController@playerEdit', $player)
+					->with( 'messages', 'Contact created successfully');
+				}
 				return Redirect::action('PlayerController@index')
 				->with( 'messages', 'Player created successfully');
 			}else{
