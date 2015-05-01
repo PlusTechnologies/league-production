@@ -211,7 +211,7 @@
 							<h4>Contacts Information</h4>
 
 							<br>
-							<div class="table-responsive">
+							<div>
 								<table class="table table-striped" id="grid">
 									<thead>
 										<tr>
