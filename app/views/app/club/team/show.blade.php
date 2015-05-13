@@ -12,13 +12,15 @@
                   Options &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i>&nbsp;Invite</a></li>
+                  
                   <li><a href="{{URL::action('TeamController@edit', $team->id)}}" > <i class="fa fa-pencil fa-fw"></i>&nbsp;Edit</a></li>
+                  <li><a href="{{URL::action('TeamController@duplicate', $team->id)}}"> <i class="fa fa-files-o fa-fw"></i>&nbsp;Duplicate</a></li>
                   <li><a href="{{URL::action('TeamController@delete', $team->id)}}"> <i class="fa fa-trash-o fa-fw"></i>&nbsp;Delete</a></li>
                   <li><a href='{{Request::root()."/club/$club->id/team/$team->id"}}' target="_blank"> <i class="fa fa-share-square-o fa-fw"> </i>&nbsp;Share</a></li>
                   <li><a href="{{URL::action('ExportController@team', $team->id)}}" > <i class="fa fa-download"> </i>&nbsp;Export Roster</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
+                  <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i>&nbsp;Invite</a></li>
                   <li><a href="{{URL::action('CoachController@create', $team->id)}}"> <i class="fa fa-users fa-fw"> </i>&nbsp;Coach</a></li>
                 </ul>
               </div> 

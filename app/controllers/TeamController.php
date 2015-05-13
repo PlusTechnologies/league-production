@@ -416,5 +416,36 @@ public function doAnnouncement($id)
 
 }
 
+public function duplicate($id)
+{
+	$user =Auth::user();
+	$club = $user->clubs()->FirstOrFail();	
+	$team = Team::find($id);
+
+	$title = 'League Together - '.$team->name.' Team';
+
+	return View::make('app.club.team.duplicate')
+	->with('page_title', $title)
+	->withTeam($team)
+	->withClub($club)
+	->withUser($user);
+
+}
+public function doDuplicate($id)
+{
+	$team = Team::find($id);
+	$uuid = Uuid::generate();
+
+	$copyTeam = $team->replicate();
+	$copyTeam->id = $uuid;
+	$status =  $copyTeam->save();
+
+	if($status){
+		return Redirect::action('TeamController@index');
+	}
+	return Redirect::action('TeamController@dupliate', $team->id)->withErrors($status);
+
+}
+
 
 }
