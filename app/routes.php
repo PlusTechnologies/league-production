@@ -63,6 +63,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
 		Route::get('team/{id}/coach/{coach}/delete', array('as' =>'team.coach.delete', 'uses' => 'CoachController@delete'));
 		Route::get('team/{id}/delete/', 				array('as' =>'team.delete', 			'uses' => 'TeamController@delete'));
+		Route::get('team/{id}/duplicate', 	array('as' =>'team.duplicate', 	'uses' => 'TeamController@duplicate'));
+		Route::post('team/{id}/duplicate', array('as' =>'team.doDuplicate',	'uses' => 'TeamController@doDuplicate'));
 		Route::post('team/{id}/announcement/',	array('as' =>'team.announcement', 'uses' => 'TeamController@doAnnouncement'));
 		Route::get('plan/{id}/delete/', 		array('as' =>'plan.delete', 			'uses' => 'PlanController@delete'));
 		Route::get('program/{id}/delete/', 	array('as' =>'program.delete', 		'uses' => 'ProgramController@delete'));
