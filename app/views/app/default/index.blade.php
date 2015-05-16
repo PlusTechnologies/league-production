@@ -19,7 +19,7 @@
 </div>
 </div>
 
-<div id="customers">
+{{-- <div id="customers">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 text-center">
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> --}}
 <div class="section-odd">
 	<div class="container">
 		<div class="row ">
@@ -89,7 +89,7 @@
 
 				<div class="feature">
 					<div class="feature_icon">
-						<i class="fa fa-refresh"></i>
+						<i class="fa fa-reply"></i>
 					</div>
 					<div>
 						<h4>Refunds</h4>
@@ -117,16 +117,16 @@
 
 				<div class="feature">
 					<div class="feature_icon">
-						<i class="fa fa-refresh"></i>
+						<i class="fa fa-map-marker"></i>
 					</div>
 					<div>
-						<h4>Event & Team Management</h4>
+						<h4>Event Management</h4>
 					</div>
 				</div>
 
 				<div class="feature">
 					<div class="feature_icon">
-						<i class="fa fa-refresh"></i>
+						<i class="fa fa-calendar"></i>
 					</div>
 					<div>
 						<h4>Calendar</h4>
