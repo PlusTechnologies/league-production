@@ -8,7 +8,7 @@
 				<br />
 				<span class="logo"><img src="/img/league-together-logo.svg" width="90"></span>
 				<h1> 
-					Registration & Payment Solutions
+				Management Solution
 				</h1>
 				<h4>FOR SPORT ORGANIZATIONS</h4>
 				<br>
