@@ -51,7 +51,11 @@
               <tr class="clickable" data-id="{{$event->id}}">
                 <td>{{$event->created_at}}</td>
                 <td>{{$event->type->name}}</td>
+                @if($event->parent)
+                <td> {{$event->parent->name}} : {{$event->name}}</td>
+                @else
                 <td>{{$event->name}}</td>
+                @endif
                 <td>{{$event->date}}</td>
                 <td>{{$event->fee}}</td>
                 <!-- <td>{{$event->status['name']}}</td> -->

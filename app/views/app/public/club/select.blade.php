@@ -17,7 +17,7 @@
 					<br><br><br>
 				</div>
 				<div class="col-md-6 col-md-offset-1 same-height">
-					<h1>Select player participate</h1>
+					<h1>Select Details</h1>
 					<br>
 					{{ Form::open(array('action' => array('ClubPublicController@doSelectPlayer', $club->id, $event->id),'method' => 'post', 'class'=>'form-horizontal p')) }}
 					<div class="row">
@@ -33,6 +33,15 @@
 									@endforeach
 								</div>
 							</div>
+
+							@if($child->count() > 0)
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Sub-Group</label>
+								<div class="col-sm-9">
+									{{ Form::select('event', $child->lists('name','id'),'', array('class' => 'form-control') ) }}
+								</div>
+							</div>
+							@endif
 							
 							
 						</div>
