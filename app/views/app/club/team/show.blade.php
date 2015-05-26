@@ -9,7 +9,7 @@
             <span>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  Options &nbsp; <span class="caret"></span>
+                  Actions &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                   

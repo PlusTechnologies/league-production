@@ -9,7 +9,7 @@
             <span>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-default btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  Options &nbsp; <span class="caret"></span>
+                  Actions &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="{{URL::action('EventoController@edit', $event->id)}}" > <i class="fa fa-pencil fa-fw"></i>&nbsp;Edit</a></li>
@@ -20,6 +20,7 @@
                   <li><a href="{{URL::action('ExportController@event', $event->id)}}" > <i class="fa fa-download"> </i>&nbsp;Export Roster</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
+                  <li><a href="{{URL::action('GroupController@create', $event->id)}}" > <i class="fa fa-group"> </i>&nbsp; Add Group</a></li>
                 </ul>
               </div> 
             </span>

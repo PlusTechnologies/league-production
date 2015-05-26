@@ -27,6 +27,8 @@ class CreateEventTable extends Migration {
 			$table->date('close');
 			$table->integer('max');
 			$table->boolean('status');
+			$table->integer('parent_id')->unsigned()->nullable();
+			$table->foreign('parent_id')->references('id')->on('events')->onDelete('cascade');
 			$table->integer('type_id')->unsigned();
       $table->foreign('type_id')->references('id')->on('event_type')->onDelete('cascade');
 			$table->string('club_id', 36)->index();

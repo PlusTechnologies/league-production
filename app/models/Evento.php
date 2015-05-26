@@ -21,6 +21,10 @@ class Evento extends Eloquent {
         'close'			=>'required|date|before:date|after:open',
         'status'        =>'required|boolean'
         );
+    public static $rules_group =array(
+        'name'          =>'required',
+        'max'           =>'required|integer',
+    );
 
     public function club()
     {
@@ -36,6 +40,15 @@ class Evento extends Eloquent {
 
     public function participants() {
         return $this->hasMany('Participant', 'event_id', 'id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('Evento', 'parent_id', 'id');
+    }
+    public function parent()
+    {
+        return $this->belongsTo('Evento', 'parent_id');
     }
 
 //Accessors & Mutators

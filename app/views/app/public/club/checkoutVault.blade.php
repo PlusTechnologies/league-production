@@ -31,7 +31,11 @@
 								<tbody>
 									@foreach(Cart::contents() as $item)
 									<tr>
-										<td>{{$item->name}}</td>
+										<td>{{$item->name}}
+											@if($event->id <> $item->event_id) 
+											: {{$item->event}}
+											@endif
+										</td>
 										<td class="text-center">{{$item->quantity}}</td>
 										<td class="text-right" >${{number_format($item->price,2) }}</td>
 									</tr>

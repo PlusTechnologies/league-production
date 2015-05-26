@@ -219,6 +219,14 @@ class ClubPublicController extends \BaseController {
 		$event = Evento::find($id);
 		$title = 'League Together - Club | '. $club->name;
 
+
+		if(!$event){
+			return Response::view('shared.404', array(), 404);
+		}
+	
+		$child = $event->children;
+		
+
 		if(!Cart::contents(true)){
 			return Redirect::action('ClubPublicController@eventSingle', array($club->id, $event->id) );
 		}
@@ -227,7 +235,8 @@ class ClubPublicController extends \BaseController {
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('event', $event)
-		->with('players', $list);
+		->with('players', $list)
+		->with('child', $child);
 	}
 
 	public function doSelectPlayer($club, $id)
@@ -237,6 +246,12 @@ class ClubPublicController extends \BaseController {
 		$cart = Cart::item(Input::get('item'));
 		$cart->user_id 		= $user->id;
 		$cart->player_id 	= $player->id; 
+
+		if(Input::get('event')){
+			$child = Evento::find(Input::get('event'));
+			$cart->event 			= $child->name;
+			$cart->event_id 	= $child->id; 
+		}
 
 		$club = Club::find($club);
 		$event = Evento::find($id);
@@ -256,6 +271,7 @@ class ClubPublicController extends \BaseController {
 		$event = Evento::find($id);
 		$cart = Cart::contents(true);
 		$uuid = Uuid::generate();
+
 
 		//Addition for stub feature 
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
@@ -435,6 +451,7 @@ class ClubPublicController extends \BaseController {
 		$user =Auth::user();
 		$club = Club::find($club);
 		$event = Evento::find($id);
+		$cart = Cart::contents(true);
 
 		//Addition for stub feature 
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
@@ -504,7 +521,7 @@ class ClubPublicController extends \BaseController {
 				$participant->due 				= $event->getOriginal('fee');
 				$participant->early_due 	= $event->getOriginal('early_fee');
 				$participant->early_due_deadline 	= $event->early_deadline;
-				$participant->event_id 		= $event->id;
+				$participant->event_id 		= $item->event_id;
 				$participant->player_id 	= $player->id;
 				$participant->accepted_on = Carbon::Now();
 				$participant->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
@@ -520,7 +537,7 @@ class ClubPublicController extends \BaseController {
 				$sale->price 				= $item->price;
 				$sale->fee 					= $salesfee;
 				$sale->payment_id   = $uuid;
-				$sale->event_id 		= $event->id;
+				$sale->event_id 		= $item->event_id;
 				$sale->participant_id = $uuid2;
 				$sale->save();
 
