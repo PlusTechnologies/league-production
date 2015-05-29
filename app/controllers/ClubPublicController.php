@@ -23,6 +23,10 @@ class ClubPublicController extends \BaseController {
 			return View::make('app.public.account.lacrosse.create')
 			->with('page_title', $title)
 			->with('club', $club);
+			case 'coach':
+			return View::make('app.public.account.coach.create')
+			->with('page_title', $title)
+			->with('club', $club);
 			default:
 			return View::make('app.public.account.create')
 			->with('page_title', $title)
@@ -36,7 +40,16 @@ class ClubPublicController extends \BaseController {
 	public function accountStore($id)
 	{
 		$club = Club::find($id);
-		$validator = Validator::make(Input::all(), ClubPublic::$rules, ClubPublic::$messages);
+		switch($club->sport) {
+			case 'lacrosse':
+			$validator = Validator::make(Input::all(), ClubPublic::$rules, ClubPublic::$messages);
+			case 'coach':
+			$validator = Validator::make(Input::all(), ClubPublic::$coach_rules, ClubPublic::$coach_messages);
+			default:
+			//$validator = Validator::make(Input::all(), ClubPublic::$rules, ClubPublic::$messages);
+		}
+
+		
 		$uuid = Uuid::generate();
 
 		if($validator->passes()){
@@ -59,6 +72,10 @@ class ClubPublicController extends \BaseController {
 
 				//implement here method for save different sport players fields
 
+
+			switch($club->sport) {
+				case 'lacrosse':
+
 				$player = new Player;
 				$player->id = $uuid;
 				$player->firstname 	= Input::get('firstname_p');
@@ -77,6 +94,27 @@ class ClubPublicController extends \BaseController {
 				$player->avatar 		= Input::get('avatar');
 				$player->user_id   	= $user->id;
 				$player->save();
+
+				case 'coach':
+				$player = new Player;
+				$player->id = $uuid;
+				$player->firstname 	= Input::get('firstname_p');
+				$player->lastname 	= Input::get('lastname_p');
+				$player->email 			= Input::get('email_p');
+				$player->mobile 		= Input::get('mobile_p');
+				$player->position 	= '';
+				$player->relation 	= Input::get('relation');
+				$player->dob 				= Input::get('dob_p');
+				$player->gender 		= Input::get('gender');
+				$player->year 			= Input::get('year');
+				$player->school 		= Input::get('school');
+				$player->avatar 		= Input::get('avatar');
+				$player->user_id   	= $user->id;
+				$player->save();
+			}
+
+
+				
 
 				$follower = new Follower;
 				$follower->user_id = $user->id;
