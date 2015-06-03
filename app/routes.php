@@ -129,6 +129,7 @@ Route::group(array('prefix' => 'club'), function() {
 	Route::post('/{id}/account/create', 			'ClubPublicController@accountStore');
 	Route::get('/{id}/account/login', 				'ClubPublicController@accountLogin');
 	Route::post('/{id}/account/login', 				'ClubPublicController@doAccountLogin');
+	
 	Route::get('/{id}/event', 								'ClubPublicController@eventIndex');
 	Route::get('/{id}/event/{item}',					'ClubPublicController@eventSingle');
 	Route::get('/{id}/event/{item}/checkout',	'ClubPublicController@eventCheckout');
@@ -152,7 +153,6 @@ Route::group(array('prefix' => 'club'), function() {
 	Route::post('/{id}/team/{item}/player',	array('before' => 'auth.club', 	'uses' => 'ClubPublicController@doSelectTeamPlayer'));
 	Route::get('/{id}/team/{item}/payment', array('before' => 'auth.club',	'uses' => 'ClubPublicController@paymentSelectTeam'));
 	Route::post('/{id}/team/{item}/payment',array('before' => 'auth.club',	'uses' => 'ClubPublicController@doPaymentSelectTeam'));
-
 	Route::get('/{id}/team/{item}/checkout',         	array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentCreateTeam'));
 	Route::get('/{id}/team/{item}/checkout/success',  array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentSuccessTeam'));
 	Route::post('/{id}/team/{item}/checkout/store',   array('before' => 'auth.club',	'uses'=>'ClubPublicController@PaymentStoreTeam'));
