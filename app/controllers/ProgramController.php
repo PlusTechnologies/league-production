@@ -139,12 +139,12 @@ class ProgramController extends BaseController {
 
 			if ($status)
 			{
-				return Redirect::action('ProgramController@edit')
+				return Redirect::action('ProgramController@edit', $program->id )
 				->with( 'notice', 'Program updated successfully');
 			}
 		}
 		$error = $validator->errors()->all(':message');
-		return Redirect::action('ProgramController@edit', $id)
+		return Redirect::action('ProgramController@edit', $program->id)
 		->withErrors($validator)
 		->withInput();
 	}
