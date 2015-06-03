@@ -23,14 +23,17 @@ class ClubPublicController extends \BaseController {
 			return View::make('app.public.account.lacrosse.create')
 			->with('page_title', $title)
 			->with('club', $club);
+			break;
 			case 'coach':
 			return View::make('app.public.account.coach.create')
 			->with('page_title', $title)
 			->with('club', $club);
+			break;
 			default:
 			return View::make('app.public.account.create')
 			->with('page_title', $title)
 			->with('club', $club);
+			break;
 		}
 
 
@@ -40,15 +43,15 @@ class ClubPublicController extends \BaseController {
 	public function accountStore($id)
 	{
 		$club = Club::find($id);
+
 		switch($club->sport) {
 			case 'lacrosse':
 			$validator = Validator::make(Input::all(), ClubPublic::$rules, ClubPublic::$messages);
+			break;
 			case 'coach':
 			$validator = Validator::make(Input::all(), ClubPublic::$coach_rules, ClubPublic::$coach_messages);
-			default:
-			//$validator = Validator::make(Input::all(), ClubPublic::$rules, ClubPublic::$messages);
+			break;
 		}
-
 		
 		$uuid = Uuid::generate();
 
@@ -70,57 +73,53 @@ class ClubPublicController extends \BaseController {
 				$profile->avatar    = '/img/coach-avatar.jpg';
 				$profile->save();
 
-				//implement here method for save different sport players fields
-
-
-			switch($club->sport) {
-				case 'lacrosse':
-
-				$player = new Player;
-				$player->id = $uuid;
-				$player->firstname 	= Input::get('firstname_p');
-				$player->lastname 	= Input::get('lastname_p');
-				$player->email 			= Input::get('email_p');
-				$player->mobile 		= Input::get('mobile_p');
-				$player->position 	= Input::get('position');
-				$player->relation 	= Input::get('relation');
-				$player->dob 				= Input::get('dob_p');
-				$player->gender 		= Input::get('gender');
-				$player->year 			= Input::get('year');
-				$player->school 		= Input::get('school');
-				$player->laxid			= Input::get('laxid');
-				$player->laxid_exp	= Input::get('laxid_exp');
-				$player->uniform 		= Input::get('uniform');
-				$player->avatar 		= Input::get('avatar');
-				$player->user_id   	= $user->id;
-				$player->save();
-
-				case 'coach':
-				$player = new Player;
-				$player->id = $uuid;
-				$player->firstname 	= Input::get('firstname_p');
-				$player->lastname 	= Input::get('lastname_p');
-				$player->email 			= Input::get('email_p');
-				$player->mobile 		= Input::get('mobile_p');
-				$player->position 	= '';
-				$player->relation 	= Input::get('relation');
-				$player->dob 				= Input::get('dob_p');
-				$player->gender 		= Input::get('gender');
-				$player->year 			= Input::get('year');
-				$player->school 		= Input::get('school');
-				$player->avatar 		= Input::get('avatar');
-				$player->user_id   	= $user->id;
-				$player->save();
-			}
-
-
-				
-
 				$follower = new Follower;
 				$follower->user_id = $user->id;
 				$follower->club_id = $club->id;
 				$follower->save();
 
+				//implement here method for save different sport players fields
+
+
+				switch($club->sport) {
+					case 'lacrosse':
+					$player = new Player;
+					$player->id = $uuid;
+					$player->firstname 	= Input::get('firstname_p');
+					$player->lastname 	= Input::get('lastname_p');
+					$player->email 			= Input::get('email_p');
+					$player->mobile 		= Input::get('mobile_p');
+					$player->position 	= Input::get('position');
+					$player->relation 	= Input::get('relation');
+					$player->dob 				= Input::get('dob_p');
+					$player->gender 		= Input::get('gender');
+					$player->year 			= Input::get('year');
+					$player->school 		= Input::get('school');
+					$player->laxid			= Input::get('laxid');
+					$player->laxid_exp	= Input::get('laxid_exp');
+					$player->uniform 		= Input::get('uniform');
+					$player->avatar 		= Input::get('avatar');
+					$player->user_id   	= $user->id;
+					$player->save();
+					break;
+					case 'coach':
+					$player = new Player;
+					$player->id = $uuid;
+					$player->firstname 	= Input::get('firstname_p');
+					$player->lastname 	= Input::get('lastname_p');
+					$player->email 			= Input::get('email_p');
+					$player->mobile 		= Input::get('mobile_p');
+					$player->position 	= '';
+					$player->relation 	= Input::get('relation');
+					$player->dob 				= Input::get('dob_p');
+					$player->gender 		= Input::get('gender');
+					$player->year 			= Input::get('year');
+					$player->school 		= Input::get('school');
+					$player->avatar 		= Input::get('avatar');
+					$player->user_id   	= $user->id;
+					$player->save();
+					break;
+				}
 
 				if (Config::get('confide::signup_email')) {
 					Mail::queueOn(
@@ -217,7 +216,6 @@ class ClubPublicController extends \BaseController {
 				$price = $event->getOriginal('early_fee');
 			}
 		}
-		
 
 		//session club id
 		Session::put('club', $club->id);
@@ -248,7 +246,6 @@ class ClubPublicController extends \BaseController {
 	public function selectPlayer($club, $id)
 	{
 
-		//return Cart::contents(true);
 
 		$user =Auth::user();
 		$players = $user->players;
@@ -309,7 +306,6 @@ class ClubPublicController extends \BaseController {
 		$event = Evento::find($id);
 		$cart = Cart::contents(true);
 		$uuid = Uuid::generate();
-
 
 		//Addition for stub feature 
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
@@ -810,7 +806,7 @@ class ClubPublicController extends \BaseController {
 		$user = Auth::user();
 		$club = Club::find($club);
 		$team = Team::find($id);
-		$cart = Cart::contents(true);
+		$cart = Cart::contents();
 		$uuid 	= Uuid::generate();
 
 		//Addition for stub feature 
@@ -861,10 +857,24 @@ class ClubPublicController extends \BaseController {
 					$message->bcc($value->email, $club->name);
 				}
 			});
-			return "Congratulation! your player has been added, please close this window.";
-			return Redirect::action('AccountController@index');
-			//return "You've been added to the team for free, please close this window to complete transaction";
-			//return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
+			
+			$vault = false;
+			Cart::destroy();
+			return View::make('app.public.club.team.free')
+			->with('page_title', 'Checkout')
+			->withUser($user)
+			->with('club', $club)
+			->with('team', $team)
+			->with('products',$cart)
+			->with('subtotal', $subtotal)
+			->with('service_fee',$fee)
+			->with('tax', $tax)
+			->with('cart_total',$total)
+			->with('discount', $discount)
+			->with('vault', $vault)
+			->with('player', $player);
+			// return "You've been added to the team for free, please close this window to complete transaction";
+			// return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->$id));
 		}
 
 		/**********************/
@@ -878,7 +888,7 @@ class ClubPublicController extends \BaseController {
 			->withUser($user)
 			->with('club', $club)
 			->with('team', $team)
-			->with('products',Cart::contents())
+			->with('products',$cart)
 			->with('subtotal', $subtotal)
 			->with('service_fee',$fee)
 			->with('tax', $tax)
@@ -904,7 +914,7 @@ class ClubPublicController extends \BaseController {
 			->withUser($user)
 			->with('club', $club)
 			->with('team', $team)
-			->with('products',Cart::contents())
+			->with('products',$cart)
 			->with('subtotal', $subtotal)
 			->with('service_fee',$fee)
 			->with('tax', $tax)
@@ -921,7 +931,7 @@ class ClubPublicController extends \BaseController {
 			->withUser($user)
 			->with('club', $club)
 			->with('team', $team)
-			->with('products',Cart::contents())
+			->with('products',$cart)
 			->with('subtotal', $subtotal)
 			->with('service_fee',$fee)
 			->with('tax', $tax)
