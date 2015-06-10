@@ -20,6 +20,10 @@ class ClubPublic extends \Eloquent {
 		'year' 					=>'required',
 		'laxid'     		=>'required',
     'laxid_exp' 		=>'required',
+    'address' 			=>'required',
+    'city' 					=>'required',
+    'state' 				=>'required',
+    'zip' 					=>'required',
 		);
 
 	public static $coach_rules = array(
@@ -53,6 +57,10 @@ class ClubPublic extends \Eloquent {
 		'year.required' 				=>'Player graduation class is required',
 		'laxid.required'     		=>'Player US Lacrosse ID required',
     'laxid_exp.required' 		=>'Player US Lacrosse ID expiration date required',
+    'address.required' 			=>'Player address is required',
+    'city.required' 				=>'City is required',
+    'state.required' 				=>'State is required',
+    'zip.required' 					=>'Zip is required',
 	);
 
 

@@ -99,7 +99,12 @@ class ClubPublicController extends \BaseController {
 					$player->laxid_exp	= Input::get('laxid_exp');
 					$player->uniform 		= Input::get('uniform');
 					$player->avatar 		= Input::get('avatar');
+					$player->address 		= Input::get('address'); 
+					$player->city 			= Input::get('city'); 
+					$player->state			= Input::get('state');
+					$player->zip				= Input::get('zip'); 
 					$player->user_id   	= $user->id;
+
 					$player->save();
 					break;
 					case 'coach':
