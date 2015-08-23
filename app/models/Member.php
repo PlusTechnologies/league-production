@@ -19,6 +19,10 @@ class Member extends Eloquent {
 	public function team() {
 		return $this->hasOne("Team", "id", "team_id");   
 	}
+	public function teams(){
+        return $this->belongsTo('Team', 'teams');
+  }
+
 	public function plan() {
 		return $this->hasOne("Plan", "id", "plan_id");   
 	}

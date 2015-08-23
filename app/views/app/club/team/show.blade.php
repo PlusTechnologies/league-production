@@ -12,7 +12,7 @@
                   Actions &nbsp; <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  
+
                   <li><a href="{{URL::action('TeamController@edit', $team->id)}}" > <i class="fa fa-pencil fa-fw"></i>&nbsp;Edit</a></li>
                   <li><a href="{{URL::action('TeamController@duplicate', $team->id)}}"> <i class="fa fa-files-o fa-fw"></i>&nbsp;Duplicate</a></li>
                   <li><a href="{{URL::action('TeamController@delete', $team->id)}}"> <i class="fa fa-trash-o fa-fw"></i>&nbsp;Delete</a></li>
@@ -50,19 +50,31 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="tile blue">
-                <h3 class="title">${{number_format($sales->sum('price'), 2)}}</h3>
+                @if($team->children->count() > 0 )
+                  <h3 class="title">${{number_format($team->aggregateSales(), 2)}}</h3>
+                @else
+                  <h3 class="title">${{number_format($sales->sum('price'), 2)}}</h3>
+                @endif
                 <p>Sales</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile red">
-                <h3 class="title">${{number_format($receivable->sum('subtotal'), 2)}}</h3>
+                @if($team->children->count() > 0 )
+                  <h3 class="title">${{number_format($team->aggregateReceivable(), 2)}}</h3>
+                @else
+                  <h3 class="title">${{number_format($receivable->sum('subtotal'), 2)}}</h3>
+                @endif
                 <p>Receivable</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile green">
-                <h3 class="title">{{$members->count()}}</h3>
+                @if($team->children->count() > 0 )
+                  <h3 class="title">{{$team->aggregateMembers()}}</h3>
+                @else
+                  <h3 class="title">{{$team->members->count()}}</h3>
+                @endif
                 <p>Members</p>
               </div>
             </div>
@@ -140,9 +152,7 @@
       <br><br>
 
       <div class="row">
-        <div class="col-md-12">
-
-        </div>
+        
         <div class="col-md-12">
           <div role="tabpanel">
             <!-- Nav tabs -->
@@ -150,6 +160,9 @@
               <li role="presentation" class="active"><a href="#roster" aria-controls="home" role="tab" data-toggle="tab">Roster</a></li>
               <li role="presentation"><a href="#announcements" aria-controls="announcement" role="tab" data-toggle="tab">Announcements</a></li>
               <li role="presentation"><a href="#coach" aria-controls="profile" role="tab" data-toggle="tab">Coach</a></li>
+              @if($team->children->count() > 0 )
+              <li role="presentation"><a href="#children" aria-controls="child" role="tab" data-toggle="tab">Sub Teams</a></li>
+              @endif
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
@@ -164,6 +177,9 @@
                       <th>Name </th>
                       <th>Position</th>
                       <th>Uniform</th>
+                      @if($team->children->count() > 0 )
+                      <th>Sub team</th>
+                      @endif
                       <th>Method</th>
                       <th>Amount</th>
                       <th class="col-sm-2">Status</th>
@@ -171,30 +187,62 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($members as $member)
-                    <tr class="clickable" data-id="{{$member->player->id}}">
-                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
-                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
-                      <td>{{$member->player->position}}</td>
-                      <td>{{$member->player->uniform}}</td>
-                      <td>{{$member->method}}</td>
-                      <td>${{number_format($member->due, 2)}}</td>
-                      @if($member->status == 1)
-                      <td>Accepted</td>
-                      @endif
-                      @if($member->status == 2)
-                      <td>Declined</td>
-                      @endif
-                      @if(!$member->status)
-                      <td>Waiting for reponse</td>
-                      @endif
-                      <td class="text-center">
-                        <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
-                          <i class="fa fa-trash"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    @endforeach
+
+
+                    @if($team->children->count() > 0 )
+                      @foreach ($team->children as $e)
+                        @foreach ($e->members as $member)
+                        <tr class="clickable" data-id="{{$member->player->id}}">
+                          <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                          <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                          <td>{{$member->player->position}}</td>
+                          <td>{{$member->player->uniform}}</td>
+                          <td>{{$e->name}}</td>
+                          <td>{{$member->method}}</td>
+                          <td>${{number_format($member->due, 2)}}</td>
+                          @if($member->status == 1)
+                          <td>Accepted</td>
+                          @endif
+                          @if($member->status == 2)
+                          <td>Declined</td>
+                          @endif
+                          @if(!$member->status)
+                          <td>Waiting for reponse</td>
+                          @endif
+                          <td class="text-center">
+                            <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                        @endforeach
+                      @endforeach
+                    @else
+                      @foreach ($team->members as $member)
+                      <tr class="clickable" data-id="{{$member->player->id}}">
+                        <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                        <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                        <td>{{$member->player->position}}</td>
+                        <td>{{$member->player->uniform}}</td>
+                        <td>{{$member->method}}</td>
+                        <td>${{number_format($member->due, 2)}}</td>
+                        @if($member->status == 1)
+                        <td>Accepted</td>
+                        @endif
+                        @if($member->status == 2)
+                        <td>Declined</td>
+                        @endif
+                        @if(!$member->status)
+                        <td>Waiting for reponse</td>
+                        @endif
+                        <td class="text-center">
+                          <a href="{{URL::action('MemberController@delete',array($team->id, $member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      @endforeach
+                    @endif
                   </tbody>
                 </table>
               </div>
@@ -264,6 +312,44 @@
                   </tbody>
                 </table>
               </div>
+
+              <!-- Display children information -->
+              @if($team->children->count() > 0 )
+              <div role="tabpanel" class="tab-pane" id="children">
+                <div class="clearfix"></div>
+                <br><br>
+                <table class="table table-striped table-condensed" id="grid3">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-2">Created</th>
+                      <th class="col-sm-3">Team</th>
+                      <th class="col-sm-2">Season</th>
+                      <th class="col-sm-3">Program Name</th>
+                      <th class="col-sm-3">Dues</th>
+                      <th class="col-sm-2">Capacity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($team->children as $data)
+                    <tr class="clickable" data-id="{{$data->id}}">
+                      <td>{{$data->created_at}}</td>
+
+                      @if($data->parent)
+                      <td> {{$data->parent->name}} : {{$data->name}}</td>
+                      @else
+                      <td>{{$data->name}} {{$data->parent}}</td>
+                      @endif
+
+                      <td>{{$data->season->name}}</td>
+                      <td>{{$data->program->name}}</td>
+                      <td>{{$data->due}}</td>
+                      <td>{{$data->members->count()}} of {{$data->max}}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              @endif
             </div>
           </div>
         </div>
@@ -367,6 +453,10 @@ $(function () {
   return false;
 });
 
+  $('#grid3').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/club/team/" + $(this).data("id"));
+  });
+
  $('#grid tbody > tr').find('td:last').on('click', function(e) {
   e.stopPropagation();
 });
@@ -378,15 +468,15 @@ $(function () {
   // dom: 'T<"clear">lfrtip',
   // tableTools: {
   //   "aButtons": ["print" ]},
-  "aoColumns": [
-  { "bSortable": false },
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  { "bSortable": false }]
+  // "aoColumns": [
+  // { "bSortable": false },
+  // null,
+  // null,
+  // null,
+  // null,
+  // null,
+  // null,
+  // { "bSortable": false }]
 });
 
  $('#grid2').DataTable({

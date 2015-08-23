@@ -284,8 +284,18 @@ class ClubPublicController extends \BaseController {
 		$user =Auth::user();
 		$player = Player::find(Input::get('player'));
 		$cart = Cart::item(Input::get('item'));
+
+		$club = Club::find($club);
+		$event = Evento::find($id);
+
 		$cart->user_id 		= $user->id;
 		$cart->player_id 	= $player->id; 
+
+		//default event
+		$cart->event 			= $event->name;
+		$cart->event_id 	= $event->id; 
+
+		//over write event with sub event present
 
 		if(Input::get('event')){
 			$child = Evento::find(Input::get('event'));
@@ -293,8 +303,7 @@ class ClubPublicController extends \BaseController {
 			$cart->event_id 	= $child->id; 
 		}
 
-		$club = Club::find($club);
-		$event = Evento::find($id);
+		
 
 		$title = 'League Together - Club | '. $club->name;
 		return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))
@@ -317,6 +326,7 @@ class ClubPublicController extends \BaseController {
 		
 		foreach (Cart::contents() as $item) {
 			$player = Player::Find($item->player_id);
+
 		}	
 
 		$discount = Session::get('discount');
@@ -334,6 +344,7 @@ class ClubPublicController extends \BaseController {
 
 		if(!$total){
 			//add participant for free !idea
+			foreach( Cart::contents() as $item){
 
 			$participant = new Participant;
 			$participant->id 					= $uuid;
@@ -342,7 +353,7 @@ class ClubPublicController extends \BaseController {
 			$participant->due 				= $event->getOriginal('fee');
 			$participant->early_due 	= $event->getOriginal('early_fee');
 			$participant->early_due_deadline 	= $event->early_deadline;
-			$participant->event_id 		= $event->id;
+			$participant->event_id 		= $item->event_id;
 			$participant->method 			= 'full';
 			$participant->player_id 	= $player->id;
 			$participant->accepted_on = Carbon::Now();
@@ -352,6 +363,9 @@ class ClubPublicController extends \BaseController {
 			$participant->save();
 
 			$participant = Participant::find($uuid);
+
+			}
+
 
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'event'=>$event, 'participant'=>$participant );
@@ -782,10 +796,13 @@ class ClubPublicController extends \BaseController {
 		$team = Team::find($id);
 		$title = 'League Together - Club | '. $club->name;
 
+		$child = $team->children;
+
 		return View::make('app.public.club.team.select')
 		->with('page_title', $title)
 		->with('club', $club)
 		->with('team', $team)
+		->with('child', $child)
 		->with('players', $list);
 	}
 
@@ -797,6 +814,18 @@ class ClubPublicController extends \BaseController {
 		$player = Player::find(Input::get('player'));
 		$cart = Cart::item(Input::get('item'));
 		$cart->player_id 	= $player->id; 
+
+
+		//default event
+		$cart->team 		= $team->name;
+		$cart->team_id 	= $team->id; 
+
+		//over write event with sub event present
+		if(Input::get('team')){
+			$child = Team::find(Input::get('team'));
+			$cart->team 			= $child->name;
+			$cart->team_id 		= $child->id; 
+		}
 
 		$title = 'League Together - Club | '. $club->name;
 		return Redirect::action('ClubPublicController@PaymentCreateTeam', array($club->id, $team->id))
@@ -836,23 +865,28 @@ class ClubPublicController extends \BaseController {
 
 		if(!$total){
 
-			$member = new Member;
-			$member->id 							= $uuid;
-			$member->firstname 				= $player->firstname;
-			$member->lastname 				= $player->lastname;
-			$member->due  						= $team->getOriginal('due');
-			$member->early_due 				= $team->getOriginal('early_due');
-			$member->early_due_deadline 	= $team->getOriginal('early_due_deadline');
-			$member->plan_id 					= null;
-			$member->player_id 				= $player->id;
-			$member->team_id					= $team->id;
-			$member->accepted_on = Carbon::Now();
-			$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
-			$member->accepted_user = $user->id;
-			$member->method = $item->type;
-			$member->status = 1;
-			$member->save();
+			foreach (Cart::contents() as $item) { 
 
+				$member = new Member;
+				$member->id 							= $uuid;
+				$member->firstname 				= $player->firstname;
+				$member->lastname 				= $player->lastname;
+				$member->due  						= $team->getOriginal('due');
+				$member->early_due 				= $team->getOriginal('early_due');
+				$member->early_due_deadline 	= $team->getOriginal('early_due_deadline');
+				$member->plan_id 					= null;
+				$member->player_id 				= $player->id;
+				$member->team_id					= $item->team_id;
+				$member->accepted_on = Carbon::Now();
+				$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
+				$member->accepted_user = $user->id;
+				$member->method = $item->type;
+				$member->status = 1;
+				$member->save();
+
+
+			}
+			
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
 			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
@@ -1074,7 +1108,7 @@ class ClubPublicController extends \BaseController {
 				$member->early_due_deadline 	= $early_due_deadline;
 				$member->plan_id 					= $team->plan_id;
 				$member->player_id 				= $player->id;
-				$member->team_id					= $team->id;
+				$member->team_id					= $item->team_id;
 				$member->accepted_on = Carbon::Now();
 				$member->accepted_by = $user->profile->firstname.' '.$user->profile->lastname;
 				$member->accepted_user = $user->id;
@@ -1105,7 +1139,7 @@ class ClubPublicController extends \BaseController {
 				$sale->price 				= $item->price;
 				$sale->fee 					= $salesfee;
 				$sale->member_id 		= $uuidMember;
-				$sale->team_id			= $team->id;
+				$sale->team_id			= $item->team_id;
 				$sale->payment_id   = $uuid;
 				$sale->save();
 

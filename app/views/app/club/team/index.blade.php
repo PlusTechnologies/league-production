@@ -55,7 +55,13 @@
               @foreach($team as $data)
               <tr class="clickable" data-id="{{$data->id}}">
                 <td>{{$data->created_at}}</td>
-                <td>{{$data->name}}</td>
+
+                @if($data->parent)
+                <td> {{$data->parent->name}} : {{$data->name}}</td>
+                @else
+                <td>{{$data->name}} {{$data->parent}}</td>
+                @endif
+
                 <td>{{$data->season->name}}</td>
                 <td>{{$data->program->name}}</td>
                 <td>{{$data->due}}</td>

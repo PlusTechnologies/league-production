@@ -15,6 +15,7 @@ class CreateTeamsTable extends Migration {
 		Schema::create('teams', function(Blueprint $table)
 		{
 			$table->string('id', 36);
+			$table->primary(array('id')); 
 			$table->string('name');
 			$table->text('description');
 			$table->double('due');
@@ -25,6 +26,8 @@ class CreateTeamsTable extends Migration {
 			$table->integer('max');
 			$table->boolean('allow_plan');
 			$table->boolean('status');
+			$table->string('parent_id', 36)->index()->nullable();
+			$table->foreign('parent_id')->references('id')->on('teams');
 			$table->string('plan_id', 36)->index()->nullable();
 			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('set null');
 			$table->string('club_id', 36)->index();
@@ -34,7 +37,7 @@ class CreateTeamsTable extends Migration {
 			$table->string('program_id', 36)->index();
 			$table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
 			$table->timestamps();
-			$table->primary(array('id')); 
+			
 		});
 	}
 

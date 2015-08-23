@@ -72,9 +72,9 @@ class GroupController extends BaseController {
 			$event->parent_id 	= $parent_event->id;
 			$event->user_id 		= $user->id;
 			$event->club_id 		= $club->id;
-			$event->save();
+			 = $event->save();
 
-			if ( $event->id )
+			if ( $status )
 			{
 				return Redirect::action('EventoController@show', $parent_event->id)
 				->with( 'messages', 'Group created successfully');

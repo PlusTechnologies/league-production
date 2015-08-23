@@ -20,11 +20,17 @@ class Team extends Eloquent {
         'status'        => 'required'
     );
 
+    public static $rules_group =array(
+        'name'          =>'required',
+        'max'           =>'required|integer',
+    );
+
     public function program(){
         return $this->hasOne('Program', "id", "program_id");
     }
     public function members() {
-        return $this->belongsToMany('Player','members')->withPivot('accepted_on','created_at','id');    
+        return $this->hasMany('Member', 'team_id', 'id');
+        //return $this->belongsToMany('Player','members')->withPivot('accepted_on','created_at','id');    
     }
 
     public function coaches() {
@@ -41,6 +47,15 @@ class Team extends Eloquent {
     public function club()
     {
         return $this->hasOne('Club', "id", "club_id");
+    }
+
+    public function children()
+    {
+        return $this->hasMany('Team', 'parent_id', 'id');
+    }
+    public function parent()
+    {
+        return $this->belongsTo('Team', 'parent_id');
     }
 
     public function setEarlyDueDeadlineAttribute($value)
@@ -101,6 +116,38 @@ class Team extends Eloquent {
     public function getStatusAttribute($value){
         if($value){ return array('name'=>'Available', 'id'=>1);};
         return array('name'=>'Unavailable', 'id'=>0);
+    }
+
+    public function aggregateMembers()
+    {   $count = 0;
+        foreach ($this->children as $e) {
+            foreach ($e->members as $p) {
+                $count++;
+            }
+        }
+        return $count ;
+    }
+
+    public function aggregateSales()
+    {   $count = 0;
+
+        foreach ($this->children as $e) {
+
+           $count += Item::where('team_id',$e->id)->sum('price');
+
+        }
+        return $count ;
+    }
+
+    public function aggregateReceivable()
+    {   $count = 0;
+
+        foreach ($this->children as $e) {
+
+           $count += SchedulePayment::with('member')->whereHas('member', function ($query) use ($e) {$query->where('team_id', '=', $e->id);})->sum('subtotal');
+
+        }
+        return $count ;
     }
 
 

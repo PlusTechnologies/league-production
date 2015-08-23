@@ -370,7 +370,6 @@ public function doAnnouncement($id)
 				}
 			}
 		}
-
 	}
 
 
