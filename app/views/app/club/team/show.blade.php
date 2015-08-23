@@ -20,8 +20,10 @@
                   <li><a href="{{URL::action('ExportController@team', $team->id)}}" > <i class="fa fa-download"> </i>&nbsp;Export Roster</a></li>
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
+                  <li><a href="{{URL::action('SubController@create', $team->id)}}" > <i class="fa fa-group"> </i>&nbsp; Add Group</a></li>
+                  <li class="divider"></li>
                   <li><a href="{{URL::action('MemberController@create', $team->id)}}"> <i class="fa fa-user fa-fw"> </i>&nbsp;Invite</a></li>
-                  <li><a href="{{URL::action('CoachController@create', $team->id)}}"> <i class="fa fa-users fa-fw"> </i>&nbsp;Coach</a></li>
+                  <li><a href="{{URL::action('CoachController@create', $team->id)}}"> <i class="fa fa-heart fa-fw"> </i>&nbsp;Coach</a></li>
                 </ul>
               </div> 
             </span>
@@ -146,7 +148,7 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#roster" aria-controls="home" role="tab" data-toggle="tab">Roster</a></li>
-              <li role="presentation"><a href="#announcements" aria-controls="profile" role="tab" data-toggle="tab">Announcements</a></li>
+              <li role="presentation"><a href="#announcements" aria-controls="announcement" role="tab" data-toggle="tab">Announcements</a></li>
               <li role="presentation"><a href="#coach" aria-controls="profile" role="tab" data-toggle="tab">Coach</a></li>
             </ul>
             <!-- Tab panes -->
@@ -378,6 +380,7 @@ $(function () {
   //   "aButtons": ["print" ]},
   "aoColumns": [
   { "bSortable": false },
+  null,
   null,
   null,
   null,

@@ -35,19 +35,35 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="tile blue">
-                <h3 class="title">${{number_format($event->participants->sum('due'), 2)}}</h3>
+
+                @if($event->children->count() > 0 )
+                  <h3 class="title">${{number_format($event->aggregateSales(), 2)}}</h3>
+                @else
+                  <h3 class="title">${{number_format($event->participants->sum('due'), 2)}}</h3>
+                @endif
                 <p>Sales</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile red">
-                <h3 class="title">{{$event->participants->count()}}</h3>
+                
+                @if($event->children->count() > 0 )
+                  <h3 class="title">{{$event->aggregateParticipants()}}</h3>
+                @else
+                  <h3 class="title">{{$event->participants->count()}}</h3>
+                @endif
                 <p>Participants</p>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="tile green">
-                <h3 class="title">{{$event->max - $event->participants->count()}}</h3>
+
+                @if($event->children->count() > 0 )
+                  <h3 class="title">{{$event->max - $event->aggregateParticipants()}}</h3>
+                @else
+                  <h3 class="title">{{$event->max - $event->participants->count()}}</h3>
+                @endif
+                
                 <p>Open</p>
               </div>
             </div>
@@ -142,11 +158,16 @@
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#roster" aria-controls="home" role="tab" data-toggle="tab">Roster</a></li>
               <li role="presentation"><a href="#announcements" aria-controls="profile" role="tab" data-toggle="tab">Announcements</a></li>
+
+              @if($event->children->count() > 0 )
+              <li role="presentation"><a href="#children" aria-controls="child" role="tab" data-toggle="tab">Sub Events</a></li>
+              @endif
+
+
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="roster">
-
                 <div class="clearfix"></div>
                 <br><br> 
                 <table class="table table-condensed table-striped" id="grid">
@@ -156,27 +177,58 @@
                       <th>Name </th>
                       <th>Position</th>
                       <th>Uniform</th>
+                      @if($event->children->count() > 0 )
+                      <th>Sub Event</th>
+                      @endif
                       <th>Amount</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($event->participants as $member)
-                    <tr class="clickable" data-id="{{$member->player->id}}">
-                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
-                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
-                      <td>{{$member->player->position}}</td>
-                      <td>{{$member->player->uniform}}</td>
-                      <td>${{number_format($member->due, 2)}}</td>
-                      <td class="text-center">
-                        <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
-                          <i class="fa fa-trash"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    @endforeach
+
+                    @if($event->children->count() > 0 )
+                      @foreach ($event->children as $e)
+                        @foreach ($e->participants as $member)
+                        <tr class="clickable" data-id="{{$member->player->id}}">
+                          <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                          <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                          <td>{{$member->player->position}}</td>
+                          <td>{{$member->player->uniform}}</td>
+                          <td> {{$e->name}}</td>
+                          <td>${{number_format($member->due, 2)}}</td>
+                          <td class="text-center">
+                            <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                        @endforeach
+                      @endforeach
+
+                    @else
+
+                      @foreach ($event->participants as $member)
+                      <tr class="clickable" data-id="{{$member->player->id}}">
+                        <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                        <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                        <td>{{$member->player->position}}</td>
+                        <td>{{$member->player->uniform}}</td>
+                        <td>${{number_format($member->due, 2)}}</td>
+                        <td class="text-center">
+                          <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      @endforeach
+
+                    @endif
+
+
+                    
                   </tbody>
                 </table>
+                <hr>
               </div>
               <div role="tabpanel" class="tab-pane" id="announcements">
                 <div class="clearfix"></div>
@@ -212,6 +264,44 @@
                   </tbody>
                 </table>
               </div>
+              <!-- Display children information -->
+              @if($event->children->count() > 0 )
+              <div role="tabpanel" class="tab-pane" id="children">
+                <div class="clearfix"></div>
+                <br><br>
+                <table class="table table-striped table-condensed" id="grid3">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-2" data-field="date">Created</th>
+                      <th class="col-sm-1" data-field="id">Type</th>
+                      <th class="col-sm-6" data-field="name">Name</th>
+                      <th class="col-sm-1" data-field="e_date">Date</th>
+                      <th class="col-sm-1" data-field="fee">Fee</th>
+                      <!-- <th class="col-sm-1" data-field="status">Status</th> -->
+                      <th class="col-sm-1" data-field="fee">Capacity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($event->children as $e)
+                    <tr class="clickable" data-id="{{$e->id}}">
+                      <td>{{$e->created_at}}</td>
+                      <td>{{$e->type->name}}</td>
+                      @if($e->parent)
+                      <td> {{$e->parent->name}} : {{$e->name}}</td>
+                      @else
+                      <td>{{$e->name}}</td>
+                      @endif
+                      <td>{{$e->date}}</td>
+                      <td>{{$e->fee}}</td>
+                      <!-- <td>{{$e->status['name']}}</td> -->
+                      <td>{{$e->participants->count()}} of {{$e->max}}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              @endif
+
             </div>
 
           </div>
@@ -232,7 +322,7 @@
       <div class="modal-body">
         <div class="modelSuccess">Message Sent!</div>
         <div class="modelForm">
-          {{ Form::open(array('action' => array('EventoController@doAnnouncement',$event->id ),'id'=>'message','method' => 'post')) }}
+          {{ Form::open(array('action' => array('EventoController@doAnnouncement', $event->id ),'id'=>'message','method' => 'post')) }}
           <div class="form-group">
             <label for="recipient-name" class="control-label">Subject (Required)</label>
             {{Form::text('subject', '', array('class'=>'form-control','placeholder'=>'Subject', 'tabindex'=>'1')) }}
@@ -317,6 +407,10 @@ $(function () {
 
 });
 
+ $('#grid3').delegate('tbody > tr', 'click', function (e) {
+    window.location = ("/account/club/event/" + $(this).data("id"));
+  });
+
  $('#grid tbody > tr').find('td:last').on('click', function(e) {
   e.stopPropagation();
 });
@@ -327,12 +421,12 @@ $(function () {
   // dom: 'T<"clear">lfrtip',
   // tableTools: {
   //   "aButtons": ["print" ]},
-  "aoColumns": [
-  { "bSortable": false },
-  null,
-  null,
-  null,
-  { "bSortable": false }]
+  // "aoColumns": [
+  // { "bSortable": false },
+  // null,
+  // null,
+  // null,
+  // { "bSortable": false }]
 });
 
  $('#grid2').DataTable({

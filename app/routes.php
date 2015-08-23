@@ -55,6 +55,9 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('event/{id}/group/create',	array('as' 	=>'event.group.create', 'uses' => 'GroupController@create'));
 		Route::post('event/{id}/group',				array('as' 	=>'event.group.store', 'uses' => 'GroupController@store'));
 
+		Route::get('team/{id}/sub/create',	array('as' 	=>'team.sub.create', 'uses' => 'SubController@create'));
+		Route::post('team/{id}/sub',				array('as' 	=>'team.sub.store', 'uses' => 'SubController@store'));
+
 
 		Route::get('event/{id}/participant/delete', array('as' 	=>'event.participant', 'uses' => 'ParticipantController@delete'));
 		Route::post('event/{id}/participant/delete', array('as'	=>'event.participant', 'uses' => 'ParticipantController@destroy'));
