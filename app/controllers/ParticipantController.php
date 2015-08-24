@@ -72,20 +72,20 @@ class ParticipantController extends BaseController {
 		$validator= Validator::make(Input::all(),Participant::$rules, $messages);
 		
 		
-		$validator->sometimes(array('fee', 'early_fee','early_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('fee', 'early_fee','early_deadline'), 'required', function($input)
 		{
 			return $input->fee <> '';
 		});
-		$validator->sometimes(array('fee', 'early_fee','early_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('fee', 'early_fee','early_deadline'), 'required', function($input)
 		{
 			return $input->early_fee <> '';
 		});
-		$validator->sometimes(array('fee', 'early_fee','early_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('fee', 'early_fee','early_deadline'), 'required', function($input)
 		{
 			return $input->early_deadline <> '';
 		});
 
-		$validator->sometimes(array('fee', 'early_fee','early_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('fee', 'early_fee','early_deadline'), 'required', function($input)
 		{
 			return $input->plan_id <> '';
 		});
@@ -356,7 +356,7 @@ class ParticipantController extends BaseController {
 			$participant->save();
 
 			//send email notification of acceptance
-			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$participant);
+			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'participant'=>$participant);
 			$mail = Mail::send('emails.notification.event.accept', $data, function($message) use ($user, $club, $participant){
 				$message->to($user->email, $participant->accepted_by)
 				->subject("Thank you for joining our team | ".$club->name);

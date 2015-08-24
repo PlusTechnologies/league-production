@@ -86,20 +86,20 @@ class MemberController extends BaseController {
 		$validator= Validator::make(Input::all(),Member::$rules, $messages);
 		
 		
-		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
 		{
     	return $input->due <> '';
 		});
-		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
 		{
     	return $input->early_due <> '';
 		});
-		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
 		{
     	return $input->early_due_deadline <> '';
 		});
 
-		$validator->sometimes(array('due', 'early_due','early_due_deadline','plan_id'), 'required', function($input)
+		$validator->sometimes(array('due', 'early_due','early_due_deadline'), 'required', function($input)
 		{
     	return $input->plan_id <> '';
 		});
