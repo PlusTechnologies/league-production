@@ -17,8 +17,14 @@ class PlayerController extends \BaseController {
 		//get player from follower
 		foreach ($players as $player) {
 			$member = Member::where('player_id','=',$player->id)->where('accepted_on','=',null)->where('declined_on','=',null)->get();
+			$participant = Participant::where('player_id','=',$player->id)->where('accepted_on','=',null)->where('declined_on','=',null)->get();
 			if($member){
 				foreach ($member as $data) {
+					$invites[] = $data;
+				}
+			}
+			if($participant){
+				foreach ($participant as $data) {
 					$invites[] = $data;
 				}
 			}

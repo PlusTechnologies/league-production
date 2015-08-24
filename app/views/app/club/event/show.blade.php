@@ -21,6 +21,8 @@
                   <li class="divider"></li>
                   <li><a href="#" data-toggle="modal" data-target=".modal"> <i class="fa fa-bell-o fa-fw"></i>  Announcement</a></li>
                   <li><a href="{{URL::action('GroupController@create', $event->id)}}" > <i class="fa fa-group"> </i>&nbsp; Add Group</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{{URL::action('ParticipantController@create', $event->id)}}"> <i class="fa fa-user fa-fw"> </i>&nbsp;Invite</a></li>
                 </ul>
               </div> 
             </span>
@@ -181,6 +183,7 @@
                       <th>Sub Event</th>
                       @endif
                       <th>Amount</th>
+                      <th class="col-sm-2">Status</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -196,6 +199,15 @@
                           <td>{{$member->player->uniform}}</td>
                           <td> {{$e->name}}</td>
                           <td>${{number_format($member->due, 2)}}</td>
+                          @if($member->status == 1)
+                          <td>Accepted</td>
+                          @endif
+                          @if($member->status == 2)
+                          <td>Declined</td>
+                          @endif
+                          @if(!$member->status)
+                          <td>Waiting for reponse</td>
+                          @endif
                           <td class="text-center">
                             <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
                               <i class="fa fa-trash"></i>
@@ -214,6 +226,15 @@
                         <td>{{$member->player->position}}</td>
                         <td>{{$member->player->uniform}}</td>
                         <td>${{number_format($member->due, 2)}}</td>
+                        @if($member->status == 1)
+                          <td>Accepted</td>
+                          @endif
+                          @if($member->status == 2)
+                          <td>Declined</td>
+                          @endif
+                          @if(!$member->status)
+                          <td>Waiting for reponse</td>
+                          @endif
                         <td class="text-center">
                           <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
                             <i class="fa fa-trash"></i>
@@ -221,11 +242,7 @@
                         </td>
                       </tr>
                       @endforeach
-
                     @endif
-
-
-                    
                   </tbody>
                 </table>
                 <hr>

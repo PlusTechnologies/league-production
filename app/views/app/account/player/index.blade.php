@@ -64,7 +64,7 @@
                 <th class="">Created</th>
                 <th class="">Player</th>
                 <th class="">Club</th>
-                <th class="">Team</th>
+                <th class="">Team/Event</th>
                 <th class="">Cost</th>
                 <th class="text-right"></th>
               </tr>
@@ -74,12 +74,24 @@
               <tr class="clickable" data-id="{{$item->id}}">
                 <td>{{$item->created_at}}</td>
                 <td>{{$item->firstname}} {{$item->lastname}}</td>
-                <td>{{$item->team->club->name}}</td>
-                <td>{{$item->team->name}}</td>
+                @if($item->event_id)
+                  <td>{{$item->event->club->name}}</td>
+                  <td>{{$item->event->name}}</td>
+                @else
+                  <td>{{$item->team->club->name}}</td>
+                  <td>{{$item->team->name}}</td>
+                @endif
+
+                
                 <td>{{$item->due}}</td>
                 <td class="text-right" >
-                  <a href="{{URL::action('MemberController@accept',$item->id)}}" class="btn btn-success btn-outline">Accept</a>
-                  <a href="{{URL::action('MemberController@decline',$item->id)}}" class="btn btn-danger btn-outline">Decline</a>
+                  @if($item->event_id)
+                    <a href="{{URL::action('ParticipantController@accept',$item->id)}}" class="btn btn-success btn-outline">Accept</a>
+                    <a href="{{URL::action('ParticipantController@decline',$item->id)}}" class="btn btn-danger btn-outline">Decline</a>
+                  @else
+                    <a href="{{URL::action('MemberController@accept',$item->id)}}" class="btn btn-success btn-outline">Accept</a>
+                    <a href="{{URL::action('MemberController@decline',$item->id)}}" class="btn btn-danger btn-outline">Decline</a>
+                  @endif
                 </td>
               </tr>
               @endforeach

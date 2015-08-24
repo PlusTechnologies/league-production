@@ -107,7 +107,7 @@ class Evento extends Eloquent {
             $this->attributes['early_fee'] =  $value ;
         }
 
-        $this->attributes['early_fee'] =  0;
+        $this->attributes['early_fee'] =  '$0.00';
     }
     public function getEarlyDueAttribute($value) {
         if($value){

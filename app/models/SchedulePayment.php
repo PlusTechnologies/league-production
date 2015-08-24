@@ -30,6 +30,11 @@ class SchedulePayment extends Eloquent {
 		return $this->belongsTo('Member', 'member_id', 'id');
 	}
 
+	public function participant()
+	{
+		return $this->belongsTo('Participant', 'participant_id', 'id');
+	}
+
 	public function getStatusAttribute($value) 
 	{
 		if($value){

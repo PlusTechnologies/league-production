@@ -83,6 +83,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('team', 						'TeamController');
 		Route::resource('programs', 				'ProgramController');
 		Route::resource('announcement', 		'AnnouncementController');
+		Route::resource('event.participant','ParticipantController');
 		Route::resource('team.member', 			'MemberController');
 		Route::resource('team.coach', 			'CoachController');
 		Route::resource('plan',							'PlanController');
@@ -122,6 +123,20 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 	Route::post('member/{id}/checkout/validate',	array('as'=>'account.member.validate', 	'uses' => 'MemberController@paymentValidate'));
 	Route::post('member/{id}/checkout/clear',			array('as'=>'account.member.clear', 		'uses' => 'MemberController@paymentRemoveCartItem'));
 	Route::post('member/{id}/checkout/discount',	array('as'=>'account.member.discount', 	'uses' => 'DiscountController@validate'));
+
+
+	Route::get('participant/{id}/accept', 							array('as' =>'account.participant.accept',			'uses' => 'ParticipantController@accept'));
+	Route::get('participant/{id}/decline',	 						array('as' =>'account.participant.decline',		'uses' => 'ParticipantController@decline'));
+	Route::post('participant/{id}/decline',	 					array('as' =>'account.participant.doDecline',	'uses' => 'ParticipantController@doDecline'));
+	Route::get('participant/{id}/payment', 						array('as' =>'account.participant.pay',			'uses' => 'ParticipantController@paymentSelect'));
+	Route::post('participant/{id}/payment', 						array('as' =>'account.participant.dopay',		'uses' => 'ParticipantController@doPaymentSelect'));
+	Route::get('participant/{id}/checkout',         		array('as'=>'account.participant.checkout',	'uses' => 'ParticipantController@paymentCreate'));
+	Route::get('participant/{id}/checkout/success',  	array('as'=>'account.participant.success', 	'uses' => 'ParticipantController@paymentSuccess'));
+	Route::post('participant/{id}/checkout/store',   	array('as'=>'account.participant.store', 		'uses' => 'ParticipantController@paymentStore'));
+	Route::post('participant/{id}/checkout/validate',	array('as'=>'account.participant.validate', 	'uses' => 'ParticipantController@paymentValidate'));
+	Route::post('participant/{id}/checkout/clear',			array('as'=>'account.participant.clear', 		'uses' => 'ParticipantController@paymentRemoveCartItem'));
+
+
 	Route::resource('player',		'PlayerController');
 	Route::resource('contact',	'ContactController');
 });

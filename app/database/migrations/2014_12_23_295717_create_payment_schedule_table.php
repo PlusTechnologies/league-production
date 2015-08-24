@@ -25,8 +25,10 @@ class CreatePaymentScheduleTable extends Migration {
 			$table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
 			$table->string('club_id', 36)->index();
 			$table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');
-			$table->string('member_id',36)->index();
+			$table->string('member_id',36)->index()->nullable();
 			$table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
+			$table->string('participant_id',36)->index()->nullable();
+			$table->foreign('participant_id')->references('id')->on('participants')->onDelete('cascade');
 			$table->timestamps();
 		});
 	}

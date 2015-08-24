@@ -329,8 +329,6 @@ class MemberController extends BaseController {
 			return Redirect::action('PlayerController@index');
 		}
 
-
-
 	}
 
 	public function paymentSelect($id)
@@ -408,7 +406,6 @@ class MemberController extends BaseController {
 			$item->name = "Membership Team ".$member->team->name;
 			$item->quantity = 1;
 		}
-
 
 		return Redirect::action('MemberController@paymentCreate', array($member->id));
 	}
