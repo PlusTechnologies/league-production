@@ -59,7 +59,13 @@
                 <td>{{$event->date}}</td>
                 <td>{{$event->fee}}</td>
                 <!-- <td>{{$event->status['name']}}</td> -->
-                <td>{{$event->participants->count()}} of {{$event->max}}</td>
+
+                @if($event->children->count() > 0 )
+                  <td>{{$event->aggregateParticipants()}} of {{$event->max}}</td>
+                @else
+                  <td>{{$event->participants->count()}} of {{$event->max}}</td>
+                @endif
+                
               </tr>
               @endforeach
             </tbody>
