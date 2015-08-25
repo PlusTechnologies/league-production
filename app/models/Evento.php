@@ -28,8 +28,9 @@ class Evento extends Eloquent {
 
     public function club()
     {
-        return $this->belongsTo('club');
+        return $this->hasOne('Club', "id", "club_id");
     }
+    
     public function type() {
         return $this->hasOne('EventType', 'id','type_id');
     }
