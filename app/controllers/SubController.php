@@ -1,6 +1,6 @@
 <?php
 
-class GroupController extends BaseController {
+class SubController extends BaseController {
 
 	public function __construct()
 	{
@@ -29,13 +29,13 @@ class GroupController extends BaseController {
 
 		$user= Auth::user();
 		$club = $user->Clubs()->FirstOrFail();
-		$event = Evento::find($id);
-		$title = 'League Together - '.$club->name.' Group';
+		$team = Team::find($id);
+		$title = 'League Together - '.$club->name.' Sub team';
 
-		return View::make('app.club.event.group.create')
+		return View::make('app.club.team.sub.create')
 		->with('page_title', $title)
 		->with('club', $club)
-		->with('event',$event)
+		->with('team',$team)
 		->withUser($user);
 		
 	}
@@ -48,41 +48,46 @@ class GroupController extends BaseController {
 	 */
 	public function store($id)
 	{
-		//create evento
+		//create sub team
+		//return Redirect::action('SubController@create',$id)->with( 'notice', 'This action cannot be perform at this moment, please comeback soon.');
+
 		$user =Auth::user();
 		$club = $user->clubs()->FirstOrFail();
-		$parent_event = Evento::find($id);
+		$parent_team = Team::find($id);
+		$uuid = Uuid::generate();
 
-		$validator= Validator::make(Input::all(), Evento::$rules_group);
+		$validator= Validator::make(Input::all(), Team::$rules_group);
 
 		if($validator->passes()){
-			$event = new Evento;
-			$event->name        = Input::get('name');
-			$event->type_id     = $parent_event->type_id;
-			$event->location 		= $parent_event->location;
-			$event->date 				= $parent_event->date;
-			$event->end 				= $parent_event->end;
-			$event->fee       	= $parent_event->getOriginal('fee');
-			$event->early_fee   = $parent_event->early_fee;
-			$event->early_deadline = $parent_event->early_deadline;
-			$event->open       	= $parent_event->open;
-			$event->close       = $parent_event->close;
-			$event->status 			= $parent_event->getOriginal('status');
-			$event->max 				= Input::get('max');
-			$event->parent_id 	= $parent_event->id;
-			$event->user_id 		= $user->id;
-			$event->club_id 		= $club->id;
-			 = $event->save();
+
+			$team = new Team;
+			$team->id 								= $uuid;
+			$team->name								= Input::get('name');
+			$team->season_id					= $parent_team->season_id;
+			$team->program_id					= $parent_team->program_id;
+			$team->description				= $parent_team->description;
+			$team->early_due					= $parent_team->getOriginal('early_due');
+			$team->early_due_deadline	= $parent_team->early_due_deadline;
+			$team->due								= $parent_team->getOriginal('due');
+			$team->plan_id						= $parent_team->plan_id;
+			$team->open								= $parent_team->open;
+			$team->close							= $parent_team->close;
+			$team->max								= Input::get('max');
+			$team->status							= $parent_team->getOriginal('status');
+			$team->parent_id 					= $parent_team->id;
+			$team->club_id						= $club->id;
+			$team->allow_plan					= 1;
+			$status = $team->save();
 
 			if ( $status )
 			{
-				return Redirect::action('EventoController@show', $parent_event->id)
+				return Redirect::action('TeamController@show', $parent_team->id)
 				->with( 'messages', 'Group created successfully');
 			}
 		}
 
 		$error = $validator->errors()->all(':message');
-		return Redirect::action('GroupController@create',$id)
+		return Redirect::action('SubController@create',$id)
 		->withErrors($validator)
 		->withInput();
 

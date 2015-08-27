@@ -12,7 +12,6 @@
 					<h1 class="text-center"> 
 						{{$club->name}}
 					</h1>
-					<h4 class="text-center">Team {{$team->name}}</h4>
 					<br><br><br>
 				</div>
 				<div class="col-md-6 col-md-offset-1 same-height">
@@ -30,11 +29,7 @@
 								<tbody>
 									@foreach(Cart::contents() as $item)
 									<tr>
-										<td>{{$item->name}}
-											@if($team->id <> $item->team_id) 
-											: {{$item->team}}
-											@endif
-										</td>
+										<td>{{$item->name}}</td>
 										<td class="text-center">{{$item->quantity}}</td>
 										<td class="text-right" >${{number_format($item->price,2) }}</td>
 									</tr>
@@ -60,7 +55,7 @@
 									</tr>
 								</tbody>
 							</table>
-							{{ Form::open(array('action' => array('ClubPublicController@PaymentStoreTeam', $club->id, $team->id), 'class'=>'form-horizontal p','method' => 'post')) }}
+							{{ Form::open(array('action' => array('ParticipantController@paymentStore', $participant->id), 'class'=>'form-horizontal p','method' => 'post')) }}
 							<button class="btn btn-success btn-lg btn-outline process pull-right" type="submit">Place Order</button>
 							{{Form::close()}}
 						</div>
@@ -119,10 +114,10 @@
 								<div class="row">
 									<div class="col-md-12">	
 										
-										{{ Form::open(array('action' => array('ClubPublicController@PaymentRemoveCartItemTeam', $club->id, $team->id),'method' => 'post')) }}
+										{{ Form::open(array('action' => array('ParticipantController@paymentRemoveCartItem', $participant->id),'method' => 'post')) }}
 										<a href="/account/player" class="btn btn-primary btn-outline ">Edit Player</a>
 										<a href="/account/settings" class="btn btn-primary btn-outline ">Edit Credit Card</a>
-										<button type="submit" class="btn btn-danger btn-outline ">Remove Player</button>
+										<button type="submit" class="btn btn-danger btn-outline ">Cancel</button>
 										{{Form::close()}}
 									</div>
 								</div>

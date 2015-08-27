@@ -144,6 +144,7 @@ public function show($id)
 	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
 	$announcements = Announcement::where('team_id', $team->id )->get();
 
+	//return $team->members;
 
 	return View::make('app.club.team.show')
 	->with('page_title', $title)
@@ -327,40 +328,75 @@ public function doAnnouncement($id)
 	$recipientEmail = array();
 	$recipientMobile = array();
 
-	foreach($members as $member){
-		//only members that accepted joined
-		if($member->accepted_user){
-			$user = User::find($member->accepted_user);
-			$recipientUser[] = array(
-				'name'=>$user->profile->firstname." ".$user->profile->lastname,
-				'email'=>$user->email,
-				'mobile'=>$user->profile->mobile
-				);
-		}
-		
-	}
-	foreach($members as $member){
-		//only members that accepted joined
-		if($member->accepted_user){
-			$player = Player::find($member->player_id);
-			foreach($player->contacts as $contact)
-				$recipientContact[] = array(
-					'name'=>$contact->firstname." ".$contact->lastname,
-					'email'=>$contact->email,
-					'mobile'=>$contact->mobile
-					);
-		//allow players with email and mobile
-			if($player->mobile && $player->email ){
-				$recipientPlayer[] = array(
-					'name'=>$player->firstname." ".$player->lastname,
-					'email'=>$player->email,
-					'mobile'=>$player->mobile
-					);
-			}
 
+	//do selection for children events
+	if($team->children->count() > 0 ){
+	  foreach ($team->children as $e){
+	    foreach ($e->members as $member){
+
+	    	//only members that accepted joined
+	    	if($member->accepted_user){
+	    		$user = User::find($member->accepted_user);
+	    		$player = Player::find($member->player_id);
+
+	    		$recipientUser[] = array(
+	    			'name'=>$user->profile->firstname." ".$user->profile->lastname,
+	    			'email'=>$user->email,
+	    			'mobile'=>$user->profile->mobile
+	    		);
+
+	    		foreach($player->contacts as $contact){
+	    			$recipientContact[] = array(
+	    				'name'=>$contact->firstname." ".$contact->lastname,
+	    				'email'=>$contact->email,
+	    				'mobile'=>$contact->mobile
+	    			);
+	    		}
+					//allow players with email and mobile
+	    		if($player->mobile && $player->email ){
+	    			$recipientPlayer[] = array(
+	    				'name'=>$player->firstname." ".$player->lastname,
+	    				'email'=>$player->email,
+	    				'mobile'=>$player->mobile
+	    			);
+	    		}
+	    	}
+	    }
+	  }
+
+	}else{
+
+		foreach($members as $member){
+			//only members that accepted joined
+			if($member->accepted_user){
+				$user = User::find($member->accepted_user);
+				$player = Player::find($member->player_id);
+
+				$recipientUser[] = array(
+					'name'=>$user->profile->firstname." ".$user->profile->lastname,
+					'email'=>$user->email,
+					'mobile'=>$user->profile->mobile
+				);
+
+				foreach($player->contacts as $contact){
+					$recipientContact[] = array(
+						'name'=>$contact->firstname." ".$contact->lastname,
+						'email'=>$contact->email,
+						'mobile'=>$contact->mobile
+					);
+				}
+			//allow players with email and mobile
+				if($player->mobile && $player->email ){
+					$recipientPlayer[] = array(
+						'name'=>$player->firstname." ".$player->lastname,
+						'email'=>$player->email,
+						'mobile'=>$player->mobile
+					);
+				}
+			}
 		}
-		
 	}
+
 	//send default function
 	function sendmessage($destination){
 		global $club, $messageData, $messageSubject, $team, $sms, $user, $recipientMobile, $recipientEmail;

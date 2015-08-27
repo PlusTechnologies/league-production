@@ -12,7 +12,6 @@
 					<h1 class="text-center"> 
 						{{$club->name}}
 					</h1>
-					<h4 class="text-center">Team {{$team->name}}</h4>
 					<br><br><br>
 				</div>
 				<div class="col-md-6 col-md-offset-1 same-height">
@@ -30,11 +29,7 @@
 								<tbody>
 									@foreach(Cart::contents() as $item)
 									<tr>
-										<td>{{$item->name}}
-											@if($team->id <> $item->team_id) 
-											: {{$item->team}}
-											@endif
-										</td>
+										<td>{{$item->name}}</td>
 										<td class="text-center">{{$item->quantity}}</td>
 										<td class="text-right" >${{number_format($item->price,2) }}</td>
 									</tr>
@@ -81,23 +76,23 @@
 							@endif
 
 							@if($errors->has())
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<div class="alert alert-dismissable">
-									<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
-									<ul>
-										@foreach ($errors->all() as $error) 
-										<li class="text-danger">{{$error}}</li>
-										@endforeach
-									</ul>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<div class="alert alert-dismissable">
+											<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+											<ul>
+												@foreach ($errors->all() as $error) 
+												<li class="text-danger">{{$error}}</li>
+												@endforeach
+											</ul>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					@endif
+							@endif
 
-							{{ Form::open(array('action' => array('ClubPublicController@PaymentStoreTeam', $club->id, $team->id), 'class'=>'form-horizontal p','method' => 'post')) }}
+							{{ Form::open(array('action' => array('ParticipantController@paymentValidate', $participant->id), 'class'=>'form-horizontal','method' => 'post')) }}
 							<p>Credit Card</p>
 							<div class="row">
 								<div class="col-xs-12">
@@ -220,7 +215,11 @@
 									</div>
 								</div>
 							</div>
-							<button class="btn btn-success btn-lg btn-outline process pull-right" type="submit">Place Order</button>
+							@if($vault)
+							<button class="btn btn-primary btn-outline btn-sm process pull-right" type="submit">Place Order</button>
+							@else
+							<button class="btn btn-primary btn-outline vault pull-right">Verify Payment</button>
+							@endif
 							{{Form::close()}}
 						</div>
 					</div>
@@ -240,13 +239,6 @@ $(document).ready(function() {
 	$(".card-mask").kendoMaskedTextBox({
 		mask: "0000 0000 0000 0000"
 	});
-
-	$( "form.p" ).submit(function( event ) {
-			$('.process').prop('disabled', true);
-			$('.process').text('');
-			$('.process').html('<i class="fa fa-refresh fa-spin"></i>');
-		});
-
 });
 
 

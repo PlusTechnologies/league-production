@@ -4,6 +4,10 @@ class Participant extends Eloquent {
 	protected $fillable = array('firstname','lastname','due','early_due','early_due_deadline','method','plan_id','event_id','player_id','accepted_user', 'accepted_by', 'accepted_on','status');
 	protected $table = 'participants';
 
+    public static $rules = array(
+        "player"    =>"required"
+    );
+
     public function player() {
         return $this->hasOne("Player", "id", "player_id");   
     }
