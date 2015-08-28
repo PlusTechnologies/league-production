@@ -10,7 +10,18 @@ class ExportController extends BaseController {
 
 		Excel::create('roster', function($excel) use ($id){
 			$excel->sheet('Sheetname', function($sheet) use ($id){
-				$team = Member::where('team_id','=',$id)->with('team')->get();
+				$event = Team::find($id);
+				$team  = array();
+				if($event->children->count() > 0 ){
+					foreach ($event->children as $e){
+						foreach ($e->members as $member){
+							$team[] = $member;
+						}
+					}
+				}else{
+					$team = Member::where('team_id','=',$id)->with('team')->get();
+				}
+
 				$sheet->setOrientation('landscape');
 				$sheet->loadView('export.lacrosse.roster', ['members' => $team]);
 			});
@@ -26,7 +37,19 @@ class ExportController extends BaseController {
 
 		Excel::create('roster', function($excel) use ($id){
 			$excel->sheet('Sheetname', function($sheet) use ($id){
-				$team = Participant::where('event_id','=',$id)->with('event')->get();
+				$event = Evento::find($id);
+				$team = array();
+				if($event->children->count() > 0 ){
+					foreach ($event->children as $e){
+						foreach ($e->participants as $member){
+							$team[] =  $member;
+						}
+					}
+
+				}else{
+					$team = Participant::where('event_id','=',$id)->with('event')->get();
+				}
+				
 				$sheet->setOrientation('landscape');
 				$sheet->loadView('export.lacrosse.roster', ['members' => $team]);
 			});
