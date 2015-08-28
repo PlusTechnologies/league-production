@@ -46,9 +46,9 @@ class Member extends Eloquent {
 		
 	// }
 
-	public function getAcceptedOnAttribute($value){
-		return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('m/d/Y');
-	}
+	// public function getAcceptedOnAttribute($value){
+	// 	return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('m/d/Y');
+	// }
 	public function setEarlyDueDeadlineAttribute($value){
 		$this->attributes['early_due_deadline'] =   date('Y-m-d', strtotime($value));
 	}

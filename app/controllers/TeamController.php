@@ -144,7 +144,7 @@ public function show($id)
 	$receivable = SchedulePayment::with('member')->whereHas('member', function ($query) use ($team) {$query->where('team_id', '=', $team->id);})->get();
 	$announcements = Announcement::where('team_id', $team->id )->get();
 
-	//return $team->members;
+
 
 	return View::make('app.club.team.show')
 	->with('page_title', $title)

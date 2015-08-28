@@ -14,12 +14,13 @@ class Participant extends Eloquent {
     public function event() {
         return $this->hasOne("Evento", "id", "event_id");   
     }
+    public function events(){
+        return $this->belongsTo('Evento', 'events');
+    }
     public function plan() {
         return $this->hasOne("Plan", "id", "plan_id");   
     }
-	public function events(){
-        return $this->belongsTo('Evento', 'events');
-    }
+
 
     // public function getDueAttribute($value) {
     //     return "$".number_format($value, 2);
