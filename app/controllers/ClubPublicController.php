@@ -181,7 +181,7 @@ class ClubPublicController extends \BaseController {
 
 		$club = Club::find($club);
 		$event = Evento::find($id);
-		$status = $event->status;
+		$status = $event->getOriginal('status');
 		$title = 'League Together - Club | '. $club->name;
 		$schedule = $event->schedule->groupBy('date');
 		
@@ -363,6 +363,16 @@ class ClubPublicController extends \BaseController {
 			$participant->save();
 
 			$participant = Participant::find($uuid);
+
+				//waitlist process
+				if($event->max <$event->participants->count()){
+					//add to waitlist
+					$waitlist = new Waitlist;
+					$waitlist->id = Uuid::generate();
+					$waitlist->participant_id = $uuid; 
+					$waitlist->event_id = $event->id; 
+					$waitlist->save();
+				}
 
 			}
 
@@ -594,6 +604,17 @@ class ClubPublicController extends \BaseController {
 				$sale->participant_id = $uuid2;
 				$sale->save();
 
+				if($event->max < $event->participants->count()){
+					//add to waitlist
+					$waitlist = new Waitlist;
+					$waitlist->id = Uuid::generate();
+					$waitlist->participant_id = $uuid2;
+					$waitlist->event_id = $event->id;  
+					$waitlist->save();
+
+					return $waitlist;
+				}
+
 				
 			}	
 
@@ -650,7 +671,7 @@ class ClubPublicController extends \BaseController {
 
 		$club = Club::find($club);
 		$team = Team::find($id);
-		$status = $team->status;
+		$status = $team->getOriginal('status');
 		$title = 'League Together - Club | '. $club->name;
 
 		//session club id
@@ -884,6 +905,16 @@ class ClubPublicController extends \BaseController {
 				$member->status = 1;
 				$member->save();
 
+				//waitlist process
+				if($team->max < $team->members->count()){
+					//add to waitlist
+					$waitlist = new Waitlist;
+					$waitlist->id = Uuid::generate();
+					$waitlist->member_id = $uuid;
+					$waitlist->team_id = $team->id;  
+					$waitlist->save();
+				}
+
 
 			}
 			
@@ -1078,10 +1109,6 @@ class ClubPublicController extends \BaseController {
 
 		}
 
-		
-
-		
-
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
 
@@ -1183,6 +1210,17 @@ class ClubPublicController extends \BaseController {
 					}
 					}//end for loop
 				}//end if plan
+
+				//waitlist process
+				if($team->max < $team->members->count()){
+					//add to waitlist
+					$waitlist = new Waitlist;
+					$waitlist->id = Uuid::generate();
+					$waitlist->member_id = $uuidMember; 
+					$waitlist->team_id = $team->id;
+					$waitlist->save();
+				}
+
 			}	
 			//email receipt 
 			$payment->receipt($transaction, $club->id, $item->player_id);

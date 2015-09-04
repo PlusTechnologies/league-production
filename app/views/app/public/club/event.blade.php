@@ -12,7 +12,7 @@
 					<h1 class="club-title"> 
 						{{$club->name}}
 					</h1>
-					<b>{{$event->name}}</b>
+					<b class="club-subtitle">{{$event->name}}</b>
 					@if($event->end == $event->date || !$event->end)
 					<p class="club-subtitle">{{$event->date}}</p>
 					@else
@@ -20,17 +20,18 @@
 					@endif
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
-					<h1>About Event </h1>
+					<h1>About the Event</h1>
 					<p>{{$event->description}}</p>
 					<br>
 					{{ Form::open(array('action' => array('ClubPublicController@addEventCart', $club->id, $event->id),'method' => 'post')) }}
 					<button type="submit" class="btn btn-success btn-outline" href=""> <i class="fa fa-plus fa-lg"></i>&nbsp; Register Player</button>
 					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> &nbsp; Add to calendar</a>
-
 					{{ Form::close() }}
-					
-					
 					<br><br>
+					@if($event->max <= $event->participants->count())
+					<b class="text-danger">** Your player will be assign to our waiting list **</b>
+					<br><br>
+					@endif
 				</div>
 			</div>
 		</div>

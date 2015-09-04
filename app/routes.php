@@ -58,6 +58,8 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::get('team/{id}/sub/create',	array('as' 	=>'team.sub.create', 'uses' => 'SubController@create'));
 		Route::post('team/{id}/sub',				array('as' 	=>'team.sub.store', 'uses' => 'SubController@store'));
 
+		Route::get('waitlist/{id}/delete', array('as' 	=>'waitlist.delete', 'uses' => 'WaitlistController@delete'));
+		//Route::post('waitlist/{id}/delete', array('as'	=>'waitlist.destroy', 'uses' => 'WaitlistController@destroy'));
 
 		Route::get('event/{id}/participant/delete', array('as' 	=>'event.participant', 'uses' => 'ParticipantController@delete'));
 		Route::post('event/{id}/participant/delete', array('as'	=>'event.participant', 'uses' => 'ParticipantController@destroy'));
@@ -89,6 +91,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::resource('plan',							'PlanController');
 		Route::resource('accounting',				'AccountingController');
 		Route::resource('follower',					'FollowerController');
+		Route::resource('waitlist', 				'WaitlistController');
 		Route::group(array('prefix' => 'plan'), function() {
 			Route::resource('schedule',					'PlanScheduleController');
 			Route::get('schedule/{id}/delete/', 	array('as' =>'schedule.delete', 		'uses' => 'PlanScheduleController@delete'));

@@ -51,6 +51,9 @@ class Evento extends Eloquent {
     {
         return $this->belongsTo('Evento', 'parent_id');
     }
+    public function waitlist() {
+        return $this->hasMany('Waitlist', 'event_id', 'id');
+    }
 
 //Accessors & Mutators
     public function setEarlyDeadlineAttribute($value){
@@ -121,17 +124,17 @@ class Evento extends Eloquent {
         return "No additional instructions";
     }
 
-    public function getStatusAttribute($value){
-        switch ($value) {
-            case 1:
-                return ["id"=>1,'name'=>"Available"];
-            case 0:
-                return ["id"=>0,'name'=>"Unavailable"];
-            default:
-                return ["id"=>0,'name'=>"Unavailable"];
-        }
+    // public function getStatusAttribute($value){
+    //     switch ($value) {
+    //         case 1:
+    //             return ["id"=>1,'name'=>"Available"];
+    //         case 0:
+    //             return ["id"=>0,'name'=>"Unavailable"];
+    //         default:
+    //             return ["id"=>0,'name'=>"Unavailable"];
+    //     }
         
-    }
+    // }
 
     public function aggregateParticipants()
     {   $count = 0;

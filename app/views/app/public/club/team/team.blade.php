@@ -12,7 +12,7 @@
 					<h1 class="club-title"> 
 						{{$club->name}}
 					</h1>
-					<b>Team {{$team->name}}</b>
+					<b class="club-subtitle">Team {{$team->name}}</b>
 				</div>
 				<div class="col-md-6 col-md-offset-1 dark-backgroud">
 					<h1>About the Team </h1>
@@ -20,6 +20,11 @@
 					<br>
 					<a  class="btn btn-success btn-outline" href="{{URL::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->id))}}"> <i class="fa fa-plus fa-lg"></i>&nbsp; Register Player</a>
 					<br><br>
+					@if($team->max <= $team->members->count())
+					<b class="text-danger">** Your player will be assign to our waiting list **</b>
+					<br><br>
+					@endif
+
 				</div>
 			</div>
 		</div>
