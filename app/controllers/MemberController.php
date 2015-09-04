@@ -26,17 +26,28 @@ class MemberController extends BaseController {
 		$club = $user->clubs()->FirstOrFail();
 		$followers = $club->followers;
 		$players = [];
-		//get player from follower
-		foreach ($followers as $follower) {
-			$fuser = User::find($follower->user_id);
-			if($fuser->players){
-				foreach (User::find($follower->user_id)->players as $data) {
-					$data['fullname'] = "$data->firstname $data->lastname";
-					$data['username'] = "$fuser->profile->firstname $fuser->profile->lastname"; 
-					$data['useremail']= "$fuser->email"; 
-					$players[] = $data;
-				}
-			}
+		
+		//get player from follower (original - restricted by club)
+		// foreach ($followers as $follower) {
+		// 	$fuser = User::find($follower->user_id);
+		// 	if($fuser->players){
+		// 		foreach (User::find($follower->user_id)->players as $data) {
+		// 			$data['fullname'] = "$data->firstname $data->lastname";
+		// 			$data['username'] = "$fuser->profile->firstname $fuser->profile->lastname"; 
+		// 			$data['useremail']= "$fuser->email"; 
+		// 			$players[] = $data;
+		// 		}
+		// 	}
+		// }
+
+		// *********************************************************
+		//per Brooks requests all player in the system are available
+		//**********************************************************// 
+		foreach (Player::all() as $data) {
+			$data['fullname'] = "$data->firstname $data->lastname";
+			$data['username'] = "$data->user->profile->firstname $data->user->profile->lastname"; 
+			$data['useremail']= "$data->user->email"; 
+			$players[] = $data;
 		}
 
 		$title = 'League Together - '.$club->name.' Teams';
