@@ -58,6 +58,10 @@ class Team extends Eloquent {
         return $this->belongsTo('Team', 'parent_id');
     }
 
+    public function waitlist() {
+        return $this->hasMany('Waitlist', 'team_id', 'id');
+    }
+
     public function setEarlyDueDeadlineAttribute($value)
     {
         if($value){

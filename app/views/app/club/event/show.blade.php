@@ -165,6 +165,8 @@
               <li role="presentation"><a href="#children" aria-controls="child" role="tab" data-toggle="tab">Sub Events</a></li>
               @endif
 
+              <li role="presentation"><a href="#waitlist" aria-controls="child" role="tab" data-toggle="tab">Waitlist</a></li>
+
 
             </ul>
             <!-- Tab panes -->
@@ -262,7 +264,7 @@
                   </thead>
                   <tbody>
                     @foreach ($announcements as $announcement)
-                    <tr data-id="{{$member->player->id}}">
+                    <tr>
                       <td class="col-md-2">{{$announcement->created_at}}</td>
                       <td class="col-md-2">{{$announcement->subject}}</td>
                       <td class="col-md-3">{{$announcement->message}}</td>
@@ -318,6 +320,85 @@
                 </table>
               </div>
               @endif
+
+              <div role="tabpanel" class="tab-pane " id="waitlist">
+                <div class="clearfix"></div>
+                <br><br> 
+                <table class="table table-condensed table-striped" id="grid">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Name </th>
+                      <th>Position</th>
+                      <th>Uniform</th>
+                      @if($event->children->count() > 0 )
+                      <th>Sub team</th>
+                      @endif
+                      <th>Method</th>
+                      <th>Amount</th>
+                      <th class="col-sm-2">Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    @if($event->children->count() > 0 )
+                    @foreach ($event->children as $e)
+                    @foreach ($e->waitlist as $w)
+                    <tr class="clickable" data-id="{{$w->participant->player->id}}">
+                      <td><img src="{{$w->participant->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$w->participant->player->lastname}}, {{$w->participant->player->firstname}}</td>
+                      <td>{{$w->participant->player->position}}</td>
+                      <td>{{$w->participant->player->uniform}}</td>
+                      <td>{{$e->name}}</td>
+                      <td>{{$w->participant->method}}</td>
+                      <td>${{number_format($w->participant->due, 2)}}</td>
+                      @if($w->participant->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($w->participant->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$w->participant->status)
+                      <td>Waiting for reponse</td>
+                      @endif
+                      <td class="text-center">
+                        <a href="{{URL::action('WaitlistController@delete',array($w->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                    @endforeach
+                    @else
+                    @foreach ($event->waitlist as $waitlist)
+                    <tr class="clickable" data-id="{{$waitlist->participant->player->id}}">
+                      <td><img src="{{$waitlist->participant->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$waitlist->participant->player->lastname}}, {{$waitlist->participant->player->firstname}}</td>
+                      <td>{{$waitlist->participant->player->position}}</td>
+                      <td>{{$waitlist->participant->player->uniform}}</td>
+                      <td>{{$waitlist->participant->method}}</td>
+                      <td>${{number_format($waitlist->participant->due, 2)}}</td>
+                      @if($waitlist->participant->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($waitlist->participant->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$waitlist->participant->status)
+                      <td>Waiting for reponse</td>
+                      @endif
+                      <td class="text-center">
+                        <a href="{{URL::action('WaitlistController@delete',array($waitlist->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                    @endif
+                  </tbody>
+                </table>
+              </div>
 
             </div>
 

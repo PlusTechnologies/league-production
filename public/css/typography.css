@@ -41,6 +41,10 @@ body{
     color: #d9534f;
 }
 
+.text-danger{
+    color: #d9534f;
+}
+
 .btn-primary.btn-outline:hover,
 .btn-success.btn-outline:hover,
 .btn-info.btn-outline:hover,
