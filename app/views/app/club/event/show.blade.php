@@ -211,8 +211,11 @@
                           <td>Waiting for reponse</td>
                           @endif
                           <td class="text-center">
-                            <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
+                            <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
                               <i class="fa fa-trash"></i>
+                            </a>
+                            <a href="{{URL::action('ParticipantController@edit',$member->id)}}" class="text-info btn-lg">
+                            <i class="fa fa-cog"></i>
                             </a>
                           </td>
                         </tr>
@@ -238,8 +241,11 @@
                           <td>Waiting for reponse</td>
                           @endif
                         <td class="text-center">
-                          <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up">
+                          <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
                             <i class="fa fa-trash"></i>
+                          </a>
+                          <a href="{{URL::action('ParticipantController@edit',array($event->id,$member->id))}}" class="text-info btn-lg">
+                            <i class="fa fa-cog"></i>
                           </a>
                         </td>
                       </tr>

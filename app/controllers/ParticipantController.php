@@ -172,9 +172,20 @@ class ParticipantController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($e, $id)
 	{
-		//
+		$user= Auth::user();
+		$club = $user->Clubs()->FirstOrFail();
+		$participant = Participant::find($id);
+		$title = 'League Together - '.$club->name.' Event';
+		$event = Evento::find($participant->event->id);
+
+		return View::make('app.club.event.participant.edit')
+		->with('page_title', $title)
+		->with('event', $event)
+		->with('participant', $participant)
+		->with('club', $club)
+		->withUser($user);
 	}
 
 	/**
@@ -184,9 +195,15 @@ class ParticipantController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($e, $id)
 	{
-		//
+		$participant = Participant::find($id);
+		$participant->event_id = Input::get('event_id');
+		$participant->save();
+		
+     // Redirect with success message.
+		return Redirect::action('ParticipantController@edit',array($participant->event->id, $participant->id))
+		->with( 'notice', 'Participant updated successfully');
 	}
 
 	/**

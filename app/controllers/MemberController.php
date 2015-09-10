@@ -233,10 +233,12 @@ class MemberController extends BaseController {
 		$member = Member::find($id);
 		$title = 'League Together - '.$club->name.' Teams';
 		$team = Team::where("id", "=",$team)->where("club_id",'=',$club->id)->FirstOrFail();
-		return View::make('pages.user.club.member.edit')
+
+		return View::make('app.club.member.edit')
 		->with('page_title', $title)
 		->with('team',$team)
 		->with('member', $member)
+		->with('club', $club)
 		->withUser($user);
 	}
 
@@ -254,29 +256,30 @@ class MemberController extends BaseController {
 		$member = Member::find($id);
 
     	//optional field - if Null take the default value from the team
-		if(!Input::get('early_due')){
-			$member->early_due = $team->early_due;
-		}else{
-			$member->early_due = Input::get('early_due');
-		}
-		if(!Input::get('early_due_deadline')){
-			$member->early_due_deadline = $team->early_due_deadline;
-		}else{
-			$member->early_due_deadline = Input::get('early_due_deadline');
-		}
-		if(!Input::get('due')){
-			$member->due = $team->due;
-		}else{
-			$member->due = Input::get('due');
-		}
+		// if(!Input::get('early_due')){
+		// 	$member->early_due = $team->early_due;
+		// }else{
+		// 	$member->early_due = Input::get('early_due');
+		// }
+		// if(!Input::get('early_due_deadline')){
+		// 	$member->early_due_deadline = $team->early_due_deadline;
+		// }else{
+		// 	$member->early_due_deadline = Input::get('early_due_deadline');
+		// }
+		// if(!Input::get('due')){
+		// 	$member->due = $team->due;
+		// }else{
+		// 	$member->due = Input::get('due');
+		// }
 
+		// $member->save();
+
+		$member->team_id = Input::get('team_id');
 		$member->save();
-
-
+		
      // Redirect with success message.
-		return Redirect::action('MembersController@show',array($team->id, $member->id))
-		->with( 'messages', 'Membership updated');
-
+		return Redirect::action('MemberController@edit',array($member->team->id, $member->id))
+		->with( 'notice', 'Member updated successfully');
 
 	}
 
