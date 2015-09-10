@@ -1235,6 +1235,7 @@ class ClubPublicController extends \BaseController {
             //return Redirect::action('ClubPublicController@PaymentSuccessTeam', array($club->id, $team->id))->with('result',$transaction);
 		}
 	}
+}
 
 	public function PaymentSuccessTeam($club, $id)
 	{
