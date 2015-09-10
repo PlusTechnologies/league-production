@@ -7,11 +7,11 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="col-xs-4 signup-col same-height">
-              <h3>Update Player Membership</h3>
+              <h3>Update Player Participant</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In odio tortor, hendrerit nec sapien at, sollicitudin accumsan lorem.</a>
               </div>
               <div class="col-xs-7 same-height col-xs-offset-1">
-                <h3 class="">Update Player Membership</h3>
+                <h3 class="">Update Player Participant</h3>
                 <p><b>Instructions:</b> Please read carefully all the instructions to succefully build your team roster. All fields are required</p>
                 <br>
                 @if($errors->has())
@@ -44,21 +44,21 @@
                 @endif
 
               
-                {{ Form::open(array('action' => array('MemberController@update', $team->id,$member->id),"class"=>"form-horizontal",'id'=>'members','method' => 'put')) }}
+                {{ Form::open(array('action' => array('ParticipantController@update', $event->id, $participant->id),"class"=>"form-horizontal",'id'=>'members','method' => 'put')) }}
 
                 <div class="row">
                   <div class="col-xs-12">
-                    <h4>Team details</h4>
-                    <p>Update Team for this player.</p>
+                    <h4>Event details</h4>
+                    <p>Update Event for this player.</p>
 
                     <p>
-                      <b>Player:</b> {{$member->player->firstname}} {{$member->player->lastname}} <br>
+                      <b>Player:</b> {{$participant->player->firstname}} {{$participant->player->lastname}} <br>
                     </p>
 
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">Team</label>
+                      <label class="col-sm-3 control-label">Event</label>
                       <div class="col-sm-9">
-                        {{ Form::select('team_id', $club->teams->lists('name', 'id'), $team->id, array('class' => 'form-control', 'tabindex'=>'8') ) }}
+                        {{ Form::select('event_id', $club->events->lists('name', 'id'), $event->id, array('class' => 'form-control', 'tabindex'=>'8') ) }}
                       </div>
                     </div>
 
@@ -97,8 +97,8 @@
                     <hr />
                     <div class="form-group">
                       <div class="col-sm-12 text-right">
-                        <a href="{{URL::action('TeamController@show', $team->id) }}" class="btn btn-default" >Cancel</a>
-                        <button type="submit" class="btn btn-primary btn-outline">Update Membership</button>
+                        <a href="{{URL::action('EventoController@show', $event->id) }}" class="btn btn-default" >Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-outline">Update Participant</button>
                       </div>
                     </div>
                   </div>
