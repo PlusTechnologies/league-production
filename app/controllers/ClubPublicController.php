@@ -380,7 +380,8 @@ class ClubPublicController extends \BaseController {
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'event'=>$event, 'participant'=>$participant );
 			$mail = Mail::send('emails.notification.event.accept', $data, function($message) use ($user, $club, $participant){
-				$message->to($user->email, $participant->accepted_by)
+				$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                ->to($user->email, $participant->accepted_by)
 				->subject("Thank you for joining our event | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);
@@ -921,7 +922,8 @@ class ClubPublicController extends \BaseController {
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
 			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
-				$message->to($user->email, $member->accepted_by)
+				$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                ->to($user->email, $member->accepted_by)
 				->subject("Thank you for joining our team | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);
@@ -1221,10 +1223,16 @@ class ClubPublicController extends \BaseController {
 					$waitlist->save();
 				}
 
-			}	
-			//email receipt 
+            if ($club->processor_name=='Bluepay')
+            {
+             //return Redirect::action('ClubPublicController@PaymentSuccessTeam', array($club->id, $team->id))->with('result','Success');
+             return Redirect::action('ClubPublicController@PaymentCreateTeam', array($club->id, $team->id))->with('error','Player added successfully.  Please check your email for receipt.');
+            }
+            else{
 			$payment->receipt($transaction, $club->id, $item->player_id);
-			return Redirect::action('ClubPublicController@PaymentSuccessTeam', array($club->id, $team->id))->with('result',$transaction);
+             return Redirect::action('ClubPublicController@PaymentSuccessTeam', array($club->id, $team->id))->with('result',$transaction);
+			}
+            //return Redirect::action('ClubPublicController@PaymentSuccessTeam', array($club->id, $team->id))->with('result',$transaction);
 		}
 	}
 

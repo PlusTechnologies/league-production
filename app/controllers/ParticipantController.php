@@ -132,7 +132,8 @@ class ParticipantController extends BaseController {
 			//send email notification of acceptance
 				$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'participant'=> $participant);
 				$mail = Mail::send('emails.notification.event.invite', $data, function($message) use ($user, $club, $participant){
-					$message->to($participant->player->user->email, $participant->accepted_by)
+					$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                    ->to($participant->player->user->email, $participant->accepted_by)
 					->subject("You're Invited to join our event | ".$club->name);
 				});
 
@@ -388,7 +389,8 @@ class ParticipantController extends BaseController {
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'participant'=>$participant);
 			$mail = Mail::send('emails.notification.event.accept', $data, function($message) use ($user, $club, $participant){
-				$message->to($user->email, $participant->accepted_by)
+				$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                ->to($user->email, $participant->accepted_by)
 				->subject("Thank you for joining our team | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);
@@ -764,7 +766,8 @@ class ParticipantController extends BaseController {
 			
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'participant'=>$participant);
 			$mail = Mail::send('emails.notification.event.accept', $data, function($message) use ($user, $club, $participant){
-				$message->to($user->email, $participant->accepted_by)
+				$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                ->to($user->email, $participant->accepted_by)
 				->subject("Thank you for joining our event | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);

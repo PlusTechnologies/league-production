@@ -146,7 +146,8 @@ class MemberController extends BaseController {
 				//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
 			$mail = Mail::send('emails.notification.invite', $data, function($message) use ($user, $club, $member){
-				$message->to($member->player->user->email, $member->accepted_by)
+				$message->from('C2C@leaguetogether.com', 'C2C Lacrosse')
+                ->to($member->player->user->email, $member->accepted_by)
 				->subject("You're Invited to join our team | ".$club->name);
 			});
 
@@ -389,7 +390,8 @@ class MemberController extends BaseController {
 			//send email notification of acceptance
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
 			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
-				$message->to($user->email, $member->accepted_by)
+				$message->from('C2C@leaguetogether.com','C2C Lacrosse')
+                ->to($user->email, $member->accepted_by)
 				->subject("Thank you for joining our team | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);
@@ -765,7 +767,8 @@ class MemberController extends BaseController {
 			
 			$data = array('club'=>$club, 'player'=>$player, 'user'=>$user, 'member'=>$member);
 			$mail = Mail::send('emails.notification.accept', $data, function($message) use ($user, $club, $member){
-				$message->to($user->email, $member->accepted_by)
+				$message->from('C2C@leagutogether.com', 'C2C Lacrosse')
+                ->to($user->email, $member->accepted_by)
 				->subject("Thank you for joining our team | ".$club->name);
 				foreach ($club->users()->get() as $value) {
 					$message->bcc($value->email, $club->name);
