@@ -302,7 +302,6 @@
                       <th class="col-sm-6" data-field="name">Name</th>
                       <th class="col-sm-1" data-field="e_date">Date</th>
                       <th class="col-sm-1" data-field="fee">Fee</th>
-                      <!-- <th class="col-sm-1" data-field="status">Status</th> -->
                       <th class="col-sm-1" data-field="fee">Capacity</th>
                     </tr>
                   </thead>
@@ -318,7 +317,6 @@
                       @endif
                       <td>{{$e->date}}</td>
                       <td>{{$e->fee}}</td>
-                      <!-- <td>{{$e->status['name']}}</td> -->
                       <td>{{$e->participants->count()}} of {{$e->max}}</td>
                     </tr>
                     @endforeach
