@@ -153,7 +153,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Status</label>
 								<div class="col-sm-9">
-									{{ Form::select('status', ['Unavailable','Available'], $event->status['id'], array('class' => 'form-control') ) }}
+									{{ Form::select('status', ['Unavailable','Available'], $event->status, array('class' => 'form-control') ) }}
 								</div>
 							</div>
 						</div>
