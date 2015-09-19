@@ -58,6 +58,8 @@ class Payment extends Eloquent {
     public function ask($param){
         $cart = CardFlex::query($param);
         //return $cart;
+        //clean xml from errors
+        $cart = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $cart);
         $xml = simplexml_load_string($cart);
         $object = json_decode(json_encode($xml), FALSE);
         return $object;
