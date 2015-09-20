@@ -70,6 +70,7 @@ Route::group(array('prefix' => 'account','before' => 'auth'), function() { //Clu
 		Route::post('event/{id}/duplicate', array('as' =>'event.doDuplicate',	'uses' => 'EventoController@doDuplicate'));
 		Route::post('event/{id}/announcement/',	array('as' =>'event.announcement', 'uses' => 'EventoController@doAnnouncement'));
 		Route::get('team/{id}/member/{member}/delete', array('as' =>'team.member.delete', 'uses' => 'MemberController@delete'));
+		Route::post('team/{id}/member/newuser', array('as' =>'team.member.storeNewUser', 'uses' => 'MemberController@storeNewUser'));
 		Route::get('team/{id}/coach/{coach}/delete', array('as' =>'team.coach.delete', 'uses' => 'CoachController@delete'));
 		Route::get('team/{id}/delete/', 				array('as' =>'team.delete', 			'uses' => 'TeamController@delete'));
 		Route::get('team/{id}/duplicate', 	array('as' =>'team.duplicate', 	'uses' => 'TeamController@duplicate'));

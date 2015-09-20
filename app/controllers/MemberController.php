@@ -831,6 +831,12 @@ class MemberController extends BaseController {
 
 	}
 
+	public function storeNewUser(){
+
+		return Redirect::back()
+			->withErrors('This function is not available at the moment');
+	}
+
 
 	
 	
