@@ -199,7 +199,7 @@ $(document).ready(function () {
       $("[name=firstname]").val(dataItem.firstname);
       $("[name=lastname]").val(dataItem.lastname);
       $("[name=position]").val(dataItem.position);
-      $("[name=email]").val(dataItem.useremail);
+      $("[name=email]").val(dataItem.user.email);
       $("[name=player]").val(dataItem.id);
     }
   }).data("kendoAutoComplete");
