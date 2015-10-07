@@ -103,6 +103,7 @@ public function store()
 */
 public function show($id)
 {
+
 	$user =Auth::user();
 	$club = $user->clubs()->FirstOrFail();	
 	$event = Evento::find($id);

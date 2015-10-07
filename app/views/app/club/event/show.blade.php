@@ -39,9 +39,9 @@
               <div class="tile blue">
 
                 @if($event->children->count() > 0 )
-                  <h3 class="title">${{number_format($event->aggregateSales(), 2)}}</h3>
+                <h3 class="title">${{number_format($event->aggregateSales(), 2)}}</h3>
                 @else
-                  <h3 class="title">${{number_format($event->participants->sum('due'), 2)}}</h3>
+                <h3 class="title">${{number_format($event->participants->sum('due'), 2)}}</h3>
                 @endif
                 <p>Sales</p>
               </div>
@@ -50,9 +50,9 @@
               <div class="tile red">
                 
                 @if($event->children->count() > 0 )
-                  <h3 class="title">{{$event->aggregateParticipants()}}</h3>
+                <h3 class="title">{{$event->aggregateParticipants()}}</h3>
                 @else
-                  <h3 class="title">{{$event->participants->count()}}</h3>
+                <h3 class="title">{{$event->participants->count()}}</h3>
                 @endif
                 <p>Participants</p>
               </div>
@@ -61,9 +61,9 @@
               <div class="tile green">
 
                 @if($event->children->count() > 0 )
-                  <h3 class="title">{{$event->max - $event->aggregateParticipants()}}</h3>
+                <h3 class="title">{{$event->max - $event->aggregateParticipants()}}</h3>
                 @else
-                  <h3 class="title">{{$event->max - $event->participants->count()}}</h3>
+                <h3 class="title">{{$event->max - $event->participants->count()}}</h3>
                 @endif
                 
                 <p>Open</p>
@@ -191,65 +191,97 @@
                   </thead>
                   <tbody>
 
+                    <!-- event participants -->
                     @if($event->children->count() > 0 )
-                      @foreach ($event->children as $e)
-                        @foreach ($e->participants as $member)
-                        <tr class="clickable" data-id="{{$member->player->id}}">
-                          <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
-                          <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
-                          <td>{{$member->player->position}}</td>
-                          <td>{{$member->player->uniform}}</td>
-                          <td> {{$e->name}}</td>
-                          <td>${{number_format($member->due, 2)}}</td>
-                          @if($member->status == 1)
-                          <td>Accepted</td>
-                          @endif
-                          @if($member->status == 2)
-                          <td>Declined</td>
-                          @endif
-                          @if(!$member->status)
-                          <td>Waiting for reponse</td>
-                          @endif
-                          <td class="text-center">
-                            <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
-                              <i class="fa fa-trash"></i>
-                            </a>
-                            <a href="{{URL::action('ParticipantController@edit',$member->id)}}" class="text-info btn-lg">
-                            <i class="fa fa-cog"></i>
-                            </a>
-                          </td>
-                        </tr>
-                        @endforeach
-                      @endforeach
+
+                    <!-- parent event participants -->
+                    @foreach ($participants as $member)
+                    <tr class="clickable" data-id="{{$member->player->id}}">
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                      <td>{{$member->player->position}}</td>
+                      <td>{{$member->player->uniform}}</td>
+                      <td> {{$event->name}}</td>
+                      <td>${{number_format($member->due, 2)}}</td>
+                      @if($member->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($member->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$member->status)
+                      <td>Waiting for reponse</td>
+                      @endif
+                      <td class="text-center">
+                        <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="{{URL::action('ParticipantController@edit',array($event->id, $member->id))}}" class="text-info btn-lg">
+                          <i class="fa fa-cog"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                    
+                    <!-- child event participants -->
+                    @foreach ($event->children as $e)
+                    @foreach ($e->participants as $member)
+                    <tr class="clickable" data-id="{{$member->player->id}}">
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                      <td>{{$member->player->position}}</td>
+                      <td>{{$member->player->uniform}}</td>
+                      <td> {{$e->name}}</td>
+                      <td>${{number_format($member->due, 2)}}</td>
+                      @if($member->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($member->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$member->status)
+                      <td>Waiting for reponse</td>
+                      @endif
+                      <td class="text-center">
+                        <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="{{URL::action('ParticipantController@edit',array($e->id, $member->id))}}" class="text-info btn-lg">
+                          <i class="fa fa-cog"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
+                    @endforeach
 
                     @else
 
-                      @foreach ($event->participants as $member)
-                      <tr class="clickable" data-id="{{$member->player->id}}">
-                        <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
-                        <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
-                        <td>{{$member->player->position}}</td>
-                        <td>{{$member->player->uniform}}</td>
-                        <td>${{number_format($member->due, 2)}}</td>
-                        @if($member->status == 1)
-                          <td>Accepted</td>
-                          @endif
-                          @if($member->status == 2)
-                          <td>Declined</td>
-                          @endif
-                          @if(!$member->status)
-                          <td>Waiting for reponse</td>
-                          @endif
-                        <td class="text-center">
-                          <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
-                            <i class="fa fa-trash"></i>
-                          </a>
-                          <a href="{{URL::action('ParticipantController@edit',array($event->id,$member->id))}}" class="text-info btn-lg">
-                            <i class="fa fa-cog"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      @endforeach
+                    @foreach ($event->participants as $member)
+                    <tr class="clickable" data-id="{{$member->player->id}}">
+                      <td><img src="{{$member->player->avatar}}" width="60" class="roster-img"></td>
+                      <td>{{$member->player->lastname}}, {{$member->player->firstname}}</td>
+                      <td>{{$member->player->position}}</td>
+                      <td>{{$member->player->uniform}}</td>
+                      <td>${{number_format($member->due, 2)}}</td>
+                      @if($member->status == 1)
+                      <td>Accepted</td>
+                      @endif
+                      @if($member->status == 2)
+                      <td>Declined</td>
+                      @endif
+                      @if(!$member->status)
+                      <td>Waiting for reponse</td>
+                      @endif
+                      <td class="text-center">
+                        <a href="{{URL::action('ParticipantController@delete',array($member->id))}}" class="text-danger text-center btn-delete pop-up btn-lg">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="{{URL::action('ParticipantController@edit',array($event->id,$member->id))}}" class="text-info btn-lg">
+                          <i class="fa fa-cog"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    @endforeach
                     @endif
                   </tbody>
                 </table>
@@ -510,8 +542,8 @@ $(function () {
 });
 
  $('#grid3').delegate('tbody > tr', 'click', function (e) {
-    window.location = ("/account/club/event/" + $(this).data("id"));
-  });
+  window.location = ("/account/club/event/" + $(this).data("id"));
+});
 
  $('#grid tbody > tr').find('td:last').on('click', function(e) {
   e.stopPropagation();
