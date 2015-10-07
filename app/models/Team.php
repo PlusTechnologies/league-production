@@ -129,7 +129,7 @@ class Team extends Eloquent {
                 $count++;
             }
         }
-        return $count ;
+        return $count + $this->members->count();
     }
 
     public function aggregateSales()
@@ -140,7 +140,7 @@ class Team extends Eloquent {
            $count += Item::where('team_id',$e->id)->sum('price');
 
         }
-        return $count ;
+        return $count + Item::where('team_id',$this->id)->sum('price');
     }
 
     public function aggregateReceivable()
@@ -151,7 +151,7 @@ class Team extends Eloquent {
            $count += SchedulePayment::with('member')->whereHas('member', function ($query) use ($e) {$query->where('team_id', '=', $e->id);})->sum('subtotal');
 
         }
-        return $count ;
+        return $count + SchedulePayment::with('member')->whereHas('member', function ($query) use ($e) {$query->where('team_id', '=', $this->id);})->sum('subtotal');
     }
 
 

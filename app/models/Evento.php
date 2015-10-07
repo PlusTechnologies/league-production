@@ -143,7 +143,7 @@ class Evento extends Eloquent {
                 $count++;
             }
         }
-        return $count ;
+        return $count + $this->participants->count();
     }
 
     public function aggregateSales()
@@ -153,7 +153,9 @@ class Evento extends Eloquent {
                 $count += $p->due;
             }
         }
-        return $count ;
+        //return $count + $this->participants->whereStatus(1);
+        return $count + $this->participants()->where('status', '=', '1')->get()->sum('due');
+
     }
 
 
