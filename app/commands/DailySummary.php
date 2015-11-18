@@ -64,9 +64,10 @@ class DailySummary extends ScheduledCommand {
 
 		$data = array('payments'=>$payments, 'fees'=>$payments2, 'subtotal'=>$payments3, 'month'=>$payments4);
 			$mail = Mail::send('emails.notification.report.daily', $data, function($message){
-				$message->to('jd.hernandez@me.com', 'David Hernandez')
-				->cc('brooks.carter@leaguetogether.com', 'Brooks Carter')
-				->subject("Daily Volume Summary");
+				$message->to('jayclayton@netzero.net', 'Jay Clayton')
+                 ->cc('brooks.carter@leaguetogether.com', 'Brooks Carter')
+                 ->bcc('jayclayton@netzero.net', 'Jay Clayton')
+                 ->subject("Daily Volume Summary");
 			});
 
 	}
