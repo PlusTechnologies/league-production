@@ -139,22 +139,22 @@ class Evento extends Eloquent {
     public function aggregateParticipants()
     {   $count = 0;
         foreach ($this->children as $e) {
-            foreach ($e->participants()->where('status', '=', 1)->get() as $p) {
+            foreach ($e->participants as $p) {
                 $count++;
             }
         }
-        return $count + $this->participants()->where('status', '=', 1)->get()->count();
+        return $count + $this->participants->count();
     }
 
     public function aggregateSales()
     {   $count = 0;
         foreach ($this->children as $e) {
-            foreach ($e->participants()->where('status', '=', 1)->get() as $p) {
+            foreach ($e->participants as $p) {
                 $count += $p->due;
             }
         }
         //return $count + $this->participants->whereStatus(1);
-        return $count + $this->participants()->where('status', '=', 1)->get()->sum('due');
+        return $count + $this->participants()->where('status', '=', '1')->get()->sum('due');
 
     }
 

@@ -59,7 +59,7 @@
                 <td>{{$data->season->name}}</td>
                 <td>{{$data->program->name}}</td>
                 <td>{{$data->due}}</td>
-                <td>{{$data->members()->where('status','=', 1)->get()->count()}} of {{$data->max}}</td>
+                <td>{{$data->members->count()}} of {{$data->max}}</td>
               </tr>
               @endforeach
             </tbody>

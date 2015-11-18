@@ -209,8 +209,6 @@ class ClubPublicController extends \BaseController {
 	{
 		$club = Club::find($club);
 		$event = Evento::find($id);
-
-		if($event->max <= $event->participants()->where('status', '=', 1)->get()->count()){ $receiptDescription =  $event->name .' ***Waitlist'; } else { $receiptDescription =  $event->name;}
 		
 		//Set price for the event
 		$today = Carbon::Now();
@@ -229,7 +227,7 @@ class ClubPublicController extends \BaseController {
 
 		$item = array(
 			'id' 							=> $event->id,
-			'name'						=> $receiptDescription,
+			'name'						=> $event->name,
 			'price'						=> $price,
 			'quantity'				=> 1,
 			'organization' 		=> $club->name,
@@ -243,7 +241,7 @@ class ClubPublicController extends \BaseController {
 		Cart::insert($item);
 		//limit to one registration per session
 		foreach (Cart::contents() as $item) {
-			$item->name = $receiptDescription;
+			$item->name = $event->name;
 			$item->quantity = 1;
 		}	
 
@@ -367,7 +365,7 @@ class ClubPublicController extends \BaseController {
 			$participant = Participant::find($uuid);
 
 				//waitlist process
-				if($event->max < $event->participants()->where('status', '=', 1)->get()->count()){
+				if($event->max <$event->participants->count()){
 					//add to waitlist
 					$waitlist = new Waitlist;
 					$waitlist->id = Uuid::generate();
@@ -607,7 +605,7 @@ class ClubPublicController extends \BaseController {
 				$sale->participant_id = $uuid2;
 				$sale->save();
 
-				if($event->max < $event->participants()->where('status', '=', 1)->get()->count()){
+				if($event->max < $event->participants->count()){
 					//add to waitlist
 					$waitlist = new Waitlist;
 					$waitlist->id = Uuid::generate();
@@ -615,7 +613,7 @@ class ClubPublicController extends \BaseController {
 					$waitlist->event_id = $event->id;  
 					$waitlist->save();
 
-					//return $waitlist;
+					return $waitlist;
 				}
 
 				
@@ -720,13 +718,10 @@ class ClubPublicController extends \BaseController {
 			->with('notice', false)
 			->withUser($user);
 		}
-
-
-		if($team->max <= $team->members->count()){ $receiptDescription =  "Membership Team ".$team->name .' ***Waitlist'; } else { $receiptDescription =  "Membership Team ".$team->name;}
 		
 		$item = array(
 			'id' 							=> $team->id,
-			'name'						=> $receiptDescription,
+			'name'						=> "Membership Team ".$team->name,
 			'price'						=> $team->getOriginal('due'),
 			'quantity'				=> 1,
 			'organization' 		=> $team->club->name,
@@ -738,7 +733,7 @@ class ClubPublicController extends \BaseController {
 			);
 		Cart::insert($item);
 		foreach (Cart::contents() as $item) {
-			$item->name = $receiptDescription;
+			$item->name = "Membership Team ".$team->name;
 			$item->quantity = 1;
 		}
 		return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->id));
@@ -754,8 +749,6 @@ class ClubPublicController extends \BaseController {
 		
 		$club = Club::find($club);
 
-		if($team->max <= $team->members->count()){ $receiptDescription =  "Membership Team ".$team->name .' ***Waitlist'; } else { $receiptDescription =  "Membership Team ".$team->name;}
-
 		switch ($type) 
 		{
 			case 'full':
@@ -769,7 +762,7 @@ class ClubPublicController extends \BaseController {
 			}
 			$item = array(
 				'id' 							=> $team->id,
-				'name'						=> $receiptDescription,
+				'name'						=> "Membership Team ".$team->name,
 				'price'						=> $price,
 				'quantity'				=> 1,
 				'organization' 		=> $team->club->name,
@@ -781,7 +774,7 @@ class ClubPublicController extends \BaseController {
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {
-				$item->name = $receiptDescription;
+				$item->name = "Membership Team ".$team->name;
 				$item->quantity = 1;
 			}
 			return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->id));
@@ -790,7 +783,7 @@ class ClubPublicController extends \BaseController {
 			$price = $team->plan->getOriginal('initial');
 			$item = array(
 				'id' 							=> $team->id,
-				'name'						=> $receiptDescription,
+				'name'						=> "Membership Team ".$team->name,
 				'price'						=> $price,
 				'quantity'				=> 1,
 				'organization' 		=> $team->club->name,
@@ -802,7 +795,7 @@ class ClubPublicController extends \BaseController {
 				);
 			Cart::insert($item);
 			foreach (Cart::contents() as $item) {
-				$item->name = $receiptDescription;
+				$item->name = "Membership Team ".$team->name;
 				$item->quantity = 1;
 			}
 			return Redirect::action('ClubPublicController@selectTeamPlayer', array($club->id, $team->id));

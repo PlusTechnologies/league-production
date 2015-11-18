@@ -9,10 +9,7 @@
           <h3>You are close to become part of our team.</h3>
           <br><br>
           <p>Please review the information below:</p>
-          @if($participant->event->max <= $participant->event->participants()->where('status', '=', 1)->get()->count())
-          <b class="text-danger">** Your player will be assign to our waiting list **</b>
           <br><br>
-          @endif
           <div class="table-responsive">
           <table class="table table-user-information">
             <tbody>

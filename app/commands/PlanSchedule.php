@@ -57,8 +57,7 @@ class PlanSchedule extends ScheduledCommand {
 		$from = Carbon::now()->hour(0)->minute(0)->second(0);
 		$to = Carbon::now()->hour(23)->minute(59)->second(59);
 
-		//$schedules = SchedulePayment::where('status', 0)->whereBetween('date', array($from , $to))->with('member.user.profile')->get();
-		$schedules = SchedulePayment::where('status', 0)->with('member.user.profile')->get();
+		$schedules = SchedulePayment::whereBetween('date', array($from , $to))->with('member.user.profile')->get();
 		$errors = array();
 		$totalAmount = array();
 		$errorAmount = array();
@@ -69,17 +68,10 @@ class PlanSchedule extends ScheduledCommand {
 		$dayLog->payments_count = count($schedules);
 		$dayLog->save();
 
-		
-
-
 		Cart::destroy();
 
-		
+
 		foreach($schedules as $schedule){
-
-
-			try {
-
 			$vault 	= $schedule->member->user->profile->customer_vault;
 			$user 	= User::find($schedule->member->user->id);
 			$player = Player::find($schedule->member->player->id);
@@ -118,91 +110,61 @@ class PlanSchedule extends ScheduledCommand {
 					'club'							=> $club->id
 					);
 				$payment = new Payment;
-				//$transaction = $payment->sale($param);
+				$transaction = $payment->sale($param);
 				
-				//temp json_decode(json_encode($array), FALSE);
-				$transaction = json_decode(json_encode(array('response' => 1, 'total'=>$schedule->total, 'fee'=>$schedule->fee)), FALSE);
-				
-				if($transaction->response == 3 || $transaction->response == 2 ){
 
-					
+				if($transaction->response == 3 || $transaction->response == 2 ){
 					$errors[] = array(
 						'payment_schedule_id'=> $schedule->id,
 						'error_description' => $transaction->transactionid.' : '.$transaction->responsetext,
 						'error_amount' => $schedule->total,
 						'daily_log_id' => $dayLog->id);
 					array_push($errorAmount, number_format($schedule->total,2));
-					//Email error
-					//$emailerrorstatus = $payment->error($transaction, $club->id, $player->id);
+					$emailerrorstatus = $payment->error($transaction, $club->id, $player->id);
 
 				}else{
 
-
-
 					array_push($totalAmount, number_format($transaction->total,2));
 
-					// $payment->id						= $uuid;
-					// $payment->customer     	= $vault;
-					// $payment->transaction   = $transaction->transactionid;	
-					// $payment->subtotal 			= $transaction->subtotal;
-					// $payment->service_fee   = $transaction->fee;
-					// $payment->total   			= $transaction->total;
-					// $payment->promo      		= $transaction->promo;
-					// $payment->tax   				= $transaction->tax;
-					// $payment->discount   		= $transaction->discount;
-					// $payment->club_id				= $club->id;
-					// $payment->user_id				= $user->id;
-					// $payment->player_id 		= $player->id;
-					// $payment->event_type 		= null;
-					// $payment->type					= $transaction->type;
-					// $payment->save();
+					$payment->id						= $uuid;
+					$payment->customer     	= $vault;
+					$payment->transaction   = $transaction->transactionid;	
+					$payment->subtotal 			= $transaction->subtotal;
+					$payment->service_fee   = $transaction->fee;
+					$payment->total   			= $transaction->total;
+					$payment->promo      		= $transaction->promo;
+					$payment->tax   				= $transaction->tax;
+					$payment->discount   		= $transaction->discount;
+					$payment->club_id				= $club->id;
+					$payment->user_id				= $user->id;
+					$payment->player_id 		= $player->id;
+					$payment->event_type 		= null;
+					$payment->type					= $transaction->type;
+					$payment->save();
 
+					$payment->receipt($transaction, $club->id, $player->id);
 					
-
-
-					//Email receipt
-					//$payment->receipt($transaction, $club->id, $player->id);
-					
-					// $sale = new Item;
-					// $sale->description 	= $itemCart['name'];
-					// $sale->quantity 		= $itemCart['quantity'];
-					// $sale->price 				= $itemCart['price'];
-					// $sale->fee 					= $transaction->fee;
-					// $sale->member_id 		= $member->id;
-					// $sale->team_id			= $team->id;
-					// $sale->payment_id   = $uuid;
-					// $sale->save();
-					//update schedule
-					$history->status = 2;
-					$history->save();
+					$sale = new Item;
+					$sale->description 	= $itemCart['name'];
+					$sale->quantity 		= $itemCart['quantity'];
+					$sale->price 				= $itemCart['price'];
+					$sale->fee 					= $transaction->fee;
+					$sale->member_id 		= $member->id;
+					$sale->team_id			= $team->id;
+					$sale->payment_id   = $uuid;
+					$sale->save();
+					//delete schedule
+					$history->delete();
 				}
 			}else{
 
 				//save error that vault didnt exist
 				$errors[] = array(
-					'payment_schedule_id' => $schedule->id,
+					'payment_schedule_id'=>$schedule->id,
 					'error_description' => 'Customer Vault not found',
 					'error_amount' => number_format ($schedule->total,2),
 					'daily_log_id' => $dayLog->id);
-
-				array_push($errorAmount, number_format($schedule->total,2));
-
 			}
-
-
-			
-			} catch (Exception $e) {
-				//save internal error 
-				$errors[] = array(
-					'payment_schedule_id'=>$schedule->id,
-					'error_description' => $e,
-					'error_amount' => number_format ($schedule->total,2),
-					'daily_log_id' => $dayLog->id);
-
-				array_push($errorAmount, number_format($schedule->total,2));
-			
-			}
-				
 			
 		}//end of foreach schedule
 

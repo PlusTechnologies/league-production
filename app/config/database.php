@@ -76,14 +76,11 @@ return array(
 
 		'sqlsrv' => array(
 			'driver'   => 'sqlsrv',
-			'host'     => 'sql1100.shared-servers.com',
-			'port'     => 1089,
-			'database' => 'leaguetogether',
-			'username' => 'ltuser',
-			'password' => 'I0tkLotd!',
-			'schema'   => 'ltadmin',
-			'prefix'   => 'ltadmin.',
-
+			'host'     => 'localhost',
+			'database' => 'database',
+			'username' => 'root',
+			'password' => '',
+			'prefix'   => '',
 			),
 
 		),

@@ -28,7 +28,7 @@
 					<a class="btn btn-default btn-outline" href="{{URL::action('CalendarController@create',$event->id )}}"> <i class="fa fa-calendar-o fa-lg"></i> &nbsp; Add to calendar</a>
 					{{ Form::close() }}
 					<br><br>
-					@if($event->max <= $event->participants()->where('status', '=', 1)->get()->count())
+					@if($event->max <= $event->participants->count())
 					<b class="text-danger">** Your player will be assign to our waiting list **</b>
 					<br><br>
 					@endif

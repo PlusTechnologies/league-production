@@ -73,7 +73,7 @@
                 @if($team->children->count() > 0 )
                 <h3 class="title">{{$team->aggregateMembers()}}</h3>
                 @else
-                <h3 class="title">{{$team->members()->where('status',"=", 1)->get()->count()}}</h3>
+                <h3 class="title">{{$team->members->count()}}</h3>
                 @endif
                 <p>Members</p>
               </div>
