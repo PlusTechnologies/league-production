@@ -40,7 +40,7 @@ class AccountingController extends \BaseController {
 			return $payment;
 			
 			case 2:
-			$payment = SchedulePayment::where('club_id', '=', $club->id)
+			$payment = SchedulePayment::where('club_id', '=', $club->id)->where('status', 0)
 			->with('member')
 			->whereBetween('date', array($from , $to))->get();
 			return $payment;
