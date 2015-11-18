@@ -62,7 +62,7 @@
                 @if($event->children->count() > 0 )
                   <td>{{$event->aggregateParticipants()}} of {{$event->max}}</td>
                 @else
-                  <td>{{$event->participants->count()}} of {{$event->max}}</td>
+                  <td>{{$event->participants()->where('status', '=', 1)->get()->count()}} of {{$event->max}}</td>
                 @endif
                 
               </tr>

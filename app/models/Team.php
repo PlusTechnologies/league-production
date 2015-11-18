@@ -125,11 +125,11 @@ class Team extends Eloquent {
     public function aggregateMembers()
     {   $count = 0;
         foreach ($this->children as $e) {
-            foreach ($e->members as $p) {
+            foreach ($e->members()->where('status', '=', 1)->get() as $p) {
                 $count++;
             }
         }
-        return $count + $this->members->count();
+        return $count + $this->members()->where('status', '=', 1)->get()->count();
     }
 
     public function aggregateSales()

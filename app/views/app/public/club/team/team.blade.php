@@ -20,7 +20,7 @@
 					<br>
 					<a  class="btn btn-success btn-outline" href="{{URL::action('ClubPublicController@paymentSelectTeam', array($club->id, $team->id))}}"> <i class="fa fa-plus fa-lg"></i>&nbsp; Register Player</a>
 					<br><br>
-					@if($team->max <= $team->members->count())
+					@if($team->max <= $team->members()->where('status', '=',1)->get()->count())
 					<b class="text-danger">** Your player will be assign to our waiting list **</b>
 					<br><br>
 					@endif

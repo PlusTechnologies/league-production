@@ -52,7 +52,7 @@
                 @if($event->children->count() > 0 )
                 <h3 class="title">{{$event->aggregateParticipants()}}</h3>
                 @else
-                <h3 class="title">{{$event->participants->count()}}</h3>
+                <h3 class="title">{{$event->participants()->where('status', '=', 1)->get()->count()}}</h3>
                 @endif
                 <p>Participants</p>
               </div>
@@ -63,7 +63,7 @@
                 @if($event->children->count() > 0 )
                 <h3 class="title">{{$event->max - $event->aggregateParticipants()}}</h3>
                 @else
-                <h3 class="title">{{$event->max - $event->participants->count()}}</h3>
+                <h3 class="title">{{$event->max - $event->participants()->where('status', '=', 1)->get()->count()}}</h3>
                 @endif
                 
                 <p>Open</p>
