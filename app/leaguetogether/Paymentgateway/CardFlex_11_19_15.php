@@ -639,16 +639,6 @@ class CardFlex{
         
 
 		$club = Club::Find($param['club']);
-
-        if ($club->id=='d70bb8a0-f4ce-11e4-9e56-375d28dbce0f'){//core 4 Athletics
-            $accountId='100249895870';
-            $secretKey='NBDYBPPCZ2T5XONGC0Z4R6K.ET6ECCXV';
-        }
-        else
-        if ($club->id=='c45f1900-3a49-11e5-a876-737260fcf1f6'){//C2C Georgia
-            $accountId='100245633213';
-            $secretKey='0WULZI9LXXOLAQ4VVYRKHGHTZPULYHAR';
-        }
 		
 		unset($param['club']);
 		//add item name to description as string
@@ -657,11 +647,11 @@ class CardFlex{
     		$desc .= $item->name . " | " . $item->organization;
 
     		//check if user's player is already a member or a participant of the event or team
-    		$playerMember = Member::where('player_id', $item->player_id)->whereRaw("BINARY team_id = '$item->id'")->first();
- 		    $playerParticipant = Participant::where('player_id', $item->player_id)->whereRaw("BINARY event_id  = '$item->id'")->first();
+    		$playerMember = Member::where('player_id', $item->player_id)->where('team_id',$item->id)->first();
+    		$playerParticipant = Participant::where('player_id', $item->player_id)->where('event_id',$item->id)->first();
 
     		if((!empty($playerMember->status) || !empty($playerParticipant->status)) && !$item->autopay){
-    			return  array("response"=>2, "responsetext"=>"The selected player is already registered $item->autopay");
+    			return  array("response"=>2, "responsetext"=>"The selected player is already registered $item->autopay ");
     		}
 		};
 
@@ -701,7 +691,7 @@ class CardFlex{
 		$total = $fee + $tax + $subtotal;
         
 //        $total=3.00;
-//            $total = $subtotal;
+            $total = $subtotal;
 
         $charged = array(
 				'date'			=> $now,
@@ -933,19 +923,6 @@ class CardFlex{
     public function blueVault_Create($param, $user)
     {
 		$club = Club::Find($param['club']);
-
-        if ($club->id=='d70bb8a0-f4ce-11e4-9e56-375d28dbce0f'){//core 4 Athletics
-            $accountId='100249895870';
-            $secretKey='NBDYBPPCZ2T5XONGC0Z4R6K.ET6ECCXV';
-        }
-        else
-        if ($club->id=='c45f1900-3a49-11e5-a876-737260fcf1f6'){//C2C Georgia
-            $accountId='100245633213';
-            $secretKey='0WULZI9LXXOLAQ4VVYRKHGHTZPULYHAR';
-        }
-
-
-
 		unset($param['club']);
 
         $credentials = array(
@@ -1104,19 +1081,8 @@ class CardFlex{
         
     }
 
-    public function blueVault_Update($param)
+    public function blueVault_Update()
     {
-
-        if ($club->id=='d70bb8a0-f4ce-11e4-9e56-375d28dbce0f'){//core 4 Athletics
-            $accountId='100249895870';
-            $secretKey='NBDYBPPCZ2T5XONGC0Z4R6K.ET6ECCXV';
-        }
-        else
-        if ($club->id=='c45f1900-3a49-11e5-a876-737260fcf1f6'){//C2C Georgia
-            $accountId='100245633213';
-            $secretKey='0WULZI9LXXOLAQ4VVYRKHGHTZPULYHAR';
-        }
-
         $bp = new BluePayment();
         $bp->sale('25.00');
         $bp->setCustInfo('4111111111111111',
@@ -1154,20 +1120,6 @@ class CardFlex{
 //        $this->blueFlex($param,'Sale');
         //CardFlex::blueFlex($param,'Sale');
         //////
-
-        $club = Club::Find($param['club']);
-
-        if ($club->id=='d70bb8a0-f4ce-11e4-9e56-375d28dbce0f'){//core 4 Athletics
-            $accountId='100249895870';
-            $secretKey='NBDYBPPCZ2T5XONGC0Z4R6K.ET6ECCXV';
-        }
-        else
-        if ($club->id=='c45f1900-3a49-11e5-a876-737260fcf1f6'){//C2C Georgia
-            $accountId='100245633213';
-            $secretKey='0WULZI9LXXOLAQ4VVYRKHGHTZPULYHAR';
-        }
-		
-		unset($param['club']);
 
         $user = Auth::user();
 
@@ -1377,7 +1329,7 @@ class CardFlex{
         return $outstring;
     }
 
-    public function blueTransaction($param)
+    public function blueTransaction()
     {
         $bp = new BluePayment();
         $bp->sale('25.00');
@@ -1455,7 +1407,7 @@ class CardFlex{
 
     		//check if user's player is already a member or a participant of the event or team
     		$playerMember = Member::where('player_id', $item->player_id)->whereRaw("BINARY team_id = '$item->id'")->first();
- 		    $playerParticipant = Participant::where('player_id', $item->player_id)->whereRaw("BINARY event_id  = '$item->id'")->first();
+ 				$playerParticipant = Participant::where('player_id', $item->player_id)->whereRaw("BINARY event_id  = '$item->id'")->first();
 
     		if((!empty($playerMember->status) || !empty($playerParticipant->status)) && !$item->autopay){
     			return  array("response"=>2, "responsetext"=>"The selected player is already registered $item->autopay");
