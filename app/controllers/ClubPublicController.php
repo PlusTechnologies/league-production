@@ -207,6 +207,7 @@ class ClubPublicController extends \BaseController {
 	}
 	public function addEventCart($club, $id)
 	{
+		Cart::destroy();
 		$club = Club::find($club);
 		$event = Evento::find($id);
 		
@@ -323,8 +324,15 @@ class ClubPublicController extends \BaseController {
 
 		//Addition for stub feature 
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+
+		
 		
 		foreach (Cart::contents() as $item) {
+			//check if selected event equal event in cart
+			if($id <> $item->event_id){
+				return Redirect::action('ClubPublicController@eventSingle', array($club->id, $event->id) );
+			}
+
 			$player = Player::Find($item->player_id);
 
 		}	
@@ -869,6 +877,10 @@ class ClubPublicController extends \BaseController {
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 		
 		foreach (Cart::contents() as $item) {
+			//check if selected team equal team in cart
+			if($id <> $item->team_id){
+				return Redirect::action('ClubPublicController@teamSingle', array($club->id, $team->id) );
+			} 
 			$player = Player::Find($item->player_id);
 		}	
 
