@@ -80,7 +80,16 @@ class Payment extends Eloquent {
     }
 
     public function update_customer($param, $user){
-        $cart = CardFlex::vault_update($param, $user);
+       
+        switch (Club::find($param['club'])->processor_name) {
+            case "CardFlex":
+                $cart = CardFlex::vault_update($param, $user);
+            break;
+            case "BluePay":
+                $cart = BluePay::vault_update((object)$param, $user);
+            break;
+        }
+        
         $object = json_decode(json_encode($cart), FALSE);
         return $object ;
     }

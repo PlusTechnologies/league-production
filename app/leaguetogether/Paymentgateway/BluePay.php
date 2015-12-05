@@ -81,25 +81,37 @@ class BluePay{
 
 	public function vault_update($param, $user){	
 
-		$club = Club::Find($param['club']);
-
-		unset($param['club']);
-
+		$club = Club::Find($param->club);
+		unset($param->club);
+		
+		$input = array(
+			'trans_type'	=> 'AUTH',			
+			'payment_account'	=> $param->ccnumber,
+			'card_cvv2'		=> $param->cvv,
+			'card_expire'	=> $param->ccexp,
+			'mode'				=> getenv("BLUEPAY_MODE"),
+			'addr1'    		=> $param->address1,
+			'city'      	=> $param->city,
+			'state'      	=> $param->state,
+			'zip'					=> $param->zip,
+			'name1' 			=> $user->profile->firstname,
+			'name2' 			=> $user->profile->lastname,
+			'email'				=> $user->email,
+			'phone'				=> $user->profile->mobile,
+			);	
+		
 		$credentials = array(
-			'customer_vault'	=> 'update_customer',
-			'username'				=> Crypt::decrypt($club->processor_user),
-			'password'				=> Crypt::decrypt($club->processor_pass),
-			'first_name' 			=> $user->profile->firstname,
-			'last_name'				=> $user->profile->lastname,
-			'email' 					=> $user->email,
-			'phone'						=> $user->profile->mobile
+			'account_id'					=> Crypt::decrypt($club->processor_user),
+			'tamper_proof_seal'		=> md5 (Crypt::decrypt($club->processor_pass)),
+			'tps_def' 						=> 'secret_key',
+			'amount' 							=> '0',
+			'memo'								=> 'create customer',
+			'version' 						=> 1
 			);
 
-		$merge 	= array_merge($credentials,$param);
-
-
+		$merge 	= array_merge($credentials, $input);
 		$params = http_build_query($merge) . "\n";
-		$uri 		= "https://secure.cardflexonline.com/api/transact.php";
+		$uri 		= "https://secure.bluepay.com/interfaces/bp20post";
 		$ch 		= curl_init($uri);
 		curl_setopt_array($ch, array(
 			CURLOPT_RETURNTRANSFER  => true,
@@ -109,7 +121,19 @@ class BluePay{
 		$out = curl_exec($ch) or die(curl_error());
 		parse_str($out, $output);
 		curl_close($ch);
-		$response = array_merge_recursive($output);
+		
+		//mapping to cardflex response
+		if($output['STATUS'] <> 1){ $output['STATUS'] = '2'; }
+		$r = array(
+			'response'			=> $output['STATUS'],
+			'responsetext' 	=> $output['MESSAGE'],
+			'transactionid' => $output['TRANS_ID'],
+			'customer_vault_id' => $output['TRANS_ID'],
+			'type' 					=> strtolower($output['TRANS_TYPE'])
+			);
+		//****************************************
+
+		$response = array_merge_recursive($output,$r);
 
 		return $response;
 		
@@ -183,6 +207,7 @@ class BluePay{
 					'city'				=>	$output['city'],
 					'state'				=>	$output['state'],
 					'postal_code'	=>	$output['zip'],
+					'customer_vault_id'=> $output['id']
 					)
 				)
 			);
@@ -295,7 +320,7 @@ class BluePay{
 	public function sale($param){
 		
 		$type = array('trans_type'=> 'sale');
-
+		
 		//Blupay Mapping
 		//For reference https://www.bluepay.com/sites/default/files/documentation/BluePay_bp20post/Bluepay20post.txt 
 		if(isset($param->customer_vault_id)){
@@ -353,9 +378,50 @@ class BluePay{
     //uses flex as a refund
 	public function refund($param){
 
-		$type = array('type'=> 'refund');
-		$transaction = CardFlex::transaction($param, $type);
-		return  $transaction;
+		$type = array('trans_type'=> 'REFUND');
+		$club = Club::Find($param->club);
+		unset($param->club);
+		$user = Auth::user();
+
+		$charged = array(
+			'total'			=> $param->amount
+		);
+
+		$credentials = array(
+			'account_id'					=> Crypt::decrypt($club->processor_user),
+			'tamper_proof_seal'		=> md5 (Crypt::decrypt($club->processor_pass)),
+			'tps_def' 						=> 'secret_key',
+			'master_id' 					=> $param->transactionid,
+			'memo'								=> 'Refund',
+			'version' 						=> 1
+		);
+
+		$merge = array_merge($type,(array)$param,$credentials);
+		$params = http_build_query($merge) . "\n";
+		$uri = "https://secure.bluepay.com/interfaces/bp20post";
+		$ch = curl_init($uri);
+		curl_setopt_array($ch, array(
+			CURLOPT_RETURNTRANSFER  =>true,
+			CURLOPT_VERBOSE     => 1,
+			CURLOPT_POSTFIELDS =>$params
+			));
+		$out = curl_exec($ch) or die(curl_error());
+		parse_str($out, $output);
+		curl_close($ch);
+
+		//mapping to cardflex response
+		if($output['STATUS'] <> 1){ $output['STATUS'] = '2'; }
+		$r = array(
+			'response'			=> $output['STATUS'],
+			'responsetext' 	=> $output['MESSAGE'],
+			'transactionid' => $output['TRANS_ID'],
+			'type' 					=> strtolower($output['TRANS_TYPE'])
+			);
+		//****************************************
+
+		$response = array_merge_recursive($output,$charged,$r);
+
+		return $response;
 
 	}
 

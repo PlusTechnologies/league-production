@@ -226,8 +226,6 @@ class AccountingController extends \BaseController {
 					}
 				});
 
-				
-
 			}//end of transaction result
 
 		} //end of amount test 

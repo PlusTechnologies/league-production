@@ -496,11 +496,11 @@ class ClubPublicController extends \BaseController {
 				return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))
 				->with('error', $transaction->responsetext);
 			}else{
-		//update user customer #
+				//update user customer #
 				$user->profile->customer_vault = $transaction->customer_vault_id;
 				$user->profile->save();
-			//User::where('id', $user->id)->update(array('customer_id' => $transaction->customer_vault_id ));
-			//retrived data save from API - See API documentation
+				//User::where('id', $user->id)->update(array('customer_id' => $transaction->customer_vault_id ));
+				//retrived data save from API - See API documentation
 				$data = array(
 					'success'  	=> true,
 					'customer' 	=> $transaction->customer_vault_id, 

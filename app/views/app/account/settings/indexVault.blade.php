@@ -170,7 +170,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<a href="{{URL::action('AccountController@vaultEdit', $vault->customer_vault->customer->customer_vault_id )}}" class="btn btn-primary btn-outline">Edit</a>
+							<a href="{{URL::action('AccountController@vaultEdit', array($vault->customer_vault->customer->customer_vault_id) )}}" class="btn btn-primary btn-outline">Edit</a>
 						</div>
 					</div>
 

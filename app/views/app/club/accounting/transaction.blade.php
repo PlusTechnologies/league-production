@@ -152,7 +152,7 @@
                         <div class="col-sm-12 text-right">
                            <a href="{{URL::action('ClubController@index')}}" class="btn btn-default">Cancel</a>
 
-                           @if($transaction->action->action_type == 'sale')
+                           @if(strtolower($transaction->action->action_type) == 'sale')
                            <a href="{{URL::action('AccountingController@refund', $payment->transaction)}}" class="btn btn-danger btn-outline">Refund</a>
                            @endif
 
