@@ -6,10 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/ircmaxell/password-compat/lib/password.php',
-    $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
-    $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
-    $vendorDir . '/iron-io/iron_mq/IronMQ.class.php',
-    $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
-    $vendorDir . '/wp-cli/php-cli-tools/lib/cli/cli.php',
+    'e40631d46120a9c38ea139981f8dab26' => $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    '3919eeb97e98d4648304477f8ef734ba' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
+    '2c102faa651ef8ea5874edb585946bce' => $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
+    '62de84aa6f2fe8682c9a9655314c1f27' => $vendorDir . '/iron-io/iron_mq/IronMQ.class.php',
+    '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
+    'be01b9b16925dcb22165c40b46681ac6' => $vendorDir . '/wp-cli/php-cli-tools/lib/cli/cli.php',
 );

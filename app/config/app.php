@@ -127,9 +127,10 @@ return array(
 		'Intervention\Image\ImageServiceProvider',
 		'Moltin\Cart\CartServiceProvider',
 		'leaguetogether\Paymentgateway\CardFlexServiceProvider',
+		'leaguetogether\Paymentgateway\BluePayServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
 		'Aloha\Twilio\TwilioServiceProvider',
-		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider'
 
 	),
 
@@ -204,6 +205,7 @@ return array(
 		'Uuid' 							=> 'Webpatser\Uuid\Uuid',
 		'Cart' 							=> 'Moltin\Cart\Facade',
 		'CardFlex'		  		=> 'leaguetogether\Facades\CardFlex',
+		'BluePay'		  			=> 'leaguetogether\Facades\BluePay',
 		'Twilio' 						=> 'Aloha\Twilio\Facades\Twilio',
 		'Excel' 						=> 'Maatwebsite\Excel\Facades\Excel',
 

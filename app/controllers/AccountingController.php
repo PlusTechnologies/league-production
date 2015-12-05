@@ -66,8 +66,9 @@ class AccountingController extends \BaseController {
 	public function transaction($id)
 	{
 		$user= Auth::user();
-		$club = $user->Clubs()->FirstOrFail();
-		$payment = Payment::where('club_id', '=', $club->id)->where('transaction', '=',$id)->FirstOrFail();
+		
+		$payment = Payment::where('transaction', '=',$id)->FirstOrFail();
+		$club = Club::find($payment->club_id);
 		$history = Payment::where('user_id','=',$payment->user->id)->whereNotIn('transaction', array($payment->transaction))->get();
 		//get transaction data from CF
 		$param = array(
@@ -77,9 +78,11 @@ class AccountingController extends \BaseController {
 			);
 
 		$transaction = $payment->ask($param);
+
+
 		$values = $transaction->transaction;
 
-		//return Response::json($values);
+		
 		$title = 'League Together - '.$club->name.' Transaction';
 		if(count($transaction->transaction) > 1){
 			foreach ($transaction->transaction as $value) {

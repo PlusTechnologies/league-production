@@ -31,19 +31,50 @@ class Payment extends Eloquent {
     }
 
     public function sale($param){
-        $cart = CardFlex::sale($param);
+        
+        //Processor switcher
+        switch (Club::find($param['club'])->processor_name) {
+            case "CardFlex":
+                $cart = CardFlex::sale($param);
+            break;
+            case "BluePay":
+                $cart = BluePay::sale((object)$param);
+            break;
+        }
+
         $object = json_decode(json_encode($cart), FALSE);
-        return $object ;
+        return $object;
     }
 
     public function refund($param){
-        $cart = CardFlex::refund($param);
+
+        //Processor switcher
+        switch (Club::find($param['club'])->processor_name) {
+            case "CardFlex":
+                $cart = CardFlex::refund($param);
+            break;
+            case "BluePay":
+                $cart = BluePay::refund((object)$param);
+            break;
+        }
+
+        
         $object = json_decode(json_encode($cart), FALSE);
         return $object ;
     }
 
     public function create_customer($param, $user){
-        $cart = CardFlex::vault_create($param, $user);
+
+        switch (Club::find($param['club'])->processor_name) {
+            case "CardFlex":
+                $cart = CardFlex::vault_create($param, $user);
+            break;
+            case "BluePay":
+                $cart = BluePay::vault_create((object)$param, $user);
+            break;
+        }
+        
+        
         $object = json_decode(json_encode($cart), FALSE);
         return $object ;
     }
@@ -56,12 +87,18 @@ class Payment extends Eloquent {
 
 
     public function ask($param){
-        $cart = CardFlex::query($param);
-        //return $cart;
-        //clean xml from errors
-        $cart = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $cart);
-        $xml = simplexml_load_string($cart);
-        $object = json_decode(json_encode($xml), FALSE);
+
+        //Processor switcher
+        switch (Club::find($param['club'])->processor_name) {
+            case "CardFlex":
+                $cart = CardFlex::query($param);
+            break;
+            case "BluePay":
+                $cart = BluePay::query($param);
+            break;
+        }
+        
+        $object = json_decode(json_encode($cart), FALSE);
         return $object;
     }
 
@@ -70,21 +107,13 @@ class Payment extends Eloquent {
         $club = Club::Find($id);
         $user = Auth::user();
         $player = Player::find($playerid);
-        /*
         $query = array(
-            'report_type'       => 'customer_vault',
-            'customer_vault_id' => $user->profile->customer_vault,
-            'club'              => $club->id
-            );
-        $payment = new Payment;*/
+            'transaction_id' => $param->transactionid,
+            'club'          => $club->id,
+            'action_type'   => $param->type
+        );
 
-        $query = array(
-            'transaction_id'    => $param->transactionid,
-            'club'              => $club->id,
-            'action_type'       => $param->type
-            );
         $payment = new Payment;
-
         $vault =  json_decode(json_encode($payment->ask($query)),false);
         //convert object to array
         $dt = json_decode(json_encode($param),false);

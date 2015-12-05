@@ -487,6 +487,7 @@ class ClubPublicController extends \BaseController {
 
 			$payment = new Payment;
 			$transaction = $payment->create_customer($param, $user);
+			
 			if($transaction->response == 3 || $transaction->response == 2 ){
 				$data = array(
 					'success'  	=> false,
@@ -528,9 +529,7 @@ class ClubPublicController extends \BaseController {
 		//Addition for stub feature 
 		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 
-
 		//check if follower equal club
-
 		if($follow->club_id <> $club->id){
 
 			$param = array(
@@ -558,9 +557,9 @@ class ClubPublicController extends \BaseController {
 
 		}
 
+
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
-
 
 		if($transaction->response == 3 || $transaction->response == 2 ){
 			return Redirect::action('ClubPublicController@PaymentCreate', array($club->id, $event->id))->with('error',$transaction->responsetext);
