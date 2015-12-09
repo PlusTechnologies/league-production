@@ -504,7 +504,11 @@ class MemberController extends BaseController {
 		$title 	= 'League Together - '.$member->team->club->name.' Teams';
 		$player = $member->player;
 		$club 	= $member->team->club;
+		$team 	= $member->team;
 		$cart 	= Cart::contents(true);
+
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
 
 		foreach (Cart::contents() as $item) {
 			$type = $item->type;
@@ -527,6 +531,29 @@ class MemberController extends BaseController {
 		switch ($type) 
 		{
 			case 'full':
+
+			/**********************/
+        //stub temporary fix for parent that like to sign up for an event team in a different club with a saved customer id
+        //check if user is follower of the club hosting the team.
+			if($follow->club_id <> $club->id){
+				$vault = false;
+				return View::make('app.club.member.checkout.checkoutWithoutVault')
+				->with('page_title', 'Checkout')
+				->withUser($user)
+				->with('club', $club)
+				->with('member', $member)
+				->with('team', $team)
+				->with('products',Cart::contents())
+				->with('subtotal', $subtotal)
+				->with('service_fee',$fee)
+				->with('tax', $tax)
+				->with('cart_total',$total)
+				->with('discount', $discount)
+				->with('vault', $vault)
+				->with('player', $player);
+
+			};
+			/*******************************/
 
 			if($user->profile->customer_vault){
 				$param = array(
@@ -568,6 +595,15 @@ class MemberController extends BaseController {
 
 
 			case 'plan':
+
+			/**********************/
+        //stub temporary fix for parent that like to sign up for an event team in a different club with a saved customer id
+        //check if user is follower of the club hosting the team.
+			if($follow->club_id <> $club->id){
+				return Redirect::action('MemberController@paymentSelect', array($member->id))
+			->with('error', 'Unfortunately payment plans are not allow for your player on this team');
+			};
+
 			if($user->profile->customer_vault){
 				$param = array(
 					'report_type'	=> 'customer_vault',
@@ -674,11 +710,37 @@ class MemberController extends BaseController {
 		$cart 	= Cart::contents(true);
 		$uuid 	= Uuid::generate();
 
-		$param = array(
+		//Addition for stub feature 
+		$follow = Follower::where("user_id","=", $user->id)->FirstOrFail();
+
+		//check if follower equal club
+
+		if($follow->club_id <> $club->id){
+
+			$param = array(
+				'ccnumber'		=> str_replace('_', '', Input::get('card')),
+				'ccexp'				=> sprintf('%02s', Input::get('month')).Input::get('year'),
+				'cvv'      		=> Input::get('cvv'),
+				'address1'    => Input::get('address'),
+				'city'      	=> Input::get('city'),
+				'state'      	=> Input::get('state'),
+				'zip'					=> Input::get('zip'),
+				'discount'		=> Input::get('discount'),
+				'club' 				=> $club->id,
+				'firstname' 	=> $user->profile->firstname,
+				'lastname' 		=> $user->profile->lastname,
+				'phone' 			=> $user->profile->mobile
+		);
+
+		}else{
+
+			$param = array(
 			'customer_vault_id'	=> $user->profile->customer_vault,
 			'discount'					=> Input::get('discount'),
 			'club'							=> $club->id,
 			);
+
+		}
 
 		$payment = new Payment;
 		$transaction = $payment->sale($param);
@@ -791,14 +853,17 @@ class MemberController extends BaseController {
 		if(!$result){
 			return Redirect::action('AccountController@index');
 		}
+		//get transaction data from CF
 		$param = array(
-			'report_type'				=> 'customer_vault',
-			'customer_vault_id'	=> $user->profile->customer_vault,
-			'club' 							=> $club->id
+			'transaction_id'	=> $result->transactionid,
+			'club'						=> $club->id,
+			'action_type' => $result->type
 			);
 		$payment = new Payment;
-		$vault = $payment->ask($param);
+		$transaction = json_decode(json_encode($payment->ask($param)),false);
+
 		$items = Cart::contents();
+
 		// Clean the cart
 		Cart::destroy();
 		return View::make('app.club.member.checkout.success')
@@ -806,7 +871,7 @@ class MemberController extends BaseController {
 		->withUser($user)
 		->with('products', $items)
 		->with('result', $result)
-		->with('vault', $vault);
+		->with('transaction', $transaction->transaction);
 	}
 	public function paymentRemoveCartItem($id){
 
