@@ -21,17 +21,7 @@ class TwilioSmsCommand extends Command {
      *
      * @var string
      */
-    protected $description = 'Twilio command to test Twilio API Integration.';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Send an SMS with Twilio.';
 
     /**
      * Execute the console command.
@@ -45,7 +35,7 @@ class TwilioSmsCommand extends Command {
         // Grab the text option if specified
         $text = $this->option('text');
 
-        // If we havent specified a message, setup a default one
+        // If we haven't specified a message, setup a default one
         if(is_null($text)) {
             $text = "This is a test message sent from the artisan console";
         }
@@ -53,8 +43,6 @@ class TwilioSmsCommand extends Command {
         $this->line($text);
 
         Twilio::message($this->argument('phone'), $text);
-
-
     }
 
     /**
@@ -77,7 +65,7 @@ class TwilioSmsCommand extends Command {
     protected function getOptions()
     {
         return array(
-            array('text', null, InputOption::VALUE_OPTIONAL, 'Optional message that will be sent.', null)
+            array('text', null, InputOption::VALUE_OPTIONAL, 'Required message that will be sent.', null),
         );
     }
 

@@ -1,10 +1,29 @@
-IronMQ PHP Client Library
+IronMQ v4 PHP Client Library
 -------------
 
 [IronMQ](http://www.iron.io/products/mq) is an elastic message queue for managing data and event flow within cloud applications and between systems.
 
-The [full API documentation is here](http://dev.iron.io/mq/reference/api/) and this client tries to stick to the API as
-much as possible so if you see an option in the API docs, you can use it in the methods below.
+This library uses IronMQ API v3.
+
+## Branches
+
+**If you're using laravel and see `"Class IronMQ not found"` error set `iron_mq` version to `1.*` and install/update dependencies**
+
+* `1.*` - Laravel 4.0/4.1/4.2/5.0 compatible, PHP 5.2 compatible version. No namespaces. Using default IronMQ servers.
+* `2.*` - Laravel 5.1/5.2 compatible, PSR-4 compatible version. With namespaces. Using default IronMQ servers. If you're not using laravel 4.0-5.0 stick with it.
+* `3.*` - Special version for IronMQ API v3. Laravel 4.0/4.1/4.2/5.0 compatible, PHP 5.2 compatible version.Different API (v3), different server endpoints.
+* `4.*` - Special version for IronMQ API v3. Laravel 5.1/5.2 compatible, PSR-4 compatible version. With namespaces. Different API (v3), different server endpoints. Go with it if you're using [IronMQ on-premise](http://dev.iron.io/mq-onpremise/)
+* `master` branch - same as `2.*`
+
+
+## Update notes
+
+* 1.3.0 - changed argument list in methods `postMessage` and `postMessages`. Please revise code that uses these methods.
+* 1.4.5 - added `getMessagePushStatuses` and `deleteMessagePushStatus` methods.
+* 2.0.0 - version 2.0 introduced some backward incompatible changes. IronMQ client finally PSR-4 compatible and using namespaces & other php 5.3 stuff. If you're migrating from previous (1.x) version, please carefully check how iron_mq / iron_core classes loaded.
+If you need some 1.x features like `.phar` archives, use latest 1.x stable version: https://github.com/iron-io/iron_mq_php/releases/tag/1.5.3
+
+
 
 ## Getting Started
 
@@ -21,28 +40,44 @@ To start using iron_mq_php, you need to sign up and get an oauth token.
 
 There are two ways to use iron_mq_php:
 
-##### Using precompiled phar archive
+##### Using composer
 
-Copy `iron_mq.phar` to target directory and include it:
+Create `composer.json` file in project directory:
 
-```php
-<?php
-require_once "phar://iron_mq.phar";
+```json
+{
+    "require": {
+        "iron-io/iron_mq": "2.*"
+    }
+}
 ```
 
-Please note, [phar](http://php.net/manual/en/book.phar.php) extension available by default only from php 5.3.0
-For php 5.2 you should install phar manually or use second option.
+Do `composer install` (install it if needed: https://getcomposer.org/download/)
 
-##### Using classes directly
-
-1. Copy `IronMQ.class.php` to target directory
-2. Grab `IronCore.class.php` [there](https://github.com/iron-io/iron_core_php) and copy to target directory
-3. Include both of them:
+And use it:
 
 ```php
-<?php
-require_once "IronCore.class.php"
-require_once "IronMQ.class.php"
+require __DIR__ . '/vendor/autoload.php';
+
+$ironmq = new \IronMQ\IronMQ();
+```
+
+
+##### Using classes directly (strongly not recommended)
+
+1. Copy classes from `src` to target directory
+2. Grab IronCore classes [there](https://github.com/iron-io/iron_core_php) and copy to target directory
+3. Include them all.
+
+```php
+require 'src/HttpException.php';
+require 'src/IronCore.php';
+require 'src/IronMQ.php';
+require 'src/IronMQException.php';
+require 'src/IronMQMessage.php';
+require 'src/JsonException.php';
+
+$ironmq = new \IronMQ\IronMQ();
 ```
 
 --
@@ -55,7 +90,7 @@ Three ways to configure IronMQ:
 
 ```php
 <?php
-$ironmq = new IronMQ(array(
+$ironmq = new \IronMQ\IronMQ(array(
     "token" => 'XXXXXXXXX',
     "project_id" => 'XXXXXXXXX'
 ));
@@ -64,7 +99,7 @@ $ironmq = new IronMQ(array(
 
 ```php
 <?php
-$ironmq = new IronMQ('config.ini');
+$ironmq = new \IronMQ\IronMQ('config.json');
 ```
 
 * Automatic [config](http://dev.iron.io/mq/reference/configuration/) search -
@@ -79,6 +114,38 @@ pass zero arguments to constructor and library will try to find config file in f
 
 --
 
+### Keystone Authentication
+
+#### Via Configuration File
+
+Add `keystone` section to your iron.json file:
+
+```javascript
+{
+  "project_id": "57a7b7b35e8e331d45000001",
+  "keystone": {
+    "server": "http://your.keystone.host/v2.0/",
+    "tenant": "some-group",
+    "username": "name",
+    "password": "password"
+  }
+}
+```
+
+#### In Code
+
+```php
+$keystone = array(
+    "server" => "http://your.keystone.host/v2.0/",
+    "tenant" => "some-gorup",
+    "username" => "name",
+    "password" => "password"
+);
+$ironmq = new \IronMQ\IronMQ(array(
+    "project_id" => '57a7b7b35e8e331d45000001',
+    "keystone" => $keystone
+));
+```
 
 ## The Basics
 
@@ -111,26 +178,42 @@ $ironmq->postMessages($queue_name, array("Message 1", "Message 2"), array(
 
 --
 
-### Get a Message off the Queue
+### Reserve a Message
 
 ```php
 <?php
-$ironmq->getMessage($queue_name);
+$ironmq->reserveMessage($queue_name);
 ```
 
 When you pop/get a message from the queue, it will NOT be deleted.
 It will eventually go back onto the queue after a timeout if you don't delete it (default timeout is 60 seconds).
 
-Get multiple messages in one API call:
+Reserve multiple messages in one API call:
 
 ```php
 <?php
-$ironmq->getMessage($queue_name, 3);
+$ironmq->reserveMessages($queue_name, 3);
+```
+
+Reservation Id is needed for operations like delete, touch or release a message. It could be obtained from
+message model after reserving it:
+
+```php
+<?php
+$message = $ironmq->reserveMessage($queue_name);
+$reservation_id = $message->reservation_id;
 ```
 
 --
 
 ### Delete a Message from the Queue
+
+```php
+<?php
+$ironmq->deleteMessage($queue_name, $message_id, $reservation_id);
+```
+
+If message isn't reserved, you don't need to provide reservation id
 
 ```php
 <?php
@@ -146,6 +229,13 @@ $ironmq->deleteMessages($queue_name, array("xxxxxxxxx", "xxxxxxxxx"));
 ```
 Delete multiple messages specified by messages id array.
 
+It's also possible to delete array of message objects:
+
+```php
+<?php
+$messages = $ironmq->reserveMessages($queue_name, 3);
+$ironmq->deleteMessage($queue_name, $messages);
+```
 --
 
 
@@ -186,7 +276,7 @@ curl.cainfo = "path\to\cacert.pem"
 
 ```php
 <?php
-$ironmq = new IronMQ(array(
+$ironmq = new \IronMQ\IronMQ(array(
     "token" => 'XXXXXXXXX',
     "project_id" => 'XXXXXXXXX'
 ));
@@ -196,19 +286,24 @@ $ironmq = new IronMQ(array(
 
 ### List Queues
 
+This code will return first 30 queues sorted by name.
+
 ```php
 <?php
-$queues = $ironmq->getQueues($page, $per_page);
+$queues = $ironmq->getQueues();
 ```
 
 **Optional parameters:**
 
-* `$page`: The 0-based page to view. The default is 0.
-* `$per_page`: The number of queues to return per page. The default is 30, the maximum is 100.
+* `per_page`: number of elements in response, default is 30.
+* `previous`: this is the last queue on the previous page, it will start from the next one. If queue with specified name doesn’t exist result will contain first per_page queues that lexicographically greater than previous
+
+Assume you have queues named "a", "b", "c", "d", "e". The following code will list "c", "d" and
+"e" queues:
 
 ```php
 <?php
-$queues_page_four = $ironmq->getQueues(3, 20); // get 4th page, 20 queues per page
+$queues = $ironmq->getQueues('b', 3);
 ```
 
 --
@@ -238,7 +333,6 @@ $response = $ironmq->deleteQueue($queue_name);
 ```php
 <?php
 $ironmq->postMessage($queue_name, "Test Message", array(
-    'timeout' => 120,
     'delay' => 2,
     'expires_in' => 2*24*3600 # 2 days
 ));
@@ -249,7 +343,6 @@ $ironmq->postMessage($queue_name, "Test Message", array(
 ```php
 <?php
 $ironmq->postMessages($queue_name, array("Lorem", "Ipsum"), array(
-    "timeout" => 120,
     "delay" => 2,
     "expires_in" => 2*24*3600 # 2 days
 ));
@@ -257,15 +350,13 @@ $ironmq->postMessages($queue_name, array("Lorem", "Ipsum"), array(
 
 **Optional parameters (3rd, `array` of key-value pairs):**
 
-* `timeout`: After timeout (in seconds), item will be placed back onto queue.
-You must delete the message from the queue to ensure it does not go back onto the queue.
- Default is 60 seconds. Minimum is 30 seconds. Maximum is 86,400 seconds (24 hours).
-
 * `delay`: The item will not be available on the queue until this many seconds have passed.
 Default is 0 seconds. Maximum is 604,800 seconds (7 days).
 
 * `expires_in`: How long in seconds to keep the item on the queue before it is deleted.
 Default is 604,800 seconds (7 days). Maximum is 2,592,000 seconds (30 days).
+
+* ~~`timeout`~~: **Deprecated**. Can no longer set timeout when posting a message, only when reserving one.
 
 --
 
@@ -275,14 +366,14 @@ Default is 604,800 seconds (7 days). Maximum is 2,592,000 seconds (30 days).
 
 ```php
 <?php
-$message = $ironmq->getMessage($queue_name, $timeout, $wait);
+$message = $ironmq->reserveMessage($queue_name, $timeout);
 ```
 
 **Multiple messages:**
 
 ```php
 <?php
-$message = $ironmq->getMessages($queue_name, $count, $timeout, $wait);
+$message = $ironmq->reserveMessages($queue_name, $count, $timeout, $wait);
 ```
 
 **Optional parameters:**
@@ -294,18 +385,18 @@ You must delete the message from the queue to ensure it does not go back onto th
 If not set, value from POST is used. Default is 60 seconds. Minimum is 30 seconds.
 Maximum is 86,400 seconds (24 hours).
 
-* `$wait`: Time in seconds to wait for a message to become available.
-This enables long polling. Default is 0 (does not wait), maximum is 30.
+* `$wait`: Time to long poll for messages, in seconds. Max is 30 seconds. Default 0.
+
 
 --
 
 ### Touch a Message on a Queue
 
-Touching a reserved message extends its timeout by the duration specified when the message was created, which is 60 seconds by default.
+Touching a reserved message returns new reservation with specified or default timeout.
 
 ```php
 <?php
-$ironmq->touchMessage($queue_name, $message_id);
+$ironmq->touchMessage($queue_name, $message_id, $reservation_id, $timeout);
 ```
 
 --
@@ -314,10 +405,10 @@ $ironmq->touchMessage($queue_name, $message_id);
 
 ```php
 <?php
-$ironmq->releaseMessage($queue_name, $message_id, $delay);
+$ironmq->releaseMessage($queue_name, $message_id, $reservation_id, $delay);
 ```
 
-**Optional parameters:**
+**Parameters:**
 
 * `$delay`: The item will not be available on the queue until this many seconds have passed.
 Default is 0 seconds. Maximum is 604,800 seconds (7 days).
@@ -328,7 +419,7 @@ Default is 0 seconds. Maximum is 604,800 seconds (7 days).
 
 ```php
 <?php
-$ironmq->deleteMessage($queue_name, $message_id);
+$ironmq->deleteMessage($queue_name, $message_id, $reservation_id);
 ```
 
 --
@@ -393,14 +484,7 @@ $res = $ironmq->updateAlerts("test_alert_queue", array($first_alert, $second_ale
 
 ```php
 <?php
-$ironmq->deleteAlerts("test_alert_queue", $alert_ids);
-```
-
-### Remove alert from a queue by its ID. This is for Pull Queue only.
-
-```php
-<?php
-$ironmq->deleteAlertById("test_alert_queue", $alert_id);
+$ironmq->deleteAlerts("test_alert_queue");
 ```
 
 --
@@ -411,52 +495,122 @@ $ironmq->deleteAlertById("test_alert_queue", $alert_id);
 IronMQ push queues allow you to setup a queue that will push to an endpoint, rather than having to poll the endpoint.
 [Here's the announcement for an overview](http://blog.iron.io/2013/01/ironmq-push-queues-reliable-message.html).
 
-### Update a Message Queue
+### Create a Queue
 
 ```php
 <?php
 $params = array(
-    "push_type" => "multicast",
-    "retries" => 5,
-    "subscribers" => array(
-        array("url" => "http://your.first.cool.endpoint.com/push"),
-        array("url" => "http://your.second.cool.endpoint.com/push")
-    ),
-    "error_queue" => "my_error_queue_name")
+    "message_timeout" => 120,
+    "message_expiration" => 24 * 3600,
+    "push" => array(
+        "subscribers" => array(
+            array("url" => "http://your.first.cool.endpoint.com/push", "name" => "first"),
+            array("url" => "http://your.second.cool.endpoint.com/push", "name" => "second")
+        ),
+        "retries" => 4,
+        "retries_delay" => 30,
+        "error_queue" => "error_queue_name"
+    )
 );
 
-$ironmq->updateQueue($queue_name, $params);
+$ironmq->createQueue($queue_name, $params);
 ```
+
+
+**Options:**
+
+* `type`: String or symbol. Queue type. `:pull`, `:multicast`, `:unicast`. Field required and static.
+* `message_timeout`: Integer. Number of seconds before message back to queue if it will not be deleted or touched.
+* `message_expiration`: Integer. Number of seconds between message post to queue and before message will be expired.
 
 **The following parameters are all related to Push Queues:**
 
-* `subscribers`: An array of subscriber hashes containing a “url” field.
+* `push: subscribers`: An array of subscriber hashes containing a `name` and a `url` required fields,
+and optional `headers` hash. `headers`'s keys are names and values are means of HTTP headers.
 This set of subscribers will replace the existing subscribers.
 To add or remove subscribers, see the add subscribers endpoint or the remove subscribers endpoint.
 See below for example json.
-* `push_type`: Either `multicast` to push to all subscribers or `unicast` to push to one and only one subscriber. Default is `multicast`.
-* `retries`: How many times to retry on failure. Default is 3. Maximum is 100.
-* `retries_delay`: Delay between each retry in seconds. Default is 60.
-* `error_queue`: The name of another queue where information about messages that can't be delivered after retrying retries number of times will be placed. Pass in an empty string to disable error queues. Default is disabled. see: [http://dev.iron.io/mq/reference/push_queues/#error_queues](http://dev.iron.io/mq/reference/push_queues/#error_queues)
+* `push: retries`: How many times to retry on failure. Default is 3. Maximum is 100.
+* `push: retries_delay`: Delay between each retry in seconds. Default is 60.
+* `push: error_queue`: String. Queue name to post push errors to.
 
 --
+
+### Update Queue Information
+
+Same as create queue. A push queue couldn't be changed into a pull queue, so vice versa too.
 
 ### Add/Remove Subscribers on a Queue
 
-Add subscriber to Push Queue:
+Add subscribers to Push Queue:
 
 ```php
 <?php
-$ironmq->addSubscriber($queue_name, array(
-    "url" => "http://cool.remote.endpoint.com/push"
-));
 
-$ironmq->removeSubscriber($queue_name, array(
-    "url" => "http://cool.remote.endpoint.com/push"
-));
+$ironmq->addSubscriber($queue_name, array(
+       "url" => "http://cool.remote.endpoint.com/push",
+       "name" => "subscriber_name",
+       "headers" => array(
+          "Content-Type" => "application/json"
+       )
+   )
+);
+
+$ironmq->addSubscribers($queue_name, array(
+        array(
+            "url" => "http://first.remote.endpoint.com/push",
+            "name" => "first"),
+        array(
+            "url" => "http://second.remote.endpoint.com/push",
+            "name" => "second")
+    )
+);
 ```
 
 --
+
+### Replace Subscribers on a Queue
+
+Sets list of subscribers to a queue. Older subscribers will be removed.
+
+```php
+<?php
+
+$ironmq->replaceSubscriber($queue_name, array(
+       "url" => "http://cool.remote.endpoint.com/push",
+       "name" => "subscriber_name"
+   )
+);
+
+$ironmq->addSubscribers($queue_name, array(
+        array(
+            "url" => "http://first.remote.endpoint.com/push",
+            "name" => "first"),
+        array(
+            "url" => "http://second.remote.endpoint.com/push",
+            "name" => "second")
+    )
+);
+```
+
+### Remove Subscribers from a Queue
+
+Remove subscriber from a queue. This is for Push Queues only.
+
+```php
+<?php
+
+$ironmq->removeSubscriber($queue_name, array(
+       "name" => "subscriber_name"
+   )
+);
+
+$ironmq->removeSubscribers($queue_name, array(
+        array("name" => "first"),
+        array("name" => "second")
+    )
+);
+```
 
 ### Get Message Push Status
 
@@ -472,28 +626,15 @@ Returns an array of subscribers with status.
 
 --
 
-### Acknowledge / Delete Message Push Status
+### Acknowledge, That Push Message Is Processed
+
+This method could be used to acknowledgement process of push messages.
+See [IronMQ v3 documentation](http://dev.iron.io/mq-onpremise/reference/push_queues/#long_running_processes__aka_202s)
+on long-processing for further information.
 
 ```php
 <?php
-$statuses = $ironmq->getMessagePushStatuses($queue_name, $message_id);
-
-foreach ($statuses as $status) {
-    $ironmq->deleteMessagePushStatus($queue_name, $message_id, $status["id"]);
-}
-```
-
---
-
-### Revert Queue Back to Pull Queue
-
-If you want to revert your queue just update `push_type` to `"pull"`.
-
-```php
-<?php
-$params = array("push_type" => "pull");
-
-$ironmq->updateQueue($queue_name, $params);
+$ironmq->deletePushMessage($queue_name, $message_id, $reservation_id, $subscriber_name);
 ```
 
 --

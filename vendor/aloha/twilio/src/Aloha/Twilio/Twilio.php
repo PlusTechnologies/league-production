@@ -20,6 +20,17 @@ class Twilio {
         );
     }
 
+    public function messageWithMedia($to, $message, $media, $from=null) {
+        $twilio = $this->getTwilio();
+        // Send SMS via Twilio SDK
+        return $twilio->account->messages->sendMessage(
+            is_null($from) ? $this->config['from'] : $from,
+            $to,
+            $message,
+            $media
+        );
+    }
+
     public function call($to, $url, $options=array(), $from=null) {
         $twilio = $this->getTwilio();
         // Create Call via Twilio SDK
